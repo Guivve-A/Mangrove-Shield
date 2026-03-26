@@ -170,16 +170,19 @@ def _ensure_ee_initialized() -> None:
     if _EE_INITIALIZED:
         return
 
-    import base64 as _b64, tempfile
+    import base64 as _b64
     gee_b64 = os.getenv("GEE_SERVICE_ACCOUNT_B64")
-    if gee_b64 and not os.getenv("GOOGLE_APPLICATION_CREDENTIALS"):
-        gee_data = _b64.b64decode(gee_b64)
-        tmp = tempfile.NamedTemporaryFile(delete=False, suffix=".json", mode="wb")
-        tmp.write(gee_data)
-        tmp.close()
-        os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = tmp.name
+    if gee_b64:
+        cred_dict = json.loads(_b64.b64decode(gee_b64))
+        creds = ee.ServiceAccountCredentials(
+            cred_dict["client_email"],
+            key_data=json.dumps(cred_dict),
+        )
+        ee.Initialize(creds, project=EE_PROJECT, opt_url=EE_OPT_URL)
+    else:
+        # Local dev: relies on `earthengine authenticate` having been run
+        ee.Initialize(project=EE_PROJECT, opt_url=EE_OPT_URL)
 
-    ee.Initialize(project=EE_PROJECT, opt_url=EE_OPT_URL)
     _EE_INITIALIZED = True
 
 

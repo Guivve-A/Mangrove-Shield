@@ -19,17 +19,17 @@ import type {
     WeatherNowResponse,
 } from '@/types/liveTypes';
 
-/* Polling intervals (ms) */
-const INTERVAL_WEATHER = 2 * 60 * 1000;       // 2 min
-const INTERVAL_VULNERABILITY = 3 * 60 * 1000;  // 3 min
-const INTERVAL_SAR = 15 * 60 * 1000;           // 15 min
-const INTERVAL_ECOSYSTEM = 30 * 60 * 1000;     // 30 min
+/* Polling intervals (ms) - optimized for battery/bandwidth */
+const INTERVAL_WEATHER = 5 * 60 * 1000;       // 5 min (was 2min, weather changes slowly)
+const INTERVAL_VULNERABILITY = 10 * 60 * 1000;  // 10 min (was 3min, composite metric)
+const INTERVAL_SAR = 30 * 60 * 1000;           // 30 min (was 15min, SAR scenes infrequent)
+const INTERVAL_ECOSYSTEM = 60 * 60 * 1000;     // 60 min (was 30min, health metric changes slowly)
 
-/* Cache TTL (ms) */
-const CACHE_WEATHER = 90 * 1000;       // 90s
-const CACHE_VULNERABILITY = 180 * 1000; // 180s
-const CACHE_SAR = 600 * 1000;         // 10 min
-const CACHE_ECOSYSTEM = 1800 * 1000;   // 30 min
+/* Cache TTL (ms) - shorter than intervals to allow fresh data pickup */
+const CACHE_WEATHER = 4 * 60 * 1000;       // 4 min (just under 5min interval)
+const CACHE_VULNERABILITY = 9 * 60 * 1000; // 9 min (just under 10min interval)
+const CACHE_SAR = 25 * 60 * 1000;         // 25 min (just under 30min interval)
+const CACHE_ECOSYSTEM = 55 * 60 * 1000;   // 55 min (just under 60min interval)
 
 export interface LiveData {
     weather: PollingState<WeatherNowResponse>;

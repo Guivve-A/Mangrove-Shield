@@ -364,31 +364,6 @@ export function MapSection({ bundle, waterMaskGeoJson, vulnerabilityGeoJson }: M
                         </Source>
                     )}
 
-                    {/* ── Bundle: priority zones ── */}
-                    {bundle?.priorities && (
-                        <Source id="bundle-priorities" type="geojson" data={bundle.priorities as any}>
-                            <Layer id="bundle-priorities-line" type="line" paint={{
-                                'line-color': '#d4a15f',
-                                'line-width': 1,
-                                'line-opacity': 0.7,
-                            }} />
-                        </Source>
-                    )}
-
-                    {/* ── Bundle: mangrove hotspots ── */}
-                    {bundle?.mangroveHotspots && (
-                        <Source id="bundle-hotspots" type="geojson" data={bundle.mangroveHotspots as any}>
-                            <Layer id="bundle-hotspot-circles" type="circle" paint={{
-                                'circle-color': ['interpolate', ['linear'],
-                                    ['coalesce', ['to-number', ['get', 'severity']], 0],
-                                    0, '#22c55e', 0.5, '#f59e0b', 1, '#ef4444'],
-                                'circle-radius': ['+', 3, ['*', ['coalesce', ['to-number', ['get', 'severity']], 0], 14]],
-                                'circle-opacity': 0.95,
-                                'circle-stroke-color': '#e5f2ff',
-                                'circle-stroke-width': 0.5,
-                            } as any} />
-                        </Source>
-                    )}
                 </Map>
             </div>
 

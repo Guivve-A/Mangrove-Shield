@@ -20,33 +20,31 @@ const REGION = { id: 'guayaquil-estero-salado', name: 'Estero Salado, Guayaquil'
 const EMPTY_FC: any = { type: 'FeatureCollection', features: [] };
 
 export async function getFloodStatus(): Promise<FloodStatusResponse> {
-    try {
-        const response = await fetch(`${API_BASE_URL}/api/v1/flood-status`);
-
-        if (response.ok) {
-            return (await response.json()) as FloodStatusResponse;
-        }
-
-        console.warn(`Local API returned ${response.status}, attempting Firestore fallback...`);
-    } catch (error) {
-        console.warn("Local API fetch failed, attempting Firestore fallback...");
-    }
-
-    // Firestore Fallback (Cloud Cache)
+    // Firestore first — authoritative source synced by GitHub Actions
     try {
         const docRef = doc(db, "flood_status", "latest");
         const docSnap = await getDoc(docRef);
 
         if (docSnap.exists()) {
-            console.log("Real-time data retrieved from Firestore cache.");
             return docSnap.data() as FloodStatusResponse;
         }
     } catch (fsError) {
-        console.error("Firestore fallback failed:", fsError);
+        console.warn("Firestore fetch failed, trying local API...", fsError);
+    }
+
+    // Local API fallback
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/v1/flood-status`);
+        if (response.ok) {
+            return (await response.json()) as FloodStatusResponse;
+        }
+        console.warn(`Local API returned ${response.status}.`);
+    } catch (error) {
+        console.warn("Local API fetch failed.");
     }
 
     // Final Static Fallback
-    console.warn("Global cache unavailable, using static fallback.");
+    console.warn("All sources unavailable, using static fallback.");
     return await fetchStaticFallback<FloodStatusResponse>(STATIC_FALLBACK_URL);
 }
 
@@ -277,16 +275,11 @@ export async function fetchEcosystemAnomalies(): Promise<EcosystemAnomaliesRespo
 }
 
 /**
- * Triggers a full data refresh on all backend sources in parallel.
- * Used by the Navbar SYNC button.
+ * No-op — data is synced to Firestore by GitHub Actions.
+ * The caller (Navbar) reloads the page, which re-fetches from Firestore.
  */
 export async function syncAllData(): Promise<void> {
-    await Promise.allSettled([
-        fetch(`${API_BASE_URL}/api/v1/trigger/weather`, { method: 'POST' }),
-        fetch(`${API_BASE_URL}/api/v1/trigger/tide`, { method: 'POST' }),
-        fetch(`${API_BASE_URL}/api/v1/trigger/sar`, { method: 'POST' }),
-        fetch(`${API_BASE_URL}/api/v1/trigger/ecosystem-health`, { method: 'POST' }),
-    ]);
+    // intentionally empty
 }
 
 export async function triggerManualUpdate(type: "weather" | "tide" | "sar" | "ecosystem-health"): Promise<unknown> {

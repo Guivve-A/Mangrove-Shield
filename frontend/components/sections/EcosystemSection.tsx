@@ -9,11 +9,8 @@ const oswald = Oswald({
   display: 'swap',
 });
 
-import { API_BASE_URL } from '@/lib/constants';
-const LOCAL_API_URL = `${API_BASE_URL}/api/v1/flood-status`;
-const WEATHER_TRIGGER_URL = `${API_BASE_URL}/api/v1/trigger/weather`;
-const TIDE_TRIGGER_URL = `${API_BASE_URL}/api/v1/trigger/tide`;
-const ECOSYSTEM_TRIGGER_URL = `${API_BASE_URL}/api/v1/trigger/ecosystem-health`;
+import { getFloodStatus } from '@/lib/liveApi';
+
 const STATUS_POLL_INTERVAL = 60_000;
 
 interface EcosystemSectionProps {
@@ -251,16 +248,11 @@ export function EcosystemSection({ liveData }: EcosystemSectionProps): JSX.Eleme
 
   const fetchCurrentStatus = useCallback(async () => {
     try {
-      const response = await fetch(LOCAL_API_URL);
-      if (!response.ok) {
-        throw new Error('Unable to reach local status feed.');
-      }
-
-      const payload: LocalFloodStatus = await response.json();
-      setLocalStatus(payload);
+      const payload = await getFloodStatus();
+      setLocalStatus(payload as unknown as LocalFloodStatus);
       setLocalStatusError(null);
     } catch (error: unknown) {
-      setLocalStatusError(error instanceof Error ? error.message : 'Unable to reach local status feed.');
+      setLocalStatusError(error instanceof Error ? error.message : 'Unable to reach data feed.');
     }
   }, []);
 
@@ -322,15 +314,9 @@ export function EcosystemSection({ liveData }: EcosystemSectionProps): JSX.Eleme
 
   const handleSync = async () => {
     setIsSyncing(true);
-
     try {
-      await Promise.allSettled([
-        fetch(WEATHER_TRIGGER_URL, { method: 'POST' }),
-        fetch(TIDE_TRIGGER_URL, { method: 'POST' }),
-        fetch(ECOSYSTEM_TRIGGER_URL, { method: 'POST' }),
-      ]);
-    } finally {
       await fetchCurrentStatus();
+    } finally {
       setIsSyncing(false);
     }
   };

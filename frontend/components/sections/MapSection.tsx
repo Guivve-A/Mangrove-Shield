@@ -4,9 +4,8 @@ import { Waves, Satellite, Droplets, Activity, AlertTriangle, RadioReceiver, Tre
 import Map, { Source, Layer, NavigationControl } from 'react-map-gl/maplibre';
 import 'maplibre-gl/dist/maplibre-gl.css';
 
-import { API_BASE_URL } from '@/lib/constants';
+import { getFloodStatus } from '@/lib/liveApi';
 
-const API_URL = `${API_BASE_URL}/api/v1/flood-status`;
 const POLL_INTERVAL = 60000;
 const EMPTY_FC: FeatureCollection = { type: 'FeatureCollection', features: [] };
 
@@ -40,9 +39,7 @@ export function MapSection({ waterMaskGeoJson }: MapSectionProps) {
         let isMounted = true;
         const fetchData = async () => {
             try {
-                const res = await fetch(API_URL);
-                if (!res.ok) throw new Error('Backend no disponible');
-                const json: FloodStatusResponse = await res.json();
+                const json = await getFloodStatus() as unknown as FloodStatusResponse;
                 if (isMounted) { setData(json); setLastFetch(new Date()); setError(null); }
             } catch (err: unknown) {
                 if (isMounted) setError(err instanceof Error ? err.message : 'Error');

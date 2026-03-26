@@ -10,6 +10,7 @@ import type {
 import { Waves, Satellite, Droplets, Activity, CloudOff, AlertTriangle, RadioReceiver, TreePine, Wind, Thermometer, ArrowUpRight } from 'lucide-react';
 import Map, { Source, Layer, NavigationControl } from 'react-map-gl/maplibre';
 import 'maplibre-gl/dist/maplibre-gl.css';
+import type { LayerBundle } from '@/types/geospatial';
 
 interface WeatherData {
     weather_now: {
@@ -59,6 +60,7 @@ interface FloodStatusResponse {
 }
 
 interface MapSectionProps {
+    bundle?: LayerBundle | null;
     waterMaskGeoJson?: FeatureCollection | null;
     vulnerabilityGeoJson?: FeatureCollection | null;
     onSelectZone?: (id: string) => void;
@@ -143,7 +145,7 @@ function toVulnerabilityPoints(
     };
 }
 
-export function MapSection({ waterMaskGeoJson, vulnerabilityGeoJson }: MapSectionProps) {
+export function MapSection({ bundle, waterMaskGeoJson, vulnerabilityGeoJson }: MapSectionProps) {
     const [data, setData] = useState<FloodStatusResponse | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -327,6 +329,66 @@ export function MapSection({ waterMaskGeoJson, vulnerabilityGeoJson }: MapSectio
                             } as any}
                         />
                     </Source>
+
+                    {/* ── Bundle: flood zones ── */}
+                    {bundle?.flood && (
+                        <Source id="bundle-flood" type="geojson" data={bundle.flood as any}>
+                            <Layer id="bundle-flood-fill" type="fill" paint={{
+                                'fill-color': ['interpolate', ['linear'],
+                                    ['coalesce', ['to-number', ['get', 'flood_likelihood']], 0],
+                                    0, '#1d4ed8', 1, '#93c5fd'],
+                                'fill-opacity': 0.28,
+                            } as any} />
+                            <Layer id="bundle-flood-line" type="line" paint={{
+                                'line-color': '#8cc8ff',
+                                'line-width': 1,
+                                'line-opacity': 0.8,
+                            }} />
+                        </Source>
+                    )}
+
+                    {/* ── Bundle: mangrove extent ── */}
+                    {bundle?.mangroveExtent && (
+                        <Source id="bundle-mangrove" type="geojson" data={bundle.mangroveExtent as any}>
+                            <Layer id="bundle-mangrove-fill" type="fill" paint={{
+                                'fill-color': ['interpolate', ['linear'],
+                                    ['coalesce', ['to-number', ['get', 'mangrove_health']], 0.5],
+                                    0, '#b91c1c', 0.5, '#f59e0b', 1, '#16a34a'],
+                                'fill-opacity': 0.42,
+                            } as any} />
+                            <Layer id="bundle-mangrove-line" type="line" paint={{
+                                'line-color': '#22c55e',
+                                'line-width': 1.2,
+                                'line-opacity': 0.9,
+                            }} />
+                        </Source>
+                    )}
+
+                    {/* ── Bundle: priority zones ── */}
+                    {bundle?.priorities && (
+                        <Source id="bundle-priorities" type="geojson" data={bundle.priorities as any}>
+                            <Layer id="bundle-priorities-line" type="line" paint={{
+                                'line-color': '#d4a15f',
+                                'line-width': 1,
+                                'line-opacity': 0.7,
+                            }} />
+                        </Source>
+                    )}
+
+                    {/* ── Bundle: mangrove hotspots ── */}
+                    {bundle?.mangroveHotspots && (
+                        <Source id="bundle-hotspots" type="geojson" data={bundle.mangroveHotspots as any}>
+                            <Layer id="bundle-hotspot-circles" type="circle" paint={{
+                                'circle-color': ['interpolate', ['linear'],
+                                    ['coalesce', ['to-number', ['get', 'severity']], 0],
+                                    0, '#22c55e', 0.5, '#f59e0b', 1, '#ef4444'],
+                                'circle-radius': ['+', 3, ['*', ['coalesce', ['to-number', ['get', 'severity']], 0], 14]],
+                                'circle-opacity': 0.95,
+                                'circle-stroke-color': '#e5f2ff',
+                                'circle-stroke-width': 0.5,
+                            } as any} />
+                        </Source>
+                    )}
                 </Map>
             </div>
 

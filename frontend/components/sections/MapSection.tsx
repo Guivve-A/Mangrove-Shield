@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import type {
     Feature,
     FeatureCollection,
@@ -10,7 +10,6 @@ import type {
 import { Waves, Satellite, Droplets, Activity, CloudOff, AlertTriangle, RadioReceiver, TreePine, Wind, Thermometer, ArrowUpRight } from 'lucide-react';
 import Map, { Source, Layer, NavigationControl } from 'react-map-gl/maplibre';
 import 'maplibre-gl/dist/maplibre-gl.css';
-import type { LayerBundle } from '@/types/geospatial';
 
 interface WeatherData {
     weather_now: {
@@ -60,9 +59,7 @@ interface FloodStatusResponse {
 }
 
 interface MapSectionProps {
-    bundle?: LayerBundle | null;
     waterMaskGeoJson?: FeatureCollection | null;
-    vulnerabilityGeoJson?: FeatureCollection | null;
     onSelectZone?: (id: string) => void;
     [key: string]: unknown;
 }
@@ -145,7 +142,7 @@ function toVulnerabilityPoints(
     };
 }
 
-export function MapSection({ bundle, waterMaskGeoJson, vulnerabilityGeoJson }: MapSectionProps) {
+export function MapSection({ waterMaskGeoJson, vulnerabilityGeoJson }: MapSectionProps) {
     const [data, setData] = useState<FloodStatusResponse | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -153,10 +150,6 @@ export function MapSection({ bundle, waterMaskGeoJson, vulnerabilityGeoJson }: M
     const [isSyncing, setIsSyncing] = useState(false);
 
     const waterMaskData = waterMaskGeoJson ?? EMPTY_FEATURE_COLLECTION;
-    const vulnerabilityPointData = useMemo(
-        () => toVulnerabilityPoints(vulnerabilityGeoJson),
-        [vulnerabilityGeoJson],
-    );
 
     useEffect(() => {
         let isMounted = true;
@@ -289,80 +282,17 @@ export function MapSection({ bundle, waterMaskGeoJson, vulnerabilityGeoJson }: M
                         </Source>
                     )}
 
+                    {/* Mangrove extent — organic polygons from SAR water mask (Firestore cache) */}
                     <Source id="water-mask-source" type="geojson" data={waterMaskData as any}>
                         <Layer
                             id="water-mask"
                             type="fill"
                             paint={{
-                                'fill-color': '#06b6d4',
-                                'fill-opacity': 0.5,
+                                'fill-color': '#00ffcc',
+                                'fill-opacity': 0.6,
                             }}
                         />
                     </Source>
-
-                    <Source id="vulnerability-source" type="geojson" data={vulnerabilityPointData as any}>
-                        <Layer
-                            id="vulnerability-points"
-                            type="circle"
-                            paint={{
-                                'circle-radius': [
-                                    'interpolate',
-                                    ['linear'],
-                                    ['coalesce', ['to-number', ['get', 'vulnerability_score']], 0],
-                                    0, 4,
-                                    0.4, 7,
-                                    0.65, 10,
-                                    1, 14,
-                                ],
-                                'circle-color': [
-                                    'match',
-                                    ['coalesce', ['get', 'vulnerability_level'], 'low'],
-                                    'critical', '#ef4444',
-                                    'high', '#f97316',
-                                    'moderate', '#facc15',
-                                    'low', '#22c55e',
-                                    '#38bdf8',
-                                ],
-                                'circle-opacity': 0.9,
-                                'circle-stroke-color': '#e2e8f0',
-                                'circle-stroke-width': 1,
-                            } as any}
-                        />
-                    </Source>
-
-                    {/* ── Bundle: flood zones ── */}
-                    {bundle?.flood && (
-                        <Source id="bundle-flood" type="geojson" data={bundle.flood as any}>
-                            <Layer id="bundle-flood-fill" type="fill" paint={{
-                                'fill-color': ['interpolate', ['linear'],
-                                    ['coalesce', ['to-number', ['get', 'flood_likelihood']], 0],
-                                    0, '#1d4ed8', 1, '#93c5fd'],
-                                'fill-opacity': 0.28,
-                            } as any} />
-                            <Layer id="bundle-flood-line" type="line" paint={{
-                                'line-color': '#8cc8ff',
-                                'line-width': 1,
-                                'line-opacity': 0.8,
-                            }} />
-                        </Source>
-                    )}
-
-                    {/* ── Bundle: mangrove extent ── */}
-                    {bundle?.mangroveExtent && (
-                        <Source id="bundle-mangrove" type="geojson" data={bundle.mangroveExtent as any}>
-                            <Layer id="bundle-mangrove-fill" type="fill" paint={{
-                                'fill-color': ['interpolate', ['linear'],
-                                    ['coalesce', ['to-number', ['get', 'mangrove_health']], 0.5],
-                                    0, '#b91c1c', 0.5, '#f59e0b', 1, '#16a34a'],
-                                'fill-opacity': 0.42,
-                            } as any} />
-                            <Layer id="bundle-mangrove-line" type="line" paint={{
-                                'line-color': '#22c55e',
-                                'line-width': 1.2,
-                                'line-opacity': 0.9,
-                            }} />
-                        </Source>
-                    )}
 
                 </Map>
             </div>

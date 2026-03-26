@@ -87,9 +87,18 @@ app = FastAPI(
     version="2.0.0",
 )
 
+_default_origins = [
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+    "https://studio-8904974087-7cc0a.web.app",
+    "https://studio-8904974087-7cc0a.firebaseapp.com",
+]
+_extra_origins = [o.strip() for o in os.getenv("ALLOWED_ORIGINS", "").split(",") if o.strip()]
+_allowed_origins = list(dict.fromkeys(_default_origins + _extra_origins))
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000", "http://127.0.0.1:3000"],
+    allow_origins=_allowed_origins,
     allow_credentials=True,
     allow_methods=["GET", "POST"],
     allow_headers=["*"],

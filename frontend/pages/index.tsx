@@ -158,19 +158,7 @@ export default function HomePage(): JSX.Element {
         <div ref={mapSentinelRef}>
           {!isLoading && shouldRenderMap ? (
             <MapSection
-              bundle={activeBundle}
-              compareBundle={compareBundle}
-              scenario={scenario}
-              compareScenario={compareScenario}
-              terrainMode={terrainMode}
-              comparisonMode={comparisonMode}
-              stormIntensity={stormIntensity}
-              selectedZoneId={selectedZoneId}
-              selectedZone={selectedZone}
-              onSelectZone={(id) => setSelectedZoneId(id)}
               waterMaskGeoJson={liveData.waterMask.data?.geometry ?? null}
-              vulnerabilityGeoJson={liveData.vulnerability.data?.geometry ?? null}
-              IntelligenceMap={IntelligenceMap}
             />
           ) : (
             <section id="map" className="relative bg-[var(--bg-dark)]" style={{ minHeight: '100vh' }}>

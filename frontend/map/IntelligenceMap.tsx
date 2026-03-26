@@ -629,19 +629,7 @@ function MapViewport({
 
     const map = new maplibregl.Map({
       container: containerRef.current,
-      style: {
-        version: 8,
-        sources: {},
-        layers: [
-          {
-            id: 'background',
-            type: 'background',
-            paint: {
-              'background-color': '#08131d',
-            },
-          },
-        ],
-      },
+      style: 'https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json',
       center: cameraState.center,
       zoom: cameraState.zoom,
       pitch: cameraState.pitch,

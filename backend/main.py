@@ -55,16 +55,27 @@ def _ensure_firebase_initialized() -> None:
     global _FIREBASE_INITIALIZED, db
     if _FIREBASE_INITIALIZED:
         return
-    
-    cert_path = os.getenv("FIREBASE_SERVICE_ACCOUNT")
+
+    import base64 as _b64
+    cert_b64 = os.getenv("FIREBASE_SERVICE_ACCOUNT_B64")
+    cert_env = os.getenv("FIREBASE_SERVICE_ACCOUNT")
     try:
-        if cert_path and Path(cert_path).exists():
-            cred = credentials.Certificate(cert_path)
+        if cert_b64:
+            # Railway / CI: base64-encoded JSON service account
+            cert_data = json.loads(_b64.b64decode(cert_b64))
+            cred = credentials.Certificate(cert_data)
+            firebase_admin.initialize_app(cred)
+        elif cert_env:
+            # Try raw JSON string first (Railway raw variable), then file path
+            try:
+                cert_data = json.loads(cert_env)
+                cred = credentials.Certificate(cert_data)
+            except (json.JSONDecodeError, ValueError):
+                cred = credentials.Certificate(cert_env)
             firebase_admin.initialize_app(cred)
         else:
-            # Fallback to default credentials if path not found
             firebase_admin.initialize_app()
-        
+
         db = firestore.client()
         _FIREBASE_INITIALIZED = True
     except Exception as e:
@@ -147,6 +158,16 @@ def _ensure_ee_initialized() -> None:
     global _EE_INITIALIZED
     if _EE_INITIALIZED:
         return
+
+    import base64 as _b64, tempfile
+    gee_b64 = os.getenv("GEE_SERVICE_ACCOUNT_B64")
+    if gee_b64 and not os.getenv("GOOGLE_APPLICATION_CREDENTIALS"):
+        gee_data = _b64.b64decode(gee_b64)
+        tmp = tempfile.NamedTemporaryFile(delete=False, suffix=".json", mode="wb")
+        tmp.write(gee_data)
+        tmp.close()
+        os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = tmp.name
+
     ee.Initialize(project=EE_PROJECT, opt_url=EE_OPT_URL)
     _EE_INITIALIZED = True
 

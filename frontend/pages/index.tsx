@@ -40,6 +40,7 @@ export default function HomePage(): JSX.Element {
     compareScenario,
     stormIntensity,
     terrainMode,
+    comparisonMode,
     activeBundle,
     compareBundle,
     metrics,
@@ -162,6 +163,7 @@ export default function HomePage(): JSX.Element {
               scenario={scenario}
               compareScenario={compareScenario}
               terrainMode={terrainMode}
+              comparisonMode={comparisonMode}
               stormIntensity={stormIntensity}
               selectedZoneId={selectedZoneId}
               selectedZone={selectedZone}

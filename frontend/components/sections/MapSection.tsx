@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import type { FeatureCollection } from 'geojson';
-import { Waves, Satellite, Droplets, Activity, AlertTriangle, RadioReceiver, TreePine } from 'lucide-react';
+import { Waves, Satellite, Droplets, Activity, AlertTriangle, RadioReceiver, TreePine, Wind, Thermometer } from 'lucide-react';
 import Map, { Source, Layer, NavigationControl } from 'react-map-gl/maplibre';
 import 'maplibre-gl/dist/maplibre-gl.css';
 
@@ -12,7 +12,14 @@ const EMPTY_FC: FeatureCollection = { type: 'FeatureCollection', features: [] };
 interface FloodStatusResponse {
     timestamp: string;
     weather: { weather_now: { rain_mm_h: number }; error?: string };
-    tide: { level_m: number; error?: string };
+    tide: {
+        level_m: number;
+        wave_height_m?: number;
+        wave_period_s?: number;
+        water_temp_c?: number;
+        wind_speed_ms?: number;
+        error?: string;
+    };
     sar_data: { tile_url: string | null; date_acquired: string | null; error?: string };
     ecosystem_health: {
         health_index: number;
@@ -167,6 +174,51 @@ export function MapSection({ waterMaskGeoJson }: MapSectionProps) {
                             </div>
                             <div className="ml-auto p-2 bg-green-500/10 rounded-lg border border-green-500/20">
                                 <TreePine className="w-5 h-5 text-green-400" />
+                            </div>
+                        </div>
+
+                        {/* Wave Height */}
+                        <div className="bg-black/40 backdrop-blur-md border border-white/10 p-3 rounded-xl flex items-center gap-6 shadow-lg min-w-[195px]">
+                            <div className="flex flex-col items-start">
+                                <span className="text-[10px] text-white/50 uppercase tracking-widest">Altura ola</span>
+                                <span className="font-mono text-xl font-medium text-cyan-300">
+                                    {data?.tide?.error
+                                        ? <AlertTriangle className="w-5 h-5 text-yellow-500 inline-block mt-1" />
+                                        : <>{data?.tide?.wave_height_m?.toFixed(2) ?? '--'} <span className="text-[10px] text-white/50">m</span></>}
+                                </span>
+                            </div>
+                            <div className="ml-auto p-2 bg-cyan-500/10 rounded-lg border border-cyan-500/20">
+                                <Waves className="w-5 h-5 text-cyan-400" />
+                            </div>
+                        </div>
+
+                        {/* Water Temperature */}
+                        <div className="bg-black/40 backdrop-blur-md border border-white/10 p-3 rounded-xl flex items-center gap-6 shadow-lg min-w-[195px]">
+                            <div className="flex flex-col items-start">
+                                <span className="text-[10px] text-white/50 uppercase tracking-widest">Temp. agua</span>
+                                <span className="font-mono text-xl font-medium text-orange-300">
+                                    {data?.tide?.error
+                                        ? <AlertTriangle className="w-5 h-5 text-yellow-500 inline-block mt-1" />
+                                        : <>{data?.tide?.water_temp_c?.toFixed(1) ?? '--'} <span className="text-[10px] text-white/50">°C</span></>}
+                                </span>
+                            </div>
+                            <div className="ml-auto p-2 bg-orange-500/10 rounded-lg border border-orange-500/20">
+                                <Thermometer className="w-5 h-5 text-orange-400" />
+                            </div>
+                        </div>
+
+                        {/* Wind Speed */}
+                        <div className="bg-black/40 backdrop-blur-md border border-white/10 p-3 rounded-xl flex items-center gap-6 shadow-lg min-w-[195px]">
+                            <div className="flex flex-col items-start">
+                                <span className="text-[10px] text-white/50 uppercase tracking-widest">Velocidad viento</span>
+                                <span className="font-mono text-xl font-medium text-purple-300">
+                                    {data?.tide?.error
+                                        ? <AlertTriangle className="w-5 h-5 text-yellow-500 inline-block mt-1" />
+                                        : <>{data?.tide?.wind_speed_ms?.toFixed(1) ?? '--'} <span className="text-[10px] text-white/50">m/s</span></>}
+                                </span>
+                            </div>
+                            <div className="ml-auto p-2 bg-purple-500/10 rounded-lg border border-purple-500/20">
+                                <Wind className="w-5 h-5 text-purple-400" />
                             </div>
                         </div>
 

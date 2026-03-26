@@ -16,15 +16,17 @@ import firebase_admin
 from firebase_admin import credentials, firestore
 from cachetools import TTLCache
 from dotenv import load_dotenv
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
 load_dotenv(override=True)
 
 
 ROOT_DIR = Path(__file__).resolve().parents[1]
-MANGROVE_EXTENT_PATH = ROOT_DIR / "data" / "demo" / "mangrove_extent.geojson"
-MANGROVE_ZONES_PATH = ROOT_DIR / "data" / "demo" / "mangrove_extent.geojson"
+# Canonical zone data directory — works both locally and in Docker (/app/data/demo)
+ZONES_DIR = Path(__file__).resolve().parent / "data" / "demo"
+MANGROVE_EXTENT_PATH = ZONES_DIR / "mangrove_extent.geojson"
+MANGROVE_ZONES_PATH = ZONES_DIR / "mangrove_extent.geojson"
 
 EE_PROJECT = os.getenv("EE_PROJECT", "studio-8904974087-7cc0a")
 EE_OPT_URL = os.getenv("EE_OPT_URL", "https://earthengine-highvolume.googleapis.com")
@@ -860,6 +862,279 @@ async def get_live_capabilities() -> dict[str, Any]:
             "sar_data": sar_probe.get("error"),
         },
     }
+
+
+# ════════════════════════════════════════════════════════════════
+#  REAL-DATA LAYER ENDPOINTS  (/api/v1/layers/{name})
+#  Per-zone GEE NDVI via reduceRegions + live SAR/weather signals.
+# ════════════════════════════════════════════════════════════════
+
+zone_layer_cache: TTLCache = TTLCache(maxsize=10, ttl=HEALTH_CACHE_TTL_SECONDS)
+
+
+@lru_cache(maxsize=8)
+def _load_zone_file(filename: str) -> dict[str, Any]:
+    """Load a static zone GeoJSON from ZONES_DIR. Cached in-process (geometry never changes)."""
+    path = ZONES_DIR / filename
+    if path.exists():
+        return json.loads(path.read_text(encoding="utf-8"))
+    raise FileNotFoundError(f"Zone file not found: {path}")
+
+
+def _compute_zone_ndvi(filename: str, force: bool = False) -> list[dict[str, float]]:
+    """
+    Return per-zone NDVI and canopy cover via a single GEE reduceRegions call.
+    Results are cached for HEALTH_CACHE_TTL_SECONDS (6 h).
+    Falls back to empty list on GEE failure — callers use static props as fallback.
+    """
+    cache_key = f"zndvi_{filename}"
+    if not force and cache_key in zone_layer_cache:
+        return zone_layer_cache[cache_key]  # type: ignore[return-value]
+
+    _ensure_ee_initialized()          # raises if GEE unavailable
+    zones_data = _load_zone_file(filename)
+    features = zones_data.get("features", [])
+    if not features:
+        return []
+
+    roi = _get_analysis_roi()
+    ctx = _latest_s2_context(roi)
+    ndvi_img = ctx["composite"].normalizedDifference(["B8", "B4"]).rename("ndvi")
+    canopy_img = ndvi_img.subtract(0.05).divide(0.80).clamp(0, 1).rename("canopy")
+
+    ee_feats = [
+        ee.Feature(ee.Geometry(f["geometry"]), {"_z": i})
+        for i, f in enumerate(features)
+    ]
+    raw = (
+        ee.Image.cat([ndvi_img, canopy_img])
+        .reduceRegions(
+            collection=ee.FeatureCollection(ee_feats),
+            reducer=ee.Reducer.mean(),
+            scale=30,
+        )
+        .getInfo()
+    )
+
+    stats: list[dict[str, float]] = [{"ndvi": 0.0, "canopy": 0.0, "date": ctx["latest_date"]}
+                                      for _ in features]
+    for sf in raw.get("features", []):
+        sp = sf.get("properties") or {}
+        z = int(sp.get("_z", 0))
+        if 0 <= z < len(stats):
+            stats[z] = {
+                "ndvi": float(sp.get("ndvi") or 0.0),
+                "canopy": float(sp.get("canopy") or 0.0),
+                "date": ctx["latest_date"],
+            }
+
+    zone_layer_cache[cache_key] = stats
+    return stats
+
+
+def _layer_mangrove_extent(force: bool = False) -> dict[str, Any]:
+    """Mangrove extent GeoJSON enriched with real per-zone Sentinel-2 NDVI."""
+    cache_key = "layer_mangrove_extent"
+    if not force and cache_key in zone_layer_cache:
+        return zone_layer_cache[cache_key]  # type: ignore[return-value]
+
+    zones = _load_zone_file("mangrove_extent.geojson")
+    today = _utc_today().strftime("%Y-%m-%d")
+
+    try:
+        per_zone = _compute_zone_ndvi("mangrove_extent.geojson", force)
+        enriched = []
+        for i, feat in enumerate(zones.get("features", [])):
+            props = dict(feat.get("properties") or {})
+            zs = per_zone[i] if i < len(per_zone) else {}
+            ndvi_val = zs.get("ndvi", float(props.get("mangrove_health", 0.0)))
+            canopy_val = zs.get("canopy", 0.0)
+            props.update({
+                "mangrove_health": _round(ndvi_val, 3),
+                "canopy_cover": _round(canopy_val, 3),
+                "status": _classify_ndvi(ndvi_val),
+                "date": zs.get("date", today),
+                "sensor": "Sentinel-2 L2A",
+            })
+            enriched.append({**feat, "properties": props})
+        result: dict[str, Any] = {"type": "FeatureCollection", "features": enriched,
+                                   "date": per_zone[0].get("date", today) if per_zone else today}
+    except Exception as exc:
+        print(f"Mangrove extent GEE failed, using static fallback: {exc}")
+        result = dict(zones)
+
+    zone_layer_cache[cache_key] = result
+    return result
+
+
+def _layer_flood(force: bool = False) -> dict[str, Any]:
+    """
+    Flood zones GeoJSON enriched with real flood likelihood.
+    Formula: 0.40 * sar_norm + 0.30 * rain_norm + 0.15 * tide_norm + 0.15 * zone_exposure
+    All inputs are live (SAR cached 6 h, weather 30 min, tide 1 h).
+    """
+    cache_key = "layer_flood"
+    if not force and cache_key in zone_layer_cache:
+        return zone_layer_cache[cache_key]  # type: ignore[return-value]
+
+    zones = _load_zone_file("flood_polygons.geojson")
+
+    sar = get_sar_data()
+    weather = weather_cache.get("data") or {}
+    tide = tide_cache.get("data") or {}
+
+    sar_frac = float(sar.get("flood_anomaly_fraction") or 0.0)
+    rain_mmh = float((weather.get("weather_now") or {}).get("rain_mm_h") or 0.0)
+    tide_m = float(tide.get("level_m") or 0.0)
+
+    sar_norm = min(1.0, sar_frac / 0.15)
+    rain_norm = min(1.0, rain_mmh / 20.0)
+    tide_norm = min(1.0, max(0.0, (tide_m - 0.2) / 1.3))
+    today = sar.get("date_acquired") or _utc_today().strftime("%Y-%m-%d")
+
+    enriched = []
+    for feat in zones.get("features", []):
+        props = dict(feat.get("properties") or {})
+        exposure = float(props.get("exposure") or 0.5)
+        flood_lh = _round(
+            0.40 * sar_norm + 0.30 * rain_norm + 0.15 * tide_norm + 0.15 * exposure, 3
+        )
+        props.update({
+            "flood_likelihood": flood_lh,
+            "sar_flood_fraction": _round(sar_frac, 4),
+            "rain_contribution": _round(rain_norm, 3),
+            "tide_contribution": _round(tide_norm, 3),
+            "date": today,
+        })
+        enriched.append({**feat, "properties": props})
+
+    result: dict[str, Any] = {"type": "FeatureCollection", "features": enriched, "date": today}
+    zone_layer_cache[cache_key] = result
+    return result
+
+
+def _layer_priorities(force: bool = False) -> dict[str, Any]:
+    """Priority zones enriched with real per-zone NDVI + live flood signal."""
+    cache_key = "layer_priorities"
+    if not force and cache_key in zone_layer_cache:
+        return zone_layer_cache[cache_key]  # type: ignore[return-value]
+
+    zones = _load_zone_file("priority_zones.geojson")
+
+    sar = get_sar_data()
+    weather = weather_cache.get("data") or {}
+    tide = tide_cache.get("data") or {}
+    sar_frac = float(sar.get("flood_anomaly_fraction") or 0.0)
+    rain_mmh = float((weather.get("weather_now") or {}).get("rain_mm_h") or 0.0)
+    tide_m = float(tide.get("level_m") or 0.0)
+    sar_norm = min(1.0, sar_frac / 0.15)
+    rain_norm = min(1.0, rain_mmh / 20.0)
+    tide_norm = min(1.0, max(0.0, (tide_m - 0.2) / 1.3))
+    today = sar.get("date_acquired") or _utc_today().strftime("%Y-%m-%d")
+
+    # Per-zone NDVI for the 15 priority zone polygons
+    try:
+        per_zone = _compute_zone_ndvi("priority_zones.geojson", force)
+    except Exception as exc:
+        print(f"Priority zone GEE NDVI failed, using static: {exc}")
+        per_zone = []
+
+    enriched = []
+    for i, feat in enumerate(zones.get("features", [])):
+        props = dict(feat.get("properties") or {})
+        exposure = float(props.get("exposure") or 0.5)
+
+        zs = per_zone[i] if i < len(per_zone) else {}
+        health = zs.get("ndvi", float(props.get("mangrove_health") or 0.5))
+
+        flood_lh: float = _round(
+            0.40 * sar_norm + 0.30 * rain_norm + 0.15 * tide_norm + 0.15 * exposure, 3
+        ) or 0.0
+        priority: float = _round(0.60 * flood_lh + 0.40 * (1.0 - health), 3) or 0.0
+
+        props.update({
+            "mangrove_health": _round(health, 3),
+            "flood_likelihood": flood_lh,
+            "priority_score": priority,
+            "date": zs.get("date", today),
+        })
+        enriched.append({**feat, "properties": props})
+
+    result: dict[str, Any] = {"type": "FeatureCollection", "features": enriched, "date": today}
+    zone_layer_cache[cache_key] = result
+    return result
+
+
+def _layer_mangrove_hotspots(force: bool = False) -> dict[str, Any]:
+    """
+    Hotspot zones with severity derived from per-zone NDVI vs. global baseline.
+    severity = max(0, (baseline_ndvi - zone_ndvi) / baseline_ndvi)
+    Zones with below-baseline NDVI get higher severity.
+    """
+    cache_key = "layer_hotspots"
+    if not force and cache_key in zone_layer_cache:
+        return zone_layer_cache[cache_key]  # type: ignore[return-value]
+
+    zones = _load_zone_file("mangrove_hotspots.geojson")
+    global_health = get_mangrove_health()
+    baseline_ndvi = float(global_health.get("health_index") or 0.60)
+    today = global_health.get("date_acquired") or _utc_today().strftime("%Y-%m-%d")
+
+    try:
+        per_zone = _compute_zone_ndvi("mangrove_hotspots.geojson", force)
+    except Exception as exc:
+        print(f"Hotspot GEE NDVI failed, using static: {exc}")
+        per_zone = []
+
+    enriched = []
+    for i, feat in enumerate(zones.get("features", [])):
+        props = dict(feat.get("properties") or {})
+        zs = per_zone[i] if i < len(per_zone) else {}
+        zone_ndvi = zs.get("ndvi", float(props.get("mangrove_health") or baseline_ndvi))
+        severity = _round(max(0.0, (baseline_ndvi - zone_ndvi) / max(baseline_ndvi, 0.01)), 3)
+        props.update({
+            "mangrove_health": _round(zone_ndvi, 3),
+            "severity": severity,
+            "date": zs.get("date", today),
+        })
+        enriched.append({**feat, "properties": props})
+
+    result: dict[str, Any] = {"type": "FeatureCollection", "features": enriched, "date": today}
+    zone_layer_cache[cache_key] = result
+    return result
+
+
+_LAYER_DISPATCH = {
+    "mangrove_extent": _layer_mangrove_extent,
+    "flood": _layer_flood,
+    "priorities": _layer_priorities,
+    "mangrove_hotspots": _layer_mangrove_hotspots,
+}
+
+
+@app.get("/api/v1/layers/{layer_name}")
+async def get_layer(layer_name: str) -> dict[str, Any]:
+    """Return real-data-enriched GeoJSON for the requested map layer."""
+    fn = _LAYER_DISPATCH.get(layer_name)
+    if fn is None:
+        raise HTTPException(status_code=404, detail=f"Unknown layer: {layer_name}")
+    return await asyncio.to_thread(fn, False)
+
+
+@app.post("/api/v1/layers/{layer_name}/refresh")
+async def refresh_layer(layer_name: str) -> dict[str, Any]:
+    """Force-refresh a single layer cache (bypasses 6-h TTL)."""
+    fn = _LAYER_DISPATCH.get(layer_name)
+    if fn is None:
+        raise HTTPException(status_code=404, detail=f"Unknown layer: {layer_name}")
+    return await asyncio.to_thread(fn, True)
+
+
+@app.get("/api/v1/timeline")
+async def get_timeline() -> dict[str, Any]:
+    """Return available data dates. Currently always returns today's date."""
+    today = _utc_today().strftime("%Y-%m-%d")
+    return {"dates": [today]}
 
 
 if __name__ == "__main__":

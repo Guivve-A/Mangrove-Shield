@@ -326,9 +326,14 @@ export function EcosystemSection({ liveData }: EcosystemSectionProps): JSX.Eleme
       return;
     }
 
-    cursorRef.current.style.left = `${event.clientX}px`;
-    cursorRef.current.style.top = `${event.clientY}px`;
-    setCursorVisible(true);
+    // Use requestAnimationFrame to batch DOM updates and prevent jank
+    window.requestAnimationFrame(() => {
+      if (cursorRef.current) {
+        // Use transform for GPU acceleration instead of left/top
+        cursorRef.current.style.transform = `translate3d(${event.clientX}px, ${event.clientY}px, 0)`;
+        setCursorVisible(true);
+      }
+    });
   };
 
   const localRainValue =
@@ -458,11 +463,13 @@ export function EcosystemSection({ liveData }: EcosystemSectionProps): JSX.Eleme
 
       <div
         ref={cursorRef}
-        className={`${canUseCursor ? 'block' : 'hidden'} pointer-events-none fixed left-[-100px] top-[-100px] z-[70] -translate-x-1/2 -translate-y-1/2 transition-[width,height,opacity] duration-200`}
+        className={`${canUseCursor ? 'block' : 'hidden'} pointer-events-none fixed z-[70] transition-[width,height,opacity] duration-200`}
         style={{
           width: cursorExpanded ? 40 : 20,
           height: cursorExpanded ? 40 : 20,
           opacity: cursorVisible ? 1 : 0,
+          transform: 'translate3d(-50%, -50%, 0)',
+          willChange: 'transform',
         }}
       >
         <span className="absolute left-0 right-0 top-1/2 h-px -translate-y-1/2 bg-white mix-blend-difference" />
@@ -616,16 +623,19 @@ export function EcosystemSection({ liveData }: EcosystemSectionProps): JSX.Eleme
           width: 26px;
           height: 100%;
           transform-origin: bottom;
+          will-change: transform, opacity;
           animation: ecosystem-eq-bounce 1.5s infinite ease-in-out alternate;
         }
 
         .ecosystem-tide-line {
           height: 2px;
           width: 72px;
+          will-change: transform, width, opacity;
           animation: ecosystem-tide-wave 3s infinite ease-in-out;
         }
 
         .ecosystem-ndvi-block {
+          will-change: opacity;
           animation: ecosystem-ndvi-pulse 2s infinite steps(5);
         }
 

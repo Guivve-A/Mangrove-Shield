@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import type { FeatureCollection } from 'geojson';
 import { Waves, Satellite, Droplets, Activity, AlertTriangle, RadioReceiver, TreePine, Wind, Thermometer } from 'lucide-react';
 import Map, { Source, Layer, NavigationControl } from 'react-map-gl/maplibre';
@@ -59,7 +59,7 @@ export function MapSection({ waterMaskGeoJson }: MapSectionProps) {
         return () => { isMounted = false; clearInterval(id); };
     }, []);
 
-    const threat = (() => {
+    const threat = useMemo(() => {
         if (!data || data.tide.error || data.weather.error) {
             return { level: 'NORMAL', color: 'text-green-400 border-green-400/50 bg-green-400/10', glow: 'shadow-[0_0_15px_rgba(74,222,128,0.2)]', pulse: false };
         }
@@ -68,7 +68,7 @@ export function MapSection({ waterMaskGeoJson }: MapSectionProps) {
         if (tide > 3.0 && rain > 15) return { level: 'CRITICAL', color: 'text-red-500 border-red-500/50 bg-red-500/10', glow: 'shadow-[0_0_20px_rgba(239,68,68,0.4)]', pulse: true };
         if (tide > 2.5) return { level: 'WARNING', color: 'text-yellow-400 border-yellow-400/50 bg-yellow-400/10', glow: 'shadow-[0_0_15px_rgba(250,204,21,0.3)]', pulse: true };
         return { level: 'NORMAL', color: 'text-green-400 border-green-400/50 bg-green-400/10', glow: 'shadow-[0_0_15px_rgba(74,222,128,0.2)]', pulse: false };
-    })();
+    }, [data?.tide?.level_m, data?.weather?.weather_now?.rain_mm_h, data?.tide?.error, data?.weather?.error]);
 
     return (
         <section id="map" className="relative w-screen h-screen bg-black overflow-hidden font-sans text-white">

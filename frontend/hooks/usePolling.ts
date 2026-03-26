@@ -21,6 +21,20 @@ interface CacheEntry<T> {
 
 const cache = new Map<string, CacheEntry<unknown>>();
 
+// Cache cleanup timer - prevents unbounded memory growth
+// Runs every 60s and removes entries older than 10min
+if (typeof window !== 'undefined') {
+    setInterval(() => {
+        const now = Date.now();
+        const maxAge = 10 * 60 * 1000; // 10 minutes
+        for (const [key, entry] of cache.entries()) {
+            if (now - entry.timestamp > maxAge) {
+                cache.delete(key);
+            }
+        }
+    }, 60 * 1000); // Cleanup every 60 seconds
+}
+
 function isFallbackSource(data: unknown): boolean {
     if (data && typeof data === 'object' && 'source' in data) {
         return (data as { source?: string }).source === 'live_failed_fallback_mock';

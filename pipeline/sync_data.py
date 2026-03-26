@@ -14,7 +14,9 @@ try:
         fetch_tide,
         get_mangrove_health,
         compute_risk_assessment,
-        sync_to_firestore
+        sync_to_firestore,
+        _ensure_ee_initialized,
+        _ensure_firebase_initialized
     )
 except ImportError as e:
     print(f"Error importing backend logic: {e}")
@@ -22,7 +24,14 @@ except ImportError as e:
 
 async def run_sync():
     print("Starting automated data synchronization...")
-    
+
+    # Initialize Earth Engine and Firebase with service accounts
+    print("Initializing Earth Engine...")
+    _ensure_ee_initialized()
+
+    print("Initializing Firebase...")
+    _ensure_firebase_initialized()
+
     # 1. Fetch all data in parallel
     print("Fetching live data from sensors (GEE, Weather, Tide)...")
     sar_task = asyncio.to_thread(get_sar_data, True)

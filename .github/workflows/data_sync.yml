@@ -21,27 +21,13 @@ jobs:
         run: |
           pip install -r backend/requirements.txt
 
-      - name: Write Firebase credentials
-        env:
-          CRED: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_B64 }}
-        run: echo "$CRED" | base64 --decode > firebase_credentials.json
-
-      - name: Write GEE credentials
-        env:
-          CRED: ${{ secrets.GEE_SERVICE_ACCOUNT_B64 }}
-        run: echo "$CRED" | base64 --decode > gee_credentials.json
-
       - name: Run Data Sync
         env:
           OPENWEATHER_API_KEY: ${{ secrets.OPENWEATHER_API_KEY }}
           STORMGLASS_API_KEY: ${{ secrets.STORMGLASS_API_KEY }}
           EE_PROJECT: ${{ secrets.EE_PROJECT }}
+          GEE_SERVICE_ACCOUNT_B64: ${{ secrets.GEE_SERVICE_ACCOUNT_B64 }}
           EE_OPT_URL: https://earthengine-highvolume.googleapis.com
-          FIREBASE_SERVICE_ACCOUNT: ${{ github.workspace }}/firebase_credentials.json
-          GOOGLE_APPLICATION_CREDENTIALS: ${{ github.workspace }}/gee_credentials.json
+          FIREBASE_SERVICE_ACCOUNT_B64: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_B64 }}
         run: |
           python pipeline/sync_data.py
-
-      - name: Clean up credentials
-        if: always()
-        run: rm -f firebase_credentials.json gee_credentials.json

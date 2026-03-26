@@ -1,0 +1,103 @@
+{
+  "timestamp": "2026-03-24T18:50:00Z",
+  "weather": {
+    "data_mode": "cache",
+    "source": "OpenWeatherMap/Guayaquil",
+    "timestamp": "2026-03-24T18:50:00Z",
+    "coordinates": { "lat": -2.15, "lon": -79.95 },
+    "region": { "id": "guayaquil", "name": "Guayaquil" },
+    "weather_now": {
+      "rain_mm_h": 12.5,
+      "wind_kph": 18.2,
+      "humidity_pct": 82,
+      "temperature_c": 28.5
+    },
+    "proxies": {
+      "rain_intensity": 1.2,
+      "soil_saturation_proxy": 0.65,
+      "tidal_stage_proxy": 0.45
+    }
+  },
+  "tide": {
+    "level_m": 0.85,
+    "error": null,
+    "source": "StormGlass/Estero-Salado"
+  },
+  "sar_data": {
+    "data_mode": "cache",
+    "bbox": [-2.35, -80.15, -1.95, -79.75],
+    "date": "2026-03-22",
+    "scene": {
+      "scene_id": "S1A_IW_GRDH_1SDV_20260322",
+      "acquired_at": "2026-03-22T23:45:00Z",
+      "orbit_pass": "descending",
+      "polarization": "VV+VH"
+    },
+    "stats": {
+      "mangrove_cells": 12450,
+      "water_cells": 1580,
+      "water_extent_ratio": 0.126
+    },
+    "tile_url": "https://earthengine.googleapis.com/v1/projects/google/maps/...",
+    "date_acquired": "2026-03-22",
+    "flood_anomaly_fraction": 0.045
+  },
+  "ecosystem_health": {
+    "date": "2026-03-20",
+    "health_index": 0.68,
+    "classification": "moderately_healthy",
+    "trend": "stable",
+    "components": {
+      "ndvi_mean": 0.682,
+      "canopy_cover": 0.74,
+      "fragmentation_index": 0.22,
+      "species_diversity": 0.65,
+      "water_quality": 0.71
+    },
+    "model": {
+      "model_id": "mangrove-v4-torch",
+      "version": "4.2.0"
+    }
+  },
+  "ecosystem_timeseries": {
+    "bbox": [-2.35, -80.15, -1.95, -79.75],
+    "from": "2026-01-01",
+    "to": "2026-03-24",
+    "timeseries": [
+      { "date": "2026-01-01", "health_index": 0.65, "ndvi_mean": 0.65, "canopy_cover": 0.72, "fragmentation_index": 0.24 },
+      { "date": "2026-02-01", "health_index": 0.67, "ndvi_mean": 0.67, "canopy_cover": 0.73, "fragmentation_index": 0.23 },
+      { "date": "2026-03-24", "health_index": 0.68, "ndvi_mean": 0.68, "canopy_cover": 0.74, "fragmentation_index": 0.22 }
+    ]
+  },
+  "anomalies": {
+    "anomalies": [
+      {
+        "id": "an-01",
+        "date": "2026-03-24",
+        "zone_id": "estuario-sur",
+        "zone_name": "Estuario Sur",
+        "anomaly_type": "low_ndvi",
+        "severity": "warning",
+        "metric": "ndvi",
+        "observed_value": 0.42,
+        "expected_range": [0.6, 0.8],
+        "deviation_sigma": 2.4,
+        "description": "Lower than expected NDVI in Southern sector",
+        "location": { "lat": -2.31, "lon": -79.92 }
+      }
+    ]
+  },
+  "risk_assessment": {
+    "level": "WARNING",
+    "score": 48.5,
+    "vulnerability_index": 0.485,
+    "vulnerability_index_100": 48.5,
+    "drivers": {
+      "rain_intensity": 1.25,
+      "soil_saturation_proxy": 0.68,
+      "tidal_stage_proxy": 0.42,
+      "sar_water_extent": 0.12,
+      "wind_exposure": 0.35
+    }
+  }
+}

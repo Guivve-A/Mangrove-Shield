@@ -1,0 +1,12 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // api_cache es escrito exclusivamente por el pipeline Python via firebase-admin SDK.
+    // El Admin SDK omite estas reglas mediante IAM — no se necesita permiso de escritura cliente.
+    // Las escrituras desde el cliente están bloqueadas intencionalmente.
+    match /api_cache/{document=**} {
+      allow read: if true;
+      allow write: if false;
+    }
+  }
+}

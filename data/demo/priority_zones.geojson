@@ -1,0 +1,590 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": "zone-puna-2026-01-01",
+      "properties": {
+        "date": "2026-01-01",
+        "zone_name": "Isla Puna Norte",
+        "flood_likelihood": 0.71,
+        "exposure": 0.48,
+        "mangrove_health": 0.63,
+        "priority_score": 0.619
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -80.03,
+              -2.7
+            ],
+            [
+              -79.98,
+              -2.7
+            ],
+            [
+              -79.98,
+              -2.66
+            ],
+            [
+              -80.03,
+              -2.66
+            ],
+            [
+              -80.03,
+              -2.7
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "zone-jambeli-2026-01-01",
+      "properties": {
+        "date": "2026-01-01",
+        "zone_name": "Canal de Jambeli",
+        "flood_likelihood": 0.77,
+        "exposure": 0.56,
+        "mangrove_health": 0.58,
+        "priority_score": 0.676
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -79.97,
+              -2.82
+            ],
+            [
+              -79.91,
+              -2.82
+            ],
+            [
+              -79.91,
+              -2.77
+            ],
+            [
+              -79.97,
+              -2.77
+            ],
+            [
+              -79.97,
+              -2.82
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "zone-duran-2026-01-01",
+      "properties": {
+        "date": "2026-01-01",
+        "zone_name": "Duran Ribera Este",
+        "flood_likelihood": 0.68,
+        "exposure": 0.74,
+        "mangrove_health": 0.52,
+        "priority_score": 0.686
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -79.84,
+              -2.2
+            ],
+            [
+              -79.79,
+              -2.2
+            ],
+            [
+              -79.79,
+              -2.15
+            ],
+            [
+              -79.84,
+              -2.15
+            ],
+            [
+              -79.84,
+              -2.2
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "zone-samborondon-2026-01-01",
+      "properties": {
+        "date": "2026-01-01",
+        "zone_name": "Samborondon Humedal",
+        "flood_likelihood": 0.64,
+        "exposure": 0.69,
+        "mangrove_health": 0.57,
+        "priority_score": 0.639
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -79.91,
+              -2.14
+            ],
+            [
+              -79.86,
+              -2.14
+            ],
+            [
+              -79.86,
+              -2.09
+            ],
+            [
+              -79.91,
+              -2.09
+            ],
+            [
+              -79.91,
+              -2.14
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "zone-estuario-centro-2026-01-01",
+      "properties": {
+        "date": "2026-01-01",
+        "zone_name": "Estuario del Rio Guayas Centro",
+        "flood_likelihood": 0.73,
+        "exposure": 0.66,
+        "mangrove_health": 0.55,
+        "priority_score": 0.688
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -79.95,
+              -2.27
+            ],
+            [
+              -79.89,
+              -2.27
+            ],
+            [
+              -79.89,
+              -2.22
+            ],
+            [
+              -79.95,
+              -2.22
+            ],
+            [
+              -79.95,
+              -2.27
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "zone-puna-2026-01-15",
+      "properties": {
+        "date": "2026-01-15",
+        "zone_name": "Isla Puna Norte",
+        "flood_likelihood": 0.82,
+        "exposure": 0.53,
+        "mangrove_health": 0.56,
+        "priority_score": 0.705
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -80.03,
+              -2.7
+            ],
+            [
+              -79.98,
+              -2.7
+            ],
+            [
+              -79.98,
+              -2.66
+            ],
+            [
+              -80.03,
+              -2.66
+            ],
+            [
+              -80.03,
+              -2.7
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "zone-jambeli-2026-01-15",
+      "properties": {
+        "date": "2026-01-15",
+        "zone_name": "Canal de Jambeli",
+        "flood_likelihood": 0.88,
+        "exposure": 0.61,
+        "mangrove_health": 0.49,
+        "priority_score": 0.768
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -79.97,
+              -2.82
+            ],
+            [
+              -79.91,
+              -2.82
+            ],
+            [
+              -79.91,
+              -2.77
+            ],
+            [
+              -79.97,
+              -2.77
+            ],
+            [
+              -79.97,
+              -2.82
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "zone-duran-2026-01-15",
+      "properties": {
+        "date": "2026-01-15",
+        "zone_name": "Duran Ribera Este",
+        "flood_likelihood": 0.79,
+        "exposure": 0.79,
+        "mangrove_health": 0.46,
+        "priority_score": 0.773
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -79.84,
+              -2.2
+            ],
+            [
+              -79.79,
+              -2.2
+            ],
+            [
+              -79.79,
+              -2.15
+            ],
+            [
+              -79.84,
+              -2.15
+            ],
+            [
+              -79.84,
+              -2.2
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "zone-samborondon-2026-01-15",
+      "properties": {
+        "date": "2026-01-15",
+        "zone_name": "Samborondon Humedal",
+        "flood_likelihood": 0.74,
+        "exposure": 0.73,
+        "mangrove_health": 0.51,
+        "priority_score": 0.716
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -79.91,
+              -2.14
+            ],
+            [
+              -79.86,
+              -2.14
+            ],
+            [
+              -79.86,
+              -2.09
+            ],
+            [
+              -79.91,
+              -2.09
+            ],
+            [
+              -79.91,
+              -2.14
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "zone-estuario-centro-2026-01-15",
+      "properties": {
+        "date": "2026-01-15",
+        "zone_name": "Estuario del Rio Guayas Centro",
+        "flood_likelihood": 0.85,
+        "exposure": 0.71,
+        "mangrove_health": 0.48,
+        "priority_score": 0.776
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -79.95,
+              -2.27
+            ],
+            [
+              -79.89,
+              -2.27
+            ],
+            [
+              -79.89,
+              -2.22
+            ],
+            [
+              -79.95,
+              -2.22
+            ],
+            [
+              -79.95,
+              -2.27
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "zone-puna-2026-02-01",
+      "properties": {
+        "date": "2026-02-01",
+        "zone_name": "Isla Puna Norte",
+        "flood_likelihood": 0.66,
+        "exposure": 0.44,
+        "mangrove_health": 0.69,
+        "priority_score": 0.572
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -80.03,
+              -2.7
+            ],
+            [
+              -79.98,
+              -2.7
+            ],
+            [
+              -79.98,
+              -2.66
+            ],
+            [
+              -80.03,
+              -2.66
+            ],
+            [
+              -80.03,
+              -2.7
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "zone-jambeli-2026-02-01",
+      "properties": {
+        "date": "2026-02-01",
+        "zone_name": "Canal de Jambeli",
+        "flood_likelihood": 0.71,
+        "exposure": 0.52,
+        "mangrove_health": 0.63,
+        "priority_score": 0.62
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -79.97,
+              -2.82
+            ],
+            [
+              -79.91,
+              -2.82
+            ],
+            [
+              -79.91,
+              -2.77
+            ],
+            [
+              -79.97,
+              -2.77
+            ],
+            [
+              -79.97,
+              -2.82
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "zone-duran-2026-02-01",
+      "properties": {
+        "date": "2026-02-01",
+        "zone_name": "Duran Ribera Este",
+        "flood_likelihood": 0.63,
+        "exposure": 0.69,
+        "mangrove_health": 0.58,
+        "priority_score": 0.63
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -79.84,
+              -2.2
+            ],
+            [
+              -79.79,
+              -2.2
+            ],
+            [
+              -79.79,
+              -2.15
+            ],
+            [
+              -79.84,
+              -2.15
+            ],
+            [
+              -79.84,
+              -2.2
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "zone-samborondon-2026-02-01",
+      "properties": {
+        "date": "2026-02-01",
+        "zone_name": "Samborondon Humedal",
+        "flood_likelihood": 0.58,
+        "exposure": 0.64,
+        "mangrove_health": 0.62,
+        "priority_score": 0.58
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -79.91,
+              -2.14
+            ],
+            [
+              -79.86,
+              -2.14
+            ],
+            [
+              -79.86,
+              -2.09
+            ],
+            [
+              -79.91,
+              -2.09
+            ],
+            [
+              -79.91,
+              -2.14
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "zone-estuario-centro-2026-02-01",
+      "properties": {
+        "date": "2026-02-01",
+        "zone_name": "Estuario del Rio Guayas Centro",
+        "flood_likelihood": 0.69,
+        "exposure": 0.61,
+        "mangrove_health": 0.61,
+        "priority_score": 0.64
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -79.95,
+              -2.27
+            ],
+            [
+              -79.89,
+              -2.27
+            ],
+            [
+              -79.89,
+              -2.22
+            ],
+            [
+              -79.95,
+              -2.22
+            ],
+            [
+              -79.95,
+              -2.27
+            ]
+          ]
+        ]
+      }
+    }
+  ]
+}

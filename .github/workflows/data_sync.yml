@@ -1,0 +1,47 @@
+name: Automated Data Sync
+
+on:
+  schedule:
+    - cron: '0 */6 * * *' # Every 6 hours
+  workflow_dispatch: # Allows manual trigger
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install Dependencies
+        run: |
+          pip install -r backend/requirements.txt
+
+      - name: Write Firebase credentials
+        env:
+          CRED: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_B64 }}
+        run: echo "$CRED" | base64 --decode > firebase_credentials.json
+
+      - name: Write GEE credentials
+        env:
+          CRED: ${{ secrets.GEE_SERVICE_ACCOUNT_B64 }}
+        run: echo "$CRED" | base64 --decode > gee_credentials.json
+
+      - name: Run Data Sync
+        env:
+          OPENWEATHER_API_KEY: ${{ secrets.OPENWEATHER_API_KEY }}
+          STORMGLASS_API_KEY: ${{ secrets.STORMGLASS_API_KEY }}
+          EE_PROJECT: ${{ secrets.EE_PROJECT }}
+          EE_OPT_URL: https://earthengine-highvolume.googleapis.com
+          FIREBASE_SERVICE_ACCOUNT: ${{ github.workspace }}/firebase_credentials.json
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ github.workspace }}/gee_credentials.json
+        run: |
+          python pipeline/sync_data.py
+
+      - name: Clean up credentials
+        if: always()
+        run: rm -f firebase_credentials.json gee_credentials.json

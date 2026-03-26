@@ -1,0 +1,329 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": "mangrove-guayas-estuary-2026-01-01",
+      "properties": {
+        "date": "2026-01-01",
+        "mangrove_health": 0.67,
+        "status": "stable"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -80,
+              -2.36
+            ],
+            [
+              -79.88,
+              -2.36
+            ],
+            [
+              -79.88,
+              -2.3
+            ],
+            [
+              -80,
+              -2.3
+            ],
+            [
+              -80,
+              -2.36
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "mangrove-puna-west-2026-01-01",
+      "properties": {
+        "date": "2026-01-01",
+        "mangrove_health": 0.64,
+        "status": "stable"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -80.07,
+              -2.75
+            ],
+            [
+              -79.99,
+              -2.75
+            ],
+            [
+              -79.99,
+              -2.69
+            ],
+            [
+              -80.07,
+              -2.69
+            ],
+            [
+              -80.07,
+              -2.75
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "mangrove-jambeli-fringe-2026-01-01",
+      "properties": {
+        "date": "2026-01-01",
+        "mangrove_health": 0.62,
+        "status": "stable"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -79.98,
+              -2.86
+            ],
+            [
+              -79.9,
+              -2.86
+            ],
+            [
+              -79.9,
+              -2.8
+            ],
+            [
+              -79.98,
+              -2.8
+            ],
+            [
+              -79.98,
+              -2.86
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "mangrove-guayas-estuary-2026-01-15",
+      "properties": {
+        "date": "2026-01-15",
+        "mangrove_health": 0.58,
+        "status": "stressed"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -80,
+              -2.36
+            ],
+            [
+              -79.88,
+              -2.36
+            ],
+            [
+              -79.88,
+              -2.3
+            ],
+            [
+              -80,
+              -2.3
+            ],
+            [
+              -80,
+              -2.36
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "mangrove-puna-west-2026-01-15",
+      "properties": {
+        "date": "2026-01-15",
+        "mangrove_health": 0.52,
+        "status": "stressed"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -80.07,
+              -2.75
+            ],
+            [
+              -79.99,
+              -2.75
+            ],
+            [
+              -79.99,
+              -2.69
+            ],
+            [
+              -80.07,
+              -2.69
+            ],
+            [
+              -80.07,
+              -2.75
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "mangrove-jambeli-fringe-2026-01-15",
+      "properties": {
+        "date": "2026-01-15",
+        "mangrove_health": 0.5,
+        "status": "stressed"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -79.98,
+              -2.86
+            ],
+            [
+              -79.9,
+              -2.86
+            ],
+            [
+              -79.9,
+              -2.8
+            ],
+            [
+              -79.98,
+              -2.8
+            ],
+            [
+              -79.98,
+              -2.86
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "mangrove-guayas-estuary-2026-02-01",
+      "properties": {
+        "date": "2026-02-01",
+        "mangrove_health": 0.73,
+        "status": "recovering"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -80,
+              -2.36
+            ],
+            [
+              -79.88,
+              -2.36
+            ],
+            [
+              -79.88,
+              -2.3
+            ],
+            [
+              -80,
+              -2.3
+            ],
+            [
+              -80,
+              -2.36
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "mangrove-puna-west-2026-02-01",
+      "properties": {
+        "date": "2026-02-01",
+        "mangrove_health": 0.71,
+        "status": "recovering"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -80.07,
+              -2.75
+            ],
+            [
+              -79.99,
+              -2.75
+            ],
+            [
+              -79.99,
+              -2.69
+            ],
+            [
+              -80.07,
+              -2.69
+            ],
+            [
+              -80.07,
+              -2.75
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "mangrove-jambeli-fringe-2026-02-01",
+      "properties": {
+        "date": "2026-02-01",
+        "mangrove_health": 0.69,
+        "status": "recovering"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -79.98,
+              -2.86
+            ],
+            [
+              -79.9,
+              -2.86
+            ],
+            [
+              -79.9,
+              -2.8
+            ],
+            [
+              -79.98,
+              -2.8
+            ],
+            [
+              -79.98,
+              -2.86
+            ]
+          ]
+        ]
+      }
+    }
+  ]
+}

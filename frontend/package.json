@@ -1,0 +1,44 @@
+{
+  "name": "mangroveshield-frontend",
+  "version": "2.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev -H 0.0.0.0 -p 3000",
+    "build": "next build",
+    "start": "next start -p 3000",
+    "test": "next build",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@deck.gl/aggregation-layers": "9.2.2",
+    "@deck.gl/core": "9.2.2",
+    "@deck.gl/layers": "9.2.2",
+    "@deck.gl/mapbox": "9.2.2",
+    "@gsap/react": "^2.1.2",
+    "firebase": "^10.11.0",
+    "@react-three/drei": "^9.112.0",
+    "@react-three/fiber": "^8.17.6",
+    "@turf/turf": "7.3.1",
+    "@types/three": "^0.183.1",
+    "clsx": "2.1.1",
+    "gsap": "^3.12.7",
+    "lucide-react": "^0.577.0",
+    "maplibre-gl": "5.9.0",
+    "next": "14.2.33",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "react-map-gl": "^8.1.0",
+    "recharts": "2.15.4",
+    "three": "^0.183.2"
+  },
+  "devDependencies": {
+    "@types/geojson": "7946.0.16",
+    "@types/node": "22.18.0",
+    "@types/react": "18.3.24",
+    "@types/react-dom": "18.3.7",
+    "autoprefixer": "10.4.21",
+    "postcss": "8.5.6",
+    "tailwindcss": "3.4.17",
+    "typescript": "5.9.2"
+  }
+}

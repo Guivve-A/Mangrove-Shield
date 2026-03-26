@@ -1,0 +1,77 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": "guayas-estuary-core",
+      "properties": {
+        "zone_name": "Estuario del Rio Guayas",
+        "zone_type": "mangrove_core"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[-79.99, -2.33], [-79.86, -2.33], [-79.86, -2.22], [-79.99, -2.22], [-79.99, -2.33]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "gulf-guayaquil-north",
+      "properties": {
+        "zone_name": "Golfo de Guayaquil Norte",
+        "zone_type": "estuarine_buffer"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[-80.08, -2.58], [-79.9, -2.58], [-79.9, -2.45], [-80.08, -2.45], [-80.08, -2.58]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "isla-puna-northwest",
+      "properties": {
+        "zone_name": "Isla Puna Noroeste",
+        "zone_type": "mangrove_front"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[-80.09, -2.77], [-79.95, -2.77], [-79.95, -2.64], [-80.09, -2.64], [-80.09, -2.77]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "duran-east-bank",
+      "properties": {
+        "zone_name": "Duran Ribera Este",
+        "zone_type": "urban_mangrove_interface"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[-79.86, -2.26], [-79.78, -2.26], [-79.78, -2.16], [-79.86, -2.16], [-79.86, -2.26]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "samborondon-wetlands",
+      "properties": {
+        "zone_name": "Humedales de Samborondon",
+        "zone_type": "wetland_channel"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[-79.9, -2.18], [-79.8, -2.18], [-79.8, -2.08], [-79.9, -2.08], [-79.9, -2.18]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "jambeli-estuarine-channels",
+      "properties": {
+        "zone_name": "Canales Estuarinos de Jambeli",
+        "zone_type": "estuarine_channel"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[-80.0, -2.88], [-79.88, -2.88], [-79.88, -2.76], [-80.0, -2.76], [-80.0, -2.88]]]
+      }
+    }
+  ]
+}

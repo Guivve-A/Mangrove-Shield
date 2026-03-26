@@ -1,0 +1,58 @@
+/* ═══════════════════════════════════════════════
+   MangroveShield — Clean Editorial Design System
+   ═══════════════════════════════════════════════ */
+
+:root {
+    /* ─── Ecosystem Colors ─── */
+    --mangrove: #0F3D2E;
+    --estuary: #1F7A63;
+    --ocean-dark: #0A2540;
+    --sat-cyan: #19D3DA;
+    --storm-orange: #F28C38;
+    --tidal-sand: #D8C9A7;
+    --wetland-mist: #F2F6F5;
+    --danger: #E63946;
+
+    /* ─── Gradients ─── */
+    --gradient-ocean: linear-gradient(165deg, #0A2540 0%, #0F3D2E 100%);
+    --gradient-mangrove: linear-gradient(135deg, #0F3D2E 0%, #1F7A63 100%);
+    --gradient-hero: linear-gradient(180deg, #0A2540 0%, #0d2e47 50%, #0F3D2E 100%);
+    --gradient-subtle: linear-gradient(180deg, #F2F6F5 0%, #ffffff 100%);
+
+    /* ─── Backgrounds ─── */
+    --bg-dark: #0A2540;
+    --bg-light: #F2F6F5;
+    --bg-white: #ffffff;
+
+    /* ─── Text on Dark ─── */
+    --text-light: #F0F6F4;
+    --text-light-secondary: rgba(240, 246, 244, 0.65);
+    --text-light-dim: rgba(240, 246, 244, 0.4);
+
+    /* ─── Text on Light ─── */
+    --text-dark: #0A2540;
+    --text-dark-secondary: rgba(10, 37, 64, 0.6);
+    --text-dark-dim: rgba(10, 37, 64, 0.35);
+
+    /* ─── Borders ─── */
+    --border-light: rgba(10, 37, 64, 0.08);
+    --border-dark: rgba(240, 246, 244, 0.1);
+
+    /* ─── Layout ─── */
+    --content-max: 1200px;
+    --content-narrow: 680px;
+    --section-py: clamp(80px, 12vh, 160px);
+    --section-px: clamp(24px, 5vw, 80px);
+
+    /* ─── Typography ─── */
+    --font-inter: var(--font-inter-native), system-ui, -apple-system, sans-serif;
+    --font-mono: var(--font-mono-native), "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+
+    /* ─── Radius ─── */
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 20px;
+
+    /* ─── Transitions ─── */
+    --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+}

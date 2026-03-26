@@ -1,0 +1,560 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": "hotspot-puna-norte-2026-01-01",
+      "properties": {
+        "date": "2026-01-01",
+        "hotspot_name": "Isla Puna Norte",
+        "severity": 0.38,
+        "mangrove_health": 0.63
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -80.015,
+              -2.708
+            ],
+            [
+              -80.008,
+              -2.708
+            ],
+            [
+              -80.008,
+              -2.701
+            ],
+            [
+              -80.015,
+              -2.701
+            ],
+            [
+              -80.015,
+              -2.708
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "hotspot-guayas-centro-2026-01-01",
+      "properties": {
+        "date": "2026-01-01",
+        "hotspot_name": "Estuario del Rio Guayas",
+        "severity": 0.46,
+        "mangrove_health": 0.6
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -79.935,
+              -2.284
+            ],
+            [
+              -79.928,
+              -2.284
+            ],
+            [
+              -79.928,
+              -2.277
+            ],
+            [
+              -79.935,
+              -2.277
+            ],
+            [
+              -79.935,
+              -2.284
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "hotspot-duran-este-2026-01-01",
+      "properties": {
+        "date": "2026-01-01",
+        "hotspot_name": "Duran Ribera Este",
+        "severity": 0.42,
+        "mangrove_health": 0.58
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -79.823,
+              -2.205
+            ],
+            [
+              -79.816,
+              -2.205
+            ],
+            [
+              -79.816,
+              -2.198
+            ],
+            [
+              -79.823,
+              -2.198
+            ],
+            [
+              -79.823,
+              -2.205
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "hotspot-samborondon-2026-01-01",
+      "properties": {
+        "date": "2026-01-01",
+        "hotspot_name": "Samborondon Humedal",
+        "severity": 0.34,
+        "mangrove_health": 0.62
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -79.892,
+              -2.133
+            ],
+            [
+              -79.885,
+              -2.133
+            ],
+            [
+              -79.885,
+              -2.126
+            ],
+            [
+              -79.892,
+              -2.126
+            ],
+            [
+              -79.892,
+              -2.133
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "hotspot-jambeli-sur-2026-01-01",
+      "properties": {
+        "date": "2026-01-01",
+        "hotspot_name": "Canal de Jambeli",
+        "severity": 0.4,
+        "mangrove_health": 0.61
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -79.948,
+              -2.838
+            ],
+            [
+              -79.941,
+              -2.838
+            ],
+            [
+              -79.941,
+              -2.831
+            ],
+            [
+              -79.948,
+              -2.831
+            ],
+            [
+              -79.948,
+              -2.838
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "hotspot-puna-norte-2026-01-15",
+      "properties": {
+        "date": "2026-01-15",
+        "hotspot_name": "Isla Puna Norte",
+        "severity": 0.72,
+        "mangrove_health": 0.51
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -80.015,
+              -2.708
+            ],
+            [
+              -80.008,
+              -2.708
+            ],
+            [
+              -80.008,
+              -2.701
+            ],
+            [
+              -80.015,
+              -2.701
+            ],
+            [
+              -80.015,
+              -2.708
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "hotspot-guayas-centro-2026-01-15",
+      "properties": {
+        "date": "2026-01-15",
+        "hotspot_name": "Estuario del Rio Guayas",
+        "severity": 0.79,
+        "mangrove_health": 0.48
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -79.935,
+              -2.284
+            ],
+            [
+              -79.928,
+              -2.284
+            ],
+            [
+              -79.928,
+              -2.277
+            ],
+            [
+              -79.935,
+              -2.277
+            ],
+            [
+              -79.935,
+              -2.284
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "hotspot-duran-este-2026-01-15",
+      "properties": {
+        "date": "2026-01-15",
+        "hotspot_name": "Duran Ribera Este",
+        "severity": 0.76,
+        "mangrove_health": 0.46
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -79.823,
+              -2.205
+            ],
+            [
+              -79.816,
+              -2.205
+            ],
+            [
+              -79.816,
+              -2.198
+            ],
+            [
+              -79.823,
+              -2.198
+            ],
+            [
+              -79.823,
+              -2.205
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "hotspot-samborondon-2026-01-15",
+      "properties": {
+        "date": "2026-01-15",
+        "hotspot_name": "Samborondon Humedal",
+        "severity": 0.64,
+        "mangrove_health": 0.5
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -79.892,
+              -2.133
+            ],
+            [
+              -79.885,
+              -2.133
+            ],
+            [
+              -79.885,
+              -2.126
+            ],
+            [
+              -79.892,
+              -2.126
+            ],
+            [
+              -79.892,
+              -2.133
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "hotspot-jambeli-sur-2026-01-15",
+      "properties": {
+        "date": "2026-01-15",
+        "hotspot_name": "Canal de Jambeli",
+        "severity": 0.74,
+        "mangrove_health": 0.49
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -79.948,
+              -2.838
+            ],
+            [
+              -79.941,
+              -2.838
+            ],
+            [
+              -79.941,
+              -2.831
+            ],
+            [
+              -79.948,
+              -2.831
+            ],
+            [
+              -79.948,
+              -2.838
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "hotspot-puna-norte-2026-02-01",
+      "properties": {
+        "date": "2026-02-01",
+        "hotspot_name": "Isla Puna Norte",
+        "severity": 0.44,
+        "mangrove_health": 0.67
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -80.015,
+              -2.708
+            ],
+            [
+              -80.008,
+              -2.708
+            ],
+            [
+              -80.008,
+              -2.701
+            ],
+            [
+              -80.015,
+              -2.701
+            ],
+            [
+              -80.015,
+              -2.708
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "hotspot-guayas-centro-2026-02-01",
+      "properties": {
+        "date": "2026-02-01",
+        "hotspot_name": "Estuario del Rio Guayas",
+        "severity": 0.52,
+        "mangrove_health": 0.64
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -79.935,
+              -2.284
+            ],
+            [
+              -79.928,
+              -2.284
+            ],
+            [
+              -79.928,
+              -2.277
+            ],
+            [
+              -79.935,
+              -2.277
+            ],
+            [
+              -79.935,
+              -2.284
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "hotspot-duran-este-2026-02-01",
+      "properties": {
+        "date": "2026-02-01",
+        "hotspot_name": "Duran Ribera Este",
+        "severity": 0.5,
+        "mangrove_health": 0.62
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -79.823,
+              -2.205
+            ],
+            [
+              -79.816,
+              -2.205
+            ],
+            [
+              -79.816,
+              -2.198
+            ],
+            [
+              -79.823,
+              -2.198
+            ],
+            [
+              -79.823,
+              -2.205
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "hotspot-samborondon-2026-02-01",
+      "properties": {
+        "date": "2026-02-01",
+        "hotspot_name": "Samborondon Humedal",
+        "severity": 0.4,
+        "mangrove_health": 0.68
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -79.892,
+              -2.133
+            ],
+            [
+              -79.885,
+              -2.133
+            ],
+            [
+              -79.885,
+              -2.126
+            ],
+            [
+              -79.892,
+              -2.126
+            ],
+            [
+              -79.892,
+              -2.133
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "hotspot-jambeli-sur-2026-02-01",
+      "properties": {
+        "date": "2026-02-01",
+        "hotspot_name": "Canal de Jambeli",
+        "severity": 0.47,
+        "mangrove_health": 0.66
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -79.948,
+              -2.838
+            ],
+            [
+              -79.941,
+              -2.838
+            ],
+            [
+              -79.941,
+              -2.831
+            ],
+            [
+              -79.948,
+              -2.831
+            ],
+            [
+              -79.948,
+              -2.838
+            ]
+          ]
+        ]
+      }
+    }
+  ]
+}

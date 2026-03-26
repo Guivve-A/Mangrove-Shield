@@ -1,0 +1,33 @@
+# Application Secrets
+.env
+.env.*
+*credentials*.json
+serviceAccountKey.json
+*.pem
+
+# IDEs and OS Files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Build and Dependency Directories
+node_modules/
+.next/
+out/
+venv/
+.venv/
+__pycache__/
+.pytest_cache/
+
+# Source Code and Config that shouldn't be public
+firebase.json
+.firebaserc
+backend/
+data/
+pipeline/
+infra/
+tests/
+Makefile
+docker-compose.yml
+Dockerfile

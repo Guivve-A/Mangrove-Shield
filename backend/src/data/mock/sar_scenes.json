@@ -1,0 +1,102 @@
+[
+  {
+    "scene_id": "S1A_IW_GRDH_20260103T111512_GYE",
+    "acquired_at": "2026-01-03T11:15:12Z",
+    "satellite": "Sentinel-1A",
+    "orbit_pass": "DESCENDING",
+    "relative_orbit": 46,
+    "polarization": ["VV", "VH"],
+    "bbox": [-80.18, -2.94, -79.71, -2.03],
+    "tile_url": "/mock/tiles/sar/2026-01-03/{z}/{x}/{y}.png"
+  },
+  {
+    "scene_id": "S1B_IW_GRDH_20260109T230441_GYE",
+    "acquired_at": "2026-01-09T23:04:41Z",
+    "satellite": "Sentinel-1B",
+    "orbit_pass": "ASCENDING",
+    "relative_orbit": 149,
+    "polarization": ["VV", "VH"],
+    "bbox": [-80.16, -2.93, -79.7, -2.02],
+    "tile_url": "/mock/tiles/sar/2026-01-09/{z}/{x}/{y}.png"
+  },
+  {
+    "scene_id": "S1A_IW_GRDH_20260115T111513_GYE",
+    "acquired_at": "2026-01-15T11:15:13Z",
+    "satellite": "Sentinel-1A",
+    "orbit_pass": "DESCENDING",
+    "relative_orbit": 46,
+    "polarization": ["VV", "VH"],
+    "bbox": [-80.19, -2.95, -79.72, -2.04],
+    "tile_url": "/mock/tiles/sar/2026-01-15/{z}/{x}/{y}.png"
+  },
+  {
+    "scene_id": "S1B_IW_GRDH_20260121T230442_GYE",
+    "acquired_at": "2026-01-21T23:04:42Z",
+    "satellite": "Sentinel-1B",
+    "orbit_pass": "ASCENDING",
+    "relative_orbit": 149,
+    "polarization": ["VV", "VH"],
+    "bbox": [-80.17, -2.92, -79.69, -2.01],
+    "tile_url": "/mock/tiles/sar/2026-01-21/{z}/{x}/{y}.png"
+  },
+  {
+    "scene_id": "S1A_IW_GRDH_20260127T111510_GYE",
+    "acquired_at": "2026-01-27T11:15:10Z",
+    "satellite": "Sentinel-1A",
+    "orbit_pass": "DESCENDING",
+    "relative_orbit": 46,
+    "polarization": ["VV", "VH"],
+    "bbox": [-80.2, -2.95, -79.72, -2.03],
+    "tile_url": "/mock/tiles/sar/2026-01-27/{z}/{x}/{y}.png"
+  },
+  {
+    "scene_id": "S1B_IW_GRDH_20260202T230440_GYE",
+    "acquired_at": "2026-02-02T23:04:40Z",
+    "satellite": "Sentinel-1B",
+    "orbit_pass": "ASCENDING",
+    "relative_orbit": 149,
+    "polarization": ["VV", "VH"],
+    "bbox": [-80.16, -2.94, -79.7, -2.02],
+    "tile_url": "/mock/tiles/sar/2026-02-02/{z}/{x}/{y}.png"
+  },
+  {
+    "scene_id": "S1A_IW_GRDH_20260208T111511_GYE",
+    "acquired_at": "2026-02-08T11:15:11Z",
+    "satellite": "Sentinel-1A",
+    "orbit_pass": "DESCENDING",
+    "relative_orbit": 46,
+    "polarization": ["VV", "VH"],
+    "bbox": [-80.18, -2.93, -79.7, -2.0],
+    "tile_url": "/mock/tiles/sar/2026-02-08/{z}/{x}/{y}.png"
+  },
+  {
+    "scene_id": "S1B_IW_GRDH_20260220T230445_GYE",
+    "acquired_at": "2026-02-20T23:04:45Z",
+    "satellite": "Sentinel-1B",
+    "orbit_pass": "ASCENDING",
+    "relative_orbit": 149,
+    "polarization": ["VV", "VH"],
+    "bbox": [-80.17, -2.95, -79.71, -2.03],
+    "tile_url": "/mock/tiles/sar/2026-02-20/{z}/{x}/{y}.png"
+  },
+  {
+    "scene_id": "S1A_IW_GRDH_20260226T111509_GYE",
+    "acquired_at": "2026-02-26T11:15:09Z",
+    "satellite": "Sentinel-1A",
+    "orbit_pass": "DESCENDING",
+    "relative_orbit": 46,
+    "polarization": ["VV", "VH"],
+    "bbox": [-80.19, -2.95, -79.73, -2.04],
+    "tile_url": "/mock/tiles/sar/2026-02-26/{z}/{x}/{y}.png"
+  },
+  {
+    "scene_id": "S1B_IW_GRDH_20260304T230444_GYE",
+    "acquired_at": "2026-03-04T23:04:44Z",
+    "satellite": "Sentinel-1B",
+    "orbit_pass": "ASCENDING",
+    "relative_orbit": 149,
+    "polarization": ["VV", "VH"],
+    "bbox": [-80.18, -2.94, -79.72, -2.01],
+    "tile_url": "/mock/tiles/sar/2026-03-04/{z}/{x}/{y}.png"
+  }
+]

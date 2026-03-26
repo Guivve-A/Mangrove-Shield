@@ -1,0 +1,347 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": "flood-guayas-canal-2026-01-01",
+      "properties": {
+        "date": "2026-01-01",
+        "flood_likelihood": 0.74,
+        "exposure": 0.63,
+        "mangrove_health": 0.56,
+        "priority_score": 0.692
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -79.99,
+              -2.31
+            ],
+            [
+              -79.9,
+              -2.31
+            ],
+            [
+              -79.9,
+              -2.23
+            ],
+            [
+              -79.99,
+              -2.23
+            ],
+            [
+              -79.99,
+              -2.31
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "flood-duran-bajo-2026-01-01",
+      "properties": {
+        "date": "2026-01-01",
+        "flood_likelihood": 0.7,
+        "exposure": 0.69,
+        "mangrove_health": 0.53,
+        "priority_score": 0.693
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -79.88,
+              -2.25
+            ],
+            [
+              -79.8,
+              -2.25
+            ],
+            [
+              -79.8,
+              -2.16
+            ],
+            [
+              -79.88,
+              -2.16
+            ],
+            [
+              -79.88,
+              -2.25
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "flood-puna-noroeste-2026-01-01",
+      "properties": {
+        "date": "2026-01-01",
+        "flood_likelihood": 0.67,
+        "exposure": 0.5,
+        "mangrove_health": 0.64,
+        "priority_score": 0.598
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -80.05,
+              -2.76
+            ],
+            [
+              -79.94,
+              -2.76
+            ],
+            [
+              -79.94,
+              -2.66
+            ],
+            [
+              -80.05,
+              -2.66
+            ],
+            [
+              -80.05,
+              -2.76
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "flood-guayas-canal-2026-01-15",
+      "properties": {
+        "date": "2026-01-15",
+        "flood_likelihood": 0.86,
+        "exposure": 0.7,
+        "mangrove_health": 0.49,
+        "priority_score": 0.778
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -79.99,
+              -2.31
+            ],
+            [
+              -79.9,
+              -2.31
+            ],
+            [
+              -79.9,
+              -2.23
+            ],
+            [
+              -79.99,
+              -2.23
+            ],
+            [
+              -79.99,
+              -2.31
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "flood-duran-bajo-2026-01-15",
+      "properties": {
+        "date": "2026-01-15",
+        "flood_likelihood": 0.81,
+        "exposure": 0.76,
+        "mangrove_health": 0.47,
+        "priority_score": 0.768
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -79.88,
+              -2.25
+            ],
+            [
+              -79.8,
+              -2.25
+            ],
+            [
+              -79.8,
+              -2.16
+            ],
+            [
+              -79.88,
+              -2.16
+            ],
+            [
+              -79.88,
+              -2.25
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "flood-puna-noroeste-2026-01-15",
+      "properties": {
+        "date": "2026-01-15",
+        "flood_likelihood": 0.79,
+        "exposure": 0.55,
+        "mangrove_health": 0.55,
+        "priority_score": 0.694
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -80.05,
+              -2.76
+            ],
+            [
+              -79.94,
+              -2.76
+            ],
+            [
+              -79.94,
+              -2.66
+            ],
+            [
+              -80.05,
+              -2.66
+            ],
+            [
+              -80.05,
+              -2.76
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "flood-guayas-canal-2026-02-01",
+      "properties": {
+        "date": "2026-02-01",
+        "flood_likelihood": 0.68,
+        "exposure": 0.58,
+        "mangrove_health": 0.62,
+        "priority_score": 0.636
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -79.99,
+              -2.31
+            ],
+            [
+              -79.9,
+              -2.31
+            ],
+            [
+              -79.9,
+              -2.23
+            ],
+            [
+              -79.99,
+              -2.23
+            ],
+            [
+              -79.99,
+              -2.31
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "flood-duran-bajo-2026-02-01",
+      "properties": {
+        "date": "2026-02-01",
+        "flood_likelihood": 0.61,
+        "exposure": 0.64,
+        "mangrove_health": 0.59,
+        "priority_score": 0.632
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -79.88,
+              -2.25
+            ],
+            [
+              -79.8,
+              -2.25
+            ],
+            [
+              -79.8,
+              -2.16
+            ],
+            [
+              -79.88,
+              -2.16
+            ],
+            [
+              -79.88,
+              -2.25
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "flood-puna-noroeste-2026-02-01",
+      "properties": {
+        "date": "2026-02-01",
+        "flood_likelihood": 0.6,
+        "exposure": 0.46,
+        "mangrove_health": 0.7,
+        "priority_score": 0.544
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -80.05,
+              -2.76
+            ],
+            [
+              -79.94,
+              -2.76
+            ],
+            [
+              -79.94,
+              -2.66
+            ],
+            [
+              -80.05,
+              -2.66
+            ],
+            [
+              -80.05,
+              -2.76
+            ]
+          ]
+        ]
+      }
+    }
+  ]
+}

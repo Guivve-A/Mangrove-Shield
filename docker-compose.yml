@@ -1,0 +1,49 @@
+services:
+  db:
+    image: postgis/postgis:16-3.4
+    container_name: mangroveshield-db
+    environment:
+      POSTGRES_USER: mangrove
+      POSTGRES_PASSWORD: mangrove
+      POSTGRES_DB: mangroveshield
+    ports:
+      - '5432:5432'
+    volumes:
+      - db_data:/var/lib/postgresql/data
+      - ./infra/postgis/init:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U mangrove -d mangroveshield']
+      interval: 10s
+      timeout: 5s
+      retries: 6
+
+  api:
+    build:
+      context: .
+      dockerfile: api/Dockerfile
+    container_name: mangroveshield-api
+    environment:
+      DATABASE_URL: postgresql://mangrove:mangrove@db:5432/mangroveshield
+      DATA_BACKEND: postgis
+      DATA_DIR: /app/data/demo
+      CORS_ORIGINS: http://localhost:3000,http://127.0.0.1:3000
+    ports:
+      - '8000:8000'
+    depends_on:
+      db:
+        condition: service_healthy
+
+  web:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+    container_name: mangroveshield-frontend
+    environment:
+      NEXT_PUBLIC_API_BASE_URL: http://localhost:8000
+    ports:
+      - '3000:3000'
+    depends_on:
+      - api
+
+volumes:
+  db_data:

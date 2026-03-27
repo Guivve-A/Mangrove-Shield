@@ -22,6 +22,11 @@ const IntelligenceMap = dynamic(
   { ssr: false },
 );
 
+const MangroveTimelineSection = dynamic(
+  () => import('@/components/sections/MangroveTimelineSection').then((m) => m.MangroveTimelineSection),
+  { ssr: false },
+);
+
 const SimulationSection = dynamic(
   () => import('@/components/sections/SimulationSection').then((m) => m.SimulationSection),
   { ssr: false },
@@ -188,6 +193,8 @@ export default function HomePage(): JSX.Element {
         </div>
 
         <OutcomesSection />
+
+        <MangroveTimelineSection />
 
         <SimulationSection />
 

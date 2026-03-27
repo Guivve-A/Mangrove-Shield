@@ -9,6 +9,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.config import get_settings
 from app.routers.intelligence import router as intelligence_router
 from app.routers.layers import router as layers_router
+from app.routers.mangrove_change import router as mangrove_change_router
 from app.services.bootstrap import build_backend
 
 
@@ -54,6 +55,7 @@ def create_app() -> FastAPI:
 
     app.include_router(layers_router, prefix=settings.api_prefix, tags=["layers"])
     app.include_router(intelligence_router, prefix=settings.api_prefix, tags=["intelligence"])
+    app.include_router(mangrove_change_router, prefix=settings.api_prefix, tags=["mangrove-change"])
     return app
 
 

@@ -121,3 +121,25 @@ export interface CameraState {
   pitch: number;
   bearing: number;
 }
+
+// Mangrove historical change (GMW v3.0 timeline)
+
+export interface MangroveYearRecord {
+  year: number;
+  total_ha: number;
+  loss_ha: number;
+  gain_ha: number;
+  delta_ha: number;
+  loss_rate_pct: number;
+}
+
+export interface MangroveTimelineResponse {
+  bbox: [number, number, number, number];
+  years: number[];
+  summary: {
+    total_loss_ha: number;
+    total_gain_ha: number;
+    net_change_ha: number;
+  };
+  records: MangroveYearRecord[];
+}

@@ -77,6 +77,47 @@ Source config:
 }
 ```
 
+## Mangrove historical change (GMW v3.0 timeline)
+
+### `GET /api/v1/mangrove/timeline`
+
+Full timeline response:
+```json
+{
+  "bbox": [-80.1, -2.4, -79.4, -1.7],
+  "years": [2014, 2016, 2018, 2020, 2022, 2024],
+  "summary": {
+    "total_loss_ha": 6750,
+    "total_gain_ha": 1450,
+    "net_change_ha": -5300
+  },
+  "records": [
+    {
+      "year": 2020,
+      "total_ha": 48320,
+      "loss_ha": 1890,
+      "gain_ha": 340,
+      "delta_ha": -1550,
+      "loss_rate_pct": 3.79
+    }
+  ]
+}
+```
+
+### `GET /api/v1/mangrove/change?year={year}&bbox={bbox}`
+
+Single-year response (FeatureCollection with metadata):
+
+Required metadata fields:
+- `year: number`
+- `total_ha: number`
+- `delta_ha: number`
+- `loss_ha: number`
+- `gain_ha: number`
+- `loss_rate_pct: number`
+
+Source: Global Mangrove Watch v3.0 (Bunting et al., 2022), extended with SERVIR Amazonia v1.1 for 2022 and SAR GEE for 2024.
+
 ## Offline fallback
 
 If API is unavailable, frontend falls back to local demo files:

@@ -166,6 +166,64 @@ export interface HealthTimeseriesResponse {
   _source?: 'firestore' | 'api' | 'calibrated_estimate';
 }
 
+// Flood events and mangrove-flood spatial correlation (Copernicus EMS + INAMHI + SAR)
+
+export interface FloodEvent {
+  id: string;
+  date: string;
+  year: number;
+  month: number;
+  label: string;
+  rain_mm_day: number;
+  tide_level_m: number;
+  affected_people: number;
+  damage_usd_m: number;
+  flood_area_ha: number;
+  severity: 'moderate' | 'severe' | 'extreme';
+  description: string;
+  correlation_pct: number;
+  source: string;
+}
+
+export interface FloodEventsResponse {
+  bbox: [number, number, number, number];
+  year_from: number;
+  year_to: number;
+  severity_filter: string;
+  total_events: number;
+  total_affected_people: number;
+  total_flood_area_ha: number;
+  events: FloodEvent[];
+  _source?: 'firestore' | 'api' | 'calibrated_estimate';
+}
+
+export interface CorrelationCellProperties {
+  cell_id: string;
+  loss_ha: number;
+  flood_frequency: number;
+  mangrove_cover: number;
+  correlation_index: number;
+  risk_category: 'critical' | 'high' | 'moderate' | 'low';
+}
+
+export interface FloodCorrelationResponse {
+  type: 'FeatureCollection';
+  metadata: {
+    bbox: [number, number, number, number];
+    cells_total: number;
+    cells_critical: number;
+    cells_high: number;
+    methodology: string;
+    sources: string[];
+  };
+  features: Array<{
+    type: 'Feature';
+    geometry: { type: 'Polygon'; coordinates: number[][][] };
+    properties: CorrelationCellProperties;
+  }>;
+  _source?: 'firestore' | 'api' | 'calibrated_estimate';
+}
+
 export interface MangroveTimelineResponse {
   bbox: [number, number, number, number];
   years: number[];

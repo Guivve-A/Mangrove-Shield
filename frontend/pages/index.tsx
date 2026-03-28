@@ -32,6 +32,11 @@ const MangroveHealthSection = dynamic(
   { ssr: false },
 );
 
+const FloodCorrelationSection = dynamic(
+  () => import('@/components/sections/FloodCorrelationSection').then((m) => m.FloodCorrelationSection),
+  { ssr: false },
+);
+
 const SimulationSection = dynamic(
   () => import('@/components/sections/SimulationSection').then((m) => m.SimulationSection),
   { ssr: false },
@@ -202,6 +207,8 @@ export default function HomePage(): JSX.Element {
         <MangroveTimelineSection />
 
         <MangroveHealthSection />
+
+        <FloodCorrelationSection />
 
         <SimulationSection />
 

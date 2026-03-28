@@ -1,6 +1,7 @@
 import React, { useRef } from 'react';
 import Image from 'next/image';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
+import { useT } from '@/lib/i18n/LanguageContext';
 
 /* ═══════════════════════════════════════════════════
    Types
@@ -18,42 +19,12 @@ interface MangroveCardItem {
    Data
    ═══════════════════════════════════════════════════ */
 
-const mangroveData: MangroveCardItem[] = [
-  {
-    tag: "ALERTA TEMPRANA",
-    title: "Protección de Vidas y Bienes Contra Inundaciones",
-    description: "El sistema utiliza radar satelital y datos en tiempo real para predecir vulnerabilidades ante inundaciones, permitiendo una alerta temprana para comunidades vulnerables en el estuario.",
-    src: "/assets/Utilidades/alerta-temprana.png",
-    imageAlt: "Radar satelital e inundaciones"
-  },
-  {
-    tag: "CONSERVACIÓN",
-    title: "Preservación de Barreras Naturales",
-    description: "Al monitorear la salud del manglar mediante el índice NDVI (Sentinel-2), se protegen los muros naturales que reducen hasta en un 60% la fuerza de las marejadas y el oleaje extremo.",
-    src: "/assets/Utilidades/conservacion.png",
-    imageAlt: "Manglares desde arriba"
-  },
-  {
-    tag: "ECONOMÍA LOCAL",
-    title: "Seguridad Alimentaria y Económica",
-    description: "Los manglares de Guayaquil son la 'sala de maternidad' de crustáceos y peces esenciales. El monitoreo constante asegura los medios de vida de miles de recolectores y pescadores.",
-    src: "/assets/Utilidades/economia-local.png",
-    imageAlt: "Pescador artesanal en estuario"
-  },
-  {
-    tag: "CARBONO AZUL",
-    title: "Mitigación del Cambio Climático",
-    description: "Identifica áreas de degradación para intervenciones precisas, maximizando la capacidad del estuario para secuestrar hasta 10 veces más carbono que los bosques tropicales terrestres.",
-    src: "/assets/Utilidades/carbono-azul.png",
-    imageAlt: "Bosque tropical denso y raíces"
-  },
-  {
-    tag: "DATOS ABIERTOS",
-    title: "Toma de Decisiones Basada en Evidencia",
-    description: "MangroveShield democratiza el acceso a datos geoespaciales (SAR, NDVI, mareas), permitiendo colaborar en estrategias de conservación basadas en datos científicos reales.",
-    src: "/assets/Utilidades/datos-abiertos.png",
-    imageAlt: "Visión satelital de la tierra y datos"
-  }
+const CARD_IMAGES = [
+  "/assets/Utilidades/alerta-temprana.png",
+  "/assets/Utilidades/conservacion.png",
+  "/assets/Utilidades/economia-local.png",
+  "/assets/Utilidades/carbono-azul.png",
+  "/assets/Utilidades/datos-abiertos.png"
 ];
 
 /* ═══════════════════════════════════════════════════
@@ -66,7 +37,7 @@ const Card: React.FC<{ item: MangroveCardItem }> = ({ item }) => {
       className="flex flex-col flex-shrink-0 w-[320px] md:w-[400px] snap-start relative group cursor-pointer shadow-lg"
       style={{ clipPath: 'polygon(0 0, calc(100% - 40px) 0, 100% 40px, 100% 100%, 0 100%)' }}
     >
-      {/* Mitad superior: Imagen y Tag */}
+      {/* Top half: Image and Tag */}
       <div className="relative h-[220px] w-full overflow-hidden bg-slate-900">
         <Image
           src={item.src}
@@ -82,7 +53,7 @@ const Card: React.FC<{ item: MangroveCardItem }> = ({ item }) => {
         </div>
       </div>
 
-      {/* Mitad inferior: Texto */}
+      {/* Bottom half: Text */}
       <div className="bg-white p-6 md:p-8 flex-grow flex flex-col justify-start min-h-[220px] transition-colors duration-300 group-hover:bg-slate-50">
         <h3 className="text-xl md:text-2xl font-bold tracking-tight text-slate-900 mb-4 leading-tight">
           {item.title}
@@ -100,6 +71,7 @@ const Card: React.FC<{ item: MangroveCardItem }> = ({ item }) => {
    ═══════════════════════════════════════════════════ */
 
 export function MangroveSection(): JSX.Element {
+  const { t } = useT();
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   const scroll = (direction: 'left' | 'right') => {
@@ -135,15 +107,15 @@ export function MangroveSection(): JSX.Element {
         <div className="w-full mb-12">
           <div className="accent-line mb-6 reveal" />
           <p className="reveal text-sm md:text-base text-blue-600 font-bold tracking-widest uppercase mb-4 text-center md:text-left">
-            Proyecto Resiliencia Guayaquil
+            {t.mangrove.projectLabel}
           </p>
           <h2 className="reveal text-3xl md:text-5xl lg:text-6xl font-medium tracking-tight text-center md:text-left max-w-4xl text-slate-900 mb-6">
-            MangroveShield no es solo tecnología. Es infraestructura crítica.
+            {t.mangrove.heading}
           </h2>
 
           <div className="flex flex-col md:flex-row justify-between items-end gap-6 mt-8">
             <p className="reveal text-lg md:text-xl text-slate-600 max-w-2xl text-center md:text-left">
-              Aquí presentamos las 5 razones fundamentales de su impacto en la resiliencia climática del estuario.
+              {t.mangrove.subheading}
             </p>
 
             {/* Navigation Buttons (Desktop) */}
@@ -176,8 +148,8 @@ export function MangroveSection(): JSX.Element {
             className="flex overflow-x-auto gap-6 snap-x snap-mandatory pb-12 pt-4 pr-16 
                        scrollbar-hide [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
           >
-            {mangroveData.map((item, index) => (
-              <Card key={index} item={item} />
+            {t.mangrove.cards.map((item, index) => (
+              <Card key={index} item={{ ...item, src: CARD_IMAGES[index] }} />
             ))}
           </div>
         </div>

@@ -13,9 +13,9 @@ const LanguageContext = createContext<LanguageContextValue | null>(null);
 
 // ─── Provider ────────────────────────────────────────────────────────────────
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
-  // Default to Spanish; localStorage preference applied client-side in useEffect
+  // Default to English; localStorage preference applied client-side in useEffect
   // to avoid SSR/hydration mismatch on static export.
-  const [lang, setLangState] = useState<Language>('es');
+  const [lang, setLangState] = useState<Language>('en');
 
   useEffect(() => {
     try {

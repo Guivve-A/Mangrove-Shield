@@ -1,8 +1,8 @@
-import React, { useMemo, useRef } from 'react';
-import { useState } from 'react';
+import React, { useMemo, useRef, useState } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls, Instances, Instance } from '@react-three/drei';
 import * as THREE from 'three';
+import { useT } from '@/lib/i18n/LanguageContext';
 
 // ============================================================================
 // Utilidades de interpolación
@@ -505,26 +505,27 @@ function Scene({ damage }: { damage: number }) {
 // ============================================================================
 
 export function SimulationSection() {
+    const { t } = useT();
     const [damage, setDamage] = useState(0);
 
     const getStatusInfo = (val: number) => {
         if (val < 40) return {
-            badge: 'ISLA VIVA PROTEGIDA',
+            badge: t.simulation.status.alive.badge,
             color: 'bg-emerald-500/90 text-white border border-emerald-500/30',
-            title: 'Equilibrio Perfecto',
-            text: 'Las aves vuelan, las flores de MangroveShield prosperan y el agua está cristalina.'
+            title: t.simulation.status.alive.title,
+            text: t.simulation.status.alive.text
         };
         if (val < 80) return {
-            badge: 'ALERTA AMBIENTAL',
+            badge: t.simulation.status.alert.badge,
             color: 'bg-amber-500/90 text-white border border-amber-500/30',
-            title: 'Fragmentación en progreso',
-            text: 'Las nubes oscurecen, el agua sube y la capa de manglares comienza a desaparecer.'
+            title: t.simulation.status.alert.title,
+            text: t.simulation.status.alert.text
         };
         return {
-            badge: 'NIVEL DE INUNDACIÓN CRÍTICO',
+            badge: t.simulation.status.critical.badge,
             color: 'bg-rose-500/90 text-white border border-rose-500/30',
-            title: 'Desastre Total Sin Manglares',
-            text: 'La flora se ahoga y el agua inunda la ciudad al perder la barrera costera natural.'
+            title: t.simulation.status.critical.title,
+            text: t.simulation.status.critical.text
         };
     };
 
@@ -545,9 +546,9 @@ export function SimulationSection() {
             {/* Título superior izquierda */}
             <div className="absolute top-10 left-10 md:top-16 md:left-16 z-50 pointer-events-none">
                 <div className="bg-white/80 backdrop-blur-xl border border-white/5 p-8 rounded-3xl max-w-xs shadow-[0_20px_40px_rgba(0,0,0,0.1)]">
-                    <p className="text-emerald-600 font-mono text-[10px] tracking-widest uppercase mb-2">Simulación WebGL</p>
-                    <h1 className="text-3xl font-inter font-bold text-slate-800 leading-tight mb-2">Mangrove<br />Island 3D</h1>
-                    <p className="text-slate-500 text-xs font-light">Mundo vivo estilizado interactivo. Arrastra para orbitar y explora el ecosistema.</p>
+                    <p className="text-emerald-600 font-mono text-[10px] tracking-widest uppercase mb-2">{t.simulation.webglLabel}</p>
+                    <h1 className="text-3xl font-inter font-bold text-slate-800 leading-tight mb-2 whitespace-pre-line">{t.simulation.title}</h1>
+                    <p className="text-slate-500 text-xs font-light">{t.simulation.subtitle}</p>
                 </div>
             </div>
 
@@ -563,7 +564,7 @@ export function SimulationSection() {
                     <div className="h-[1px] w-full bg-slate-100 mb-4"></div>
 
                     <div className="flex justify-between items-center text-[10px] font-mono text-slate-400">
-                        <span>INTEGRIDAD DEL ECOSISTEMA</span>
+                        <span>{t.simulation.ecosystemIntegrity}</span>
                         <span className={`font-bold ${damage > 50 ? 'text-rose-500' : 'text-emerald-500'}`}>{100 - damage}%</span>
                     </div>
                 </div>
@@ -575,7 +576,7 @@ export function SimulationSection() {
 
                     <div className="flex items-center gap-2">
                         <div className="w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_10px_rgba(52,211,153,0.5)]"></div>
-                        <span className="text-[10px] font-mono font-bold tracking-widest text-emerald-600 uppercase">Salud Óptima</span>
+                        <span className="text-[10px] font-mono font-bold tracking-widest text-emerald-600 uppercase">{t.simulation.optimalHealth}</span>
                     </div>
 
                     <input
@@ -592,14 +593,14 @@ export function SimulationSection() {
                     />
 
                     <div className="flex items-center gap-2">
-                        <span className="text-[10px] font-mono font-bold tracking-widest text-rose-500 uppercase">Daño Ambiental</span>
+                        <span className="text-[10px] font-mono font-bold tracking-widest text-rose-500 uppercase">{t.simulation.environmentalDamage}</span>
                         <div className="w-2 h-2 rounded-full bg-rose-400 shadow-[0_0_10px_rgba(244,63,94,0.5)]"></div>
                     </div>
 
                 </div>
 
                 <p className="text-center text-[10px] text-white/70 font-mono tracking-widest mt-4 uppercase hidden md:block mix-blend-difference drop-shadow-md">
-                    [ Arrastra para ver la cámara 3D · Rueda para hacer zoom ]
+                    {t.simulation.hintOrbit}
                 </p>
             </div>
 

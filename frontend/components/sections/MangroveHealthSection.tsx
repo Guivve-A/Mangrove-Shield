@@ -17,6 +17,7 @@ import type {
   MunicipalityHealth,
 } from '@/types/geospatial';
 import { loadHealthSummary, loadHealthTimeseries } from '@/lib/api';
+import { useT } from '@/lib/i18n/LanguageContext';
 
 const oswald = Oswald({ subsets: ['latin'], weight: ['400', '700'], display: 'swap' });
 
@@ -169,9 +170,10 @@ const DIST_SEGMENTS: Array<{ key: string; label: string; color: string }> = [
   { key: 'critical', label: 'CRÍTICO',   color: '#ef4444' },
 ];
 
-function DistributionBar({ distribution, visible }: {
+function DistributionBar({ distribution, visible, t }: {
   distribution: Record<string, number>;
   visible: boolean;
+  t: any;
 }) {
   return (
     <div className="w-full max-w-lg">
@@ -199,7 +201,7 @@ function DistributionBar({ distribution, visible }: {
               </span>
             </div>
             <span className="mt-0.5 font-mono text-[9px] uppercase tracking-[0.2em] text-white/30">
-              {seg.label}
+              {t.health.distribution[seg.key]}
             </span>
           </div>
         ))}
@@ -324,6 +326,7 @@ function ChartTooltipContent({ active, payload, label }: {
 // ═══════════════════════════════════════════════════════════════════════════
 
 export function MangroveHealthSection() {
+  const { t } = useT();
   const [summary, setSummary] = useState<HealthSummaryResponse | null>(null);
   const [timeseries, setTimeseries] = useState<HealthTimeseriesResponse | null>(null);
   const [activeIndex, setActiveIndex] = useState<IndexKey>('ndvi');
@@ -388,7 +391,7 @@ export function MangroveHealthSection() {
         <div className="flex items-center gap-3">
           <div className="h-2 w-2 animate-pulse rounded-full bg-emerald-500" />
           <span className="font-mono text-[11px] uppercase tracking-[0.2em] text-white/40">
-            Cargando telemetría Sentinel-2...
+            {t.health.loading}
           </span>
         </div>
       </section>
@@ -421,8 +424,8 @@ export function MangroveHealthSection() {
               summary._source === 'firestore' ? 'bg-emerald-400' : 'bg-amber-400 animate-pulse'
             }`} />
             {summary._source === 'firestore'
-              ? 'Datos en vivo · Sentinel-2 SR via GEE Pipeline → Firestore'
-              : 'Estimación calibrada · Sentinel-2 NDVI + NASA AGB v1.3 (literatura)'}
+              ? t.health.liveData
+              : t.health.calibratedData}
           </div>
         </div>
 
@@ -432,13 +435,13 @@ export function MangroveHealthSection() {
           <div className="mb-6 flex items-center justify-center gap-3">
             <div className="h-px w-12 bg-gradient-to-r from-transparent to-white/20" />
             <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-white/25">
-              Sentinel-2 MSI &middot; 10m &middot; Compuesto Mensual
+              {t.health.compositeLabel}
             </span>
             <div className="h-px w-12 bg-gradient-to-l from-transparent to-white/20" />
           </div>
 
           <h2 className={`${oswald.className} text-center text-4xl uppercase leading-none tracking-[0.08em] text-white/90 md:text-6xl`}>
-            Salud del Ecosistema
+            {t.health.title}
           </h2>
 
           <p className="mt-2 text-center font-mono text-[11px] uppercase tracking-[0.15em] text-white/25">
@@ -450,7 +453,7 @@ export function MangroveHealthSection() {
             <div className="flex justify-center md:col-span-7">
               <InstrumentGauge
                 value={gaugeValue}
-                label="Índice de salud global"
+                label={t.health.globalHealthLabel}
                 classification={summary.classification}
               />
             </div>
@@ -460,19 +463,19 @@ export function MangroveHealthSection() {
               <div className="relative rounded-2xl border border-white/[0.06] bg-white/[0.02] p-5">
                 <Brackets className="border-white/[0.08]" />
                 <p className="mb-3 font-mono text-[9px] uppercase tracking-[0.2em] text-white/25">
-                  Lecturas
+                  {t.health.readingsLabel}
                 </p>
-                <TelemetryReadout label="NDVI medio" value={summary.ndvi_mean.toFixed(4)} />
-                <TelemetryReadout label="NDWI medio" value={summary.ndwi_mean.toFixed(4)} />
-                <TelemetryReadout label="Periodo" value={summary.period} />
-                <TelemetryReadout label="Resolución" value="10" unit="m/px" />
+                <TelemetryReadout label={t.health.ndviMean} value={summary.ndvi_mean.toFixed(4)} />
+                <TelemetryReadout label={t.health.ndwiMean} value={summary.ndwi_mean.toFixed(4)} />
+                <TelemetryReadout label={t.health.period} value={summary.period} />
+                <TelemetryReadout label={t.health.resolution} value="10" unit="m/px" />
               </div>
             </div>
           </div>
 
           {/* Distribution bar */}
           <div className="mt-12 flex justify-center">
-            <DistributionBar distribution={summary.distribution} visible={isVisible} />
+            <DistributionBar distribution={summary.distribution} visible={isVisible} t={t} />
           </div>
         </div>
 
@@ -489,7 +492,7 @@ export function MangroveHealthSection() {
                     : 'text-white/30 hover:bg-white/[0.03] hover:text-white/50'
                 }`}
               >
-                {INDEX_META[key].label}
+                {key === 'agb' ? t.health.indexMeta.biomass : key === 'height' ? t.health.indexMeta.canopyHeight : INDEX_META[key].label}
                 {activeIndex === key && (
                   <div className="absolute bottom-0 left-1/2 h-px w-3/4 -translate-x-1/2 bg-gradient-to-r from-transparent via-white/40 to-transparent" />
                 )}
@@ -522,10 +525,10 @@ export function MangroveHealthSection() {
           <div className="mb-5 flex flex-col items-start justify-between gap-3 sm:flex-row sm:items-center">
             <div>
               <h3 className="font-mono text-[11px] uppercase tracking-[0.2em] text-white/35">
-                Evolución Temporal NDVI
+                {t.health.chart.title}
               </h3>
               <p className="mt-1 font-mono text-[11px] text-white/20">
-                24 meses &middot; compuesto mediana por municipio
+                {t.health.chart.subtitle}
               </p>
             </div>
 
@@ -540,7 +543,7 @@ export function MangroveHealthSection() {
                 }`}
               >
                 <div className={`h-1.5 w-1.5 rounded-full ${showAnomalies ? 'animate-pulse bg-red-400' : 'bg-white/20'}`} />
-                Anomalías
+                {t.health.chart.anomalies}
               </button>
 
               {/* Legend */}
@@ -576,8 +579,7 @@ export function MangroveHealthSection() {
                   interval={2}
                   tickFormatter={(v: string) => {
                     const parts = v.split('-');
-                    const months = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
-                    return `${months[parseInt(parts[1], 10) - 1]} ${parts[0].slice(2)}`;
+                    return `${t.health.months[parseInt(parts[1], 10) - 1]} ${parts[0].slice(2)}`;
                   }}
                 />
 
@@ -591,7 +593,7 @@ export function MangroveHealthSection() {
 
                 <ReferenceArea yAxisId={0} y1={0.65} y2={1.0} fill="url(#healthyBand)" />
                 <ReferenceLine y={0.65} stroke="rgba(16,185,129,0.15)" strokeDasharray="4 6"
-                  label={{ value: 'Umbral sano', position: 'right', fill: 'rgba(16,185,129,0.3)', fontSize: 8 }} />
+                  label={{ value: t.health.chart.healthyThreshold, position: 'right', fill: 'rgba(16,185,129,0.3)', fontSize: 8 }} />
 
                 <Tooltip content={<ChartTooltipContent />} cursor={{ stroke: 'rgba(255,255,255,0.08)' }} />
 
@@ -626,10 +628,10 @@ export function MangroveHealthSection() {
           {/* Bottom data strip */}
           <div className="mt-4 flex items-center justify-between border-t border-white/[0.04] pt-3">
             <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-white/20">
-              Fuente: COPERNICUS/S2_SR_HARMONIZED &middot; NASA ORNL DAAC AGB v1.3
+              {t.health.chart.sourceFooter}
             </span>
             <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-white/20">
-              CRS: EPSG:4326 &middot; Escala: {activeIndex === 'agb' || activeIndex === 'height' ? '30' : '10'}m
+              {t.health.chart.scaleLabel(activeIndex === 'agb' || activeIndex === 'height' ? '30' : '10')}
             </span>
           </div>
         </div>
@@ -637,14 +639,13 @@ export function MangroveHealthSection() {
         {/* Sources + classification thresholds (compact 2-line footer) */}
         <div className="mt-6 border-t border-white/[0.04] pt-4 text-center">
           <p className="font-mono text-[9px] uppercase leading-5 tracking-[0.15em] text-white/20">
-            Fuentes: Sentinel-2 SR Harmonized (10m) &middot; NASA AGB v1.3, ORNL DAAC (30m)
-            &middot; Simard et al. (2019) Nature Geoscience &middot; Giri et al. (2011) GEB
+            {t.health.chart.sourcesFooter}
           </p>
           <p className="font-mono text-[9px] uppercase tracking-[0.15em] text-white/15">
-            Umbrales NDVI: <span className="text-emerald-400/50">&ge;0.85 Sano</span> &middot;
-            <span className="text-yellow-400/50"> &ge;0.65 Moderado</span> &middot;
-            <span className="text-orange-400/50"> &ge;0.40 Degradado</span> &middot;
-            <span className="text-red-400/50"> &lt;0.40 Crítico</span>
+            {t.health.chart.thresholdsLabel} <span className="text-emerald-400/50">{t.health.chart.thresholdHealthy}</span> &middot;
+            <span className="text-yellow-400/50"> {t.health.chart.thresholdModerate}</span> &middot;
+            <span className="text-orange-400/50"> {t.health.chart.thresholdDegraded}</span> &middot;
+            <span className="text-red-400/50"> {t.health.chart.thresholdCritical}</span>
           </p>
         </div>
       </div>

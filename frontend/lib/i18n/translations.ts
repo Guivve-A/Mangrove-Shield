@@ -267,6 +267,27 @@ const en = {
       'Bbox — Gran Guayaquil -80.1, -2.4, -79.4, -1.7 · CRS: EPSG:4326',
     ],
   },
+
+  simulation: {
+    webglLabel: 'WebGL Simulation',
+    title: 'Mangrove\nIsland 3D',
+    subtitle: 'Stylized interactive living world. Drag to orbit and explore the ecosystem.',
+    status: {
+      alive: { badge: 'ALIVE PROTECTED ISLAND', title: 'Perfect Equilibrium', text: 'Birds fly, MangroveShield flowers thrive and the water is crystal clear.' },
+      alert: { badge: 'ENVIRONMENTAL ALERT',   title: 'Fragmentation in progress', text: 'Clouds darken, water rises and the mangrove layer begins to disappear.' },
+      critical: { badge: 'CRITICAL FLOOD LEVEL', title: 'Total Disaster Without Mangroves', text: 'Flora drowns and water floods the city as the natural coastal barrier is lost.' },
+    },
+    ecosystemIntegrity: 'ECOSYSTEM INTEGRITY',
+    optimalHealth: 'Optimal Health',
+    environmentalDamage: 'Environmental Damage',
+    hintOrbit: '[ Drag to view the 3D camera · Scroll to zoom ]',
+  },
+
+  team: {
+    heading: 'Meet our team',
+    description: 'ESPOL students passionate about technological innovation, design and environmental conservation.',
+    linkedinLabel: 'LinkedIn Profile',
+  },
 };
 
 // ─── Derive type & Language union ────────────────────────────────────────────
@@ -554,6 +575,27 @@ const es: Translations = {
       'Factor 3.2× — Spalding et al. (2014) Nature, coastal protection value of mangroves',
       'Bbox — Gran Guayaquil -80.1, -2.4, -79.4, -1.7 · CRS: EPSG:4326',
     ],
+  },
+
+  simulation: {
+    webglLabel: 'Simulación WebGL',
+    title: 'Mangrove\nIsland 3D',
+    subtitle: 'Mundo vivo estilizado interactivo. Arrastra para orbitar y explora el ecosistema.',
+    status: {
+      alive:    { badge: 'ISLA VIVA PROTEGIDA',       title: 'Equilibrio Perfecto',              text: 'Las aves vuelan, las flores de MangroveShield prosperan y el agua está cristalina.' },
+      alert:    { badge: 'ALERTA AMBIENTAL',           title: 'Fragmentación en progreso',        text: 'Las nubes oscurecen, el agua sube y la capa de manglares comienza a desaparecer.' },
+      critical: { badge: 'NIVEL DE INUNDACIÓN CRÍTICO', title: 'Desastre Total Sin Manglares',  text: 'La flora se ahoga y el agua inunda la ciudad al perder la barrera costera natural.' },
+    },
+    ecosystemIntegrity: 'INTEGRIDAD DEL ECOSISTEMA',
+    optimalHealth: 'Salud Óptima',
+    environmentalDamage: 'Daño Ambiental',
+    hintOrbit: '[ Arrastra para ver la cámara 3D · Rueda para hacer zoom ]',
+  },
+
+  team: {
+    heading: 'Conoce nuestro equipo',
+    description: 'Estudiantes de ESPOL apasionados por la innovación tecnológica, el diseño y la conservación ambiental.',
+    linkedinLabel: 'Perfil de LinkedIn',
   },
 };
 

@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/dist/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
+import { useT } from '@/lib/i18n/LanguageContext';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -73,6 +74,7 @@ const teamData = [
 // ============================================================================
 
 export function TeamSection() {
+    const { t } = useT();
     const [selectedMember, setSelectedMember] = useState<typeof teamData[0] | null>(null);
 
     const containerRef = useRef<HTMLDivElement>(null);
@@ -171,7 +173,7 @@ export function TeamSection() {
             <div className="max-w-7xl mx-auto px-6 pt-20">
                 <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-24 gap-12">
                     <h1 className="team-anim-header text-5xl md:text-7xl font-grotesk font-medium tracking-tighter w-full md:w-1/2">
-                        Meet our team
+                        {t.team.heading}
                     </h1>
 
                     <div className="team-anim-header hidden md:flex flex-col items-center justify-center text-neutral-400 font-mono text-[10px] tracking-widest absolute left-1/2 -translate-x-1/2 mt-4">
@@ -181,7 +183,7 @@ export function TeamSection() {
 
                     <div className="team-anim-header w-full md:w-[40%] text-base md:text-lg font-inter text-neutral-700 leading-relaxed font-light">
                         <p>
-                            Estudiantes de espol apasionados por la innovación tecnológica, el diseño y la conservación ambiental.
+                            {t.team.description}
                         </p>
                     </div>
                 </div>
@@ -263,7 +265,7 @@ export function TeamSection() {
                                 className="group flex items-center w-max bg-sat-cyan/20 hover:bg-sat-cyan/30 text-ocean-dark transition-colors rounded-sm overflow-hidden"
                             >
                                 <span className="px-5 py-3 font-mono text-[10px] uppercase tracking-widest font-bold text-ocean-dark">
-                                    Perfil de LinkedIn
+                                    {t.team.linkedinLabel}
                                 </span>
                                 <span className="px-4 py-3 border-l border-ocean-dark/10 flex items-center justify-center group-hover:bg-ocean-dark/5 transition-colors text-ocean-dark">
                                     <PlusIcon />

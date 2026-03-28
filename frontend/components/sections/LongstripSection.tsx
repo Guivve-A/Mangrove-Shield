@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Activity, ChevronRight, Radar, Trees, Waves, AlertTriangle } from 'lucide-react';
 import type { LiveData } from '@/hooks/useLiveData';
+import { useT } from '@/lib/i18n/LanguageContext';
 
 interface LongstripSectionProps {
   liveData: LiveData;
@@ -28,6 +29,7 @@ function formatCount(value?: number): string {
 }
 
 export function LongstripSection({ liveData }: LongstripSectionProps): JSX.Element {
+  const { t } = useT();
   const weather = liveData.weather.data;
   const waterMask = liveData.waterMask.data;
   const ecosystem = liveData.ecosystemHealth.data;
@@ -38,9 +40,9 @@ export function LongstripSection({ liveData }: LongstripSectionProps): JSX.Eleme
     () => [
       {
         number: '01',
-        title: 'Monitoreo Satelital de Inundaciones (SAR Water-Mask)',
-        desc: 'El sistema utiliza datos de radar de apertura sintética (SAR) para generar una máscara hídrica en tiempo real. Esto permite detectar cambios en la extensión del agua independientemente de la nubosidad, contrastando el escaneo actual con líneas base históricas para identificar desbordamientos.',
-        cardTitle: 'Monitoreo Satelital de Inundaciones',
+        title: t.longstrip.sections[0].title,
+        desc: t.longstrip.sections[0].desc,
+        cardTitle: t.longstrip.sections[0].cardTitle,
         bg: '/assets/detection/detection-stage-01-sar.webp',
         icon: <Radar className="w-5 h-5 text-white/85" />,
         metric: waterMask?.scene.scene_id ? `Scene ${waterMask.scene.scene_id}` : 'Radar feed active',
@@ -48,9 +50,9 @@ export function LongstripSection({ liveData }: LongstripSectionProps): JSX.Eleme
       },
       {
         number: '02',
-        title: 'Análisis Dinámico de Salud del Ecosistema (VCI/NDVI)',
-        desc: 'A través de series temporales de índices de vegetación, la plataforma detecta anomalías en el mangle. Utiliza inferencia matemática para diferenciar entre ciclos estacionales normales y estrés fitosanitario real, activando alertas cuando los valores caen por debajo del umbral de resiliencia.',
-        cardTitle: 'Análisis Dinámico de Salud',
+        title: t.longstrip.sections[1].title,
+        desc: t.longstrip.sections[1].desc,
+        cardTitle: t.longstrip.sections[1].cardTitle,
         bg: '/assets/detection/detection-stage-02-environment.webp',
         icon: <Waves className="w-5 h-5 text-white/85" />,
         metric: weather
@@ -60,9 +62,9 @@ export function LongstripSection({ liveData }: LongstripSectionProps): JSX.Eleme
       },
       {
         number: '03',
-        title: 'Cálculo de Vulnerabilidad Multiparamétrica',
-        desc: 'El motor integra variables de clima en vivo (lluvia, viento) con datos de mareas. Mediante algoritmos de ponderación, calcula un índice de riesgo que identifica zonas críticas donde la combinación de factores meteorológicos y geográficos supera la capacidad de absorción del ecosistema.',
-        cardTitle: 'Cálculo de Vulnerabilidad',
+        title: t.longstrip.sections[2].title,
+        desc: t.longstrip.sections[2].desc,
+        cardTitle: t.longstrip.sections[2].cardTitle,
         bg: '/assets/detection/detection-stage-03-mangroves.webp',
         icon: <Trees className="w-5 h-5 text-white/85" />,
         metric: ecosystem ? `Health ${formatPercent(ecosystem.health_index)}` : 'Coverage layer active',
@@ -70,9 +72,9 @@ export function LongstripSection({ liveData }: LongstripSectionProps): JSX.Eleme
       },
       {
         number: '04',
-        title: 'Detección de Anomalías Espaciales',
-        desc: 'La API de anomalías procesa datos geolocalizados para encontrar desviaciones estadísticas en puntos específicos del mapa. Esto no solo detecta inundaciones, sino también cambios estructurales en el terreno o pérdida de cobertura forestal detectada en los últimos ciclos de escaneo.',
-        cardTitle: 'Detección de Anomalías',
+        title: t.longstrip.sections[3].title,
+        desc: t.longstrip.sections[3].desc,
+        cardTitle: t.longstrip.sections[3].cardTitle,
         bg: '/assets/detection/detection-stage-04-anomaly.webp',
         icon: <AlertTriangle className="w-5 h-5 text-white/85" />,
         metric: anomalies ? `${formatCount(anomalies.anomalies.length)} flagged` : 'Anomaly engine active',
@@ -80,16 +82,16 @@ export function LongstripSection({ liveData }: LongstripSectionProps): JSX.Eleme
       },
       {
         number: '05',
-        title: 'Predicción y Triggers de Alerta',
-        desc: 'El sistema no solo visualiza; ejecuta una lógica de "triggers" (activadores) que compara la telemetría actual con configuraciones de seguridad. Si los milímetros de lluvia o el nivel de marea alcanzan puntos críticos definidos matemáticamente, el sistema automatiza el estado de alerta en el mapa de inteligencia.',
-        cardTitle: 'Predicción y Triggers',
+        title: t.longstrip.sections[4].title,
+        desc: t.longstrip.sections[4].desc,
+        cardTitle: t.longstrip.sections[4].cardTitle,
         bg: '/assets/detection/detection-stage-05-stress.webp',
         icon: <Activity className="w-5 h-5 text-white/85" />,
         metric: vulnerability ? `Stress ${vulnerability.vulnerability_index_100}/100` : 'Stress index active',
         graphic: 'stress',
       },
     ],
-    [weather, waterMask, ecosystem, anomalies, vulnerability]
+    [weather, waterMask, ecosystem, anomalies, vulnerability, t]
   );
 
   const [activeIndex, setActiveIndex] = useState(0);
@@ -167,8 +169,8 @@ export function LongstripSection({ liveData }: LongstripSectionProps): JSX.Eleme
           {/* Línea horizontal superior */}
           <div className="absolute top-0 left-0 w-full h-[1px] bg-white/40"></div>
 
-          <h1 className="text-5xl md:text-7xl lg:text-[6rem] font-sans font-normal tracking-wide uppercase leading-[1.1] text-white drop-shadow-md">
-            Capacidades De  <br /> Detección
+          <h1 className="text-5xl md:text-7xl lg:text-[6rem] font-sans font-normal tracking-wide uppercase leading-[1.1] text-white drop-shadow-md whitespace-pre-line">
+            {t.longstrip.title.replace(' ', '\n')}
           </h1>
 
           {/* Línea horizontal inferior */}
@@ -309,11 +311,11 @@ export function LongstripSection({ liveData }: LongstripSectionProps): JSX.Eleme
 
               <div className="relative mt-6 min-h-[260px] border-t border-white/12 bg-[linear-gradient(rgba(255,255,255,0.08)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.08)_1px,transparent_1px)] bg-[size:34px_34px] bg-center pb-[4.4rem]">
                 <div className="grid grid-cols-1 gap-4 p-4">
-                  {sections[activeIndex].graphic === 'sar' && <SarGraphic metric={sections[activeIndex].metric} />}
-                  {sections[activeIndex].graphic === 'environment' && <EnvironmentGraphic weather={weather} />}
-                  {sections[activeIndex].graphic === 'ecosystem' && <EcosystemGraphic ecosystem={ecosystem} />}
-                  {sections[activeIndex].graphic === 'anomaly' && <AnomalyGraphic anomalies={anomalies} />}
-                  {sections[activeIndex].graphic === 'stress' && <StressGraphic vulnerability={vulnerability} />}
+                  {sections[activeIndex].graphic === 'sar' && <SarGraphic metric={sections[activeIndex].metric} t={t} />}
+                  {sections[activeIndex].graphic === 'environment' && <EnvironmentGraphic weather={weather} t={t} />}
+                  {sections[activeIndex].graphic === 'ecosystem' && <EcosystemGraphic ecosystem={ecosystem} t={t} />}
+                  {sections[activeIndex].graphic === 'anomaly' && <AnomalyGraphic anomalies={anomalies} t={t} />}
+                  {sections[activeIndex].graphic === 'stress' && <StressGraphic vulnerability={vulnerability} t={t} />}
                 </div>
 
                 <div className="absolute bottom-4 left-4 inline-flex items-center rounded-full border border-white/15 bg-white/10 px-4 py-2.5 font-mono text-[11px] font-semibold uppercase tracking-[0.14em] text-white/88 backdrop-blur-md">
@@ -350,69 +352,69 @@ function SignalBox({ label, value }: SignalBoxProps) {
   );
 }
 
-function SarGraphic({ metric }: { metric: string }) {
+function SarGraphic({ metric, t }: { metric: string; t: any }) {
   return (
     <>
-      <SignalBox label="Cobertura" value="SAR" />
-      <SignalBox label="Estado" value="Live" />
-      <SignalBox label="Límite agua" value="Tracked" />
-      <SignalBox label="Escena" value={metric.includes('Scene') ? metric.replace('Scene ', '') : 'Pending'} />
+      <SignalBox label={t.longstrip.signals.coverage} value="SAR" />
+      <SignalBox label={t.longstrip.signals.status} value="Live" />
+      <SignalBox label={t.longstrip.signals.waterEdge} value="Tracked" />
+      <SignalBox label={t.longstrip.signals.scene} value={metric.includes('Scene') ? metric.replace('Scene ', '') : 'Pending'} />
     </>
   );
 }
 
-function EnvironmentGraphic({ weather }: { weather: LiveData['weather']['data'] }) {
+function EnvironmentGraphic({ weather, t }: { weather: LiveData['weather']['data']; t: any }) {
   return (
     <>
-      <SignalBox label="Lluvia" value={weather ? `${weather.weather_now.rain_mm_h} mm/h` : 'Syncing'} />
+      <SignalBox label={t.longstrip.signals.rain} value={weather ? `${weather.weather_now.rain_mm_h} mm/h` : 'Syncing'} />
       <SignalBox
-        label="Marea"
+        label={t.longstrip.signals.tide}
         value={weather ? `${Math.round(weather.proxies.tidal_stage_proxy * 100)}%` : 'Syncing'}
       />
       <SignalBox
-        label="Humedad"
+        label={t.longstrip.signals.humidity}
         value={weather ? `${weather.weather_now.humidity_pct}%` : 'Syncing'}
       />
-      <SignalBox label="Estado" value="Live" />
+      <SignalBox label={t.longstrip.signals.status} value="Live" />
     </>
   );
 }
 
-function EcosystemGraphic({ ecosystem }: { ecosystem: LiveData['ecosystemHealth']['data'] }) {
+function EcosystemGraphic({ ecosystem, t }: { ecosystem: LiveData['ecosystemHealth']['data']; t: any }) {
   return (
     <>
-      <SignalBox label="Cobertura" value="Mangrove" />
+      <SignalBox label={t.longstrip.signals.coverage} value="Mangrove" />
       <SignalBox
         label="Health index"
         value={ecosystem ? `${Math.round(ecosystem.health_index * 100)}%` : 'Syncing'}
       />
-      <SignalBox label="Protección" value="Active" />
-      <SignalBox label="Estado" value="Tracked" />
+      <SignalBox label={t.longstrip.signals.protection} value="Active" />
+      <SignalBox label={t.longstrip.signals.status} value="Tracked" />
     </>
   );
 }
 
-function AnomalyGraphic({ anomalies }: { anomalies: LiveData['anomalies']['data'] }) {
+function AnomalyGraphic({ anomalies, t }: { anomalies: LiveData['anomalies']['data']; t: any }) {
   return (
     <>
-      <SignalBox label="Flags" value={anomalies ? `${anomalies.anomalies.length}` : 'Syncing'} />
-      <SignalBox label="Tipo" value="Spatial" />
-      <SignalBox label="Motor" value="AI-assisted" />
-      <SignalBox label="Estado" value="Monitoring" />
+      <SignalBox label={t.longstrip.signals.flags} value={anomalies ? `${anomalies.anomalies.length}` : 'Syncing'} />
+      <SignalBox label={t.longstrip.signals.type} value="Spatial" />
+      <SignalBox label={t.longstrip.signals.engine} value="AI-assisted" />
+      <SignalBox label={t.longstrip.signals.status} value="Monitoring" />
     </>
   );
 }
 
-function StressGraphic({ vulnerability }: { vulnerability: LiveData['vulnerability']['data'] }) {
+function StressGraphic({ vulnerability, t }: { vulnerability: LiveData['vulnerability']['data']; t: any }) {
   return (
     <>
       <SignalBox
         label="Stress"
         value={vulnerability ? `${vulnerability.vulnerability_index_100}/100` : 'Syncing'}
       />
-      <SignalBox label="Modelo" value="Fusion" />
-      <SignalBox label="Lectura" value="Ground truth" />
-      <SignalBox label="Estado" value="Ready" />
+      <SignalBox label={t.longstrip.signals.model} value="Fusion" />
+      <SignalBox label={t.longstrip.signals.reading} value="Ground truth" />
+      <SignalBox label={t.longstrip.signals.status} value="Ready" />
     </>
   );
 }

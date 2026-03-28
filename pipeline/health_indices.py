@@ -19,13 +19,20 @@ import base64
 import json
 import logging
 import os
-import sys
 import tempfile
 from datetime import datetime
 from pathlib import Path
 from typing import Any
 
 import ee
+
+# Load .env from backend/ directory (service account keys live there)
+try:
+    from dotenv import load_dotenv
+    _env_path = Path(__file__).resolve().parents[1] / "backend" / ".env"
+    load_dotenv(_env_path)
+except ImportError:
+    pass
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s - %(message)s")
 logger = logging.getLogger(__name__)
@@ -79,9 +86,19 @@ def _municipality_geom(name: str) -> ee.Geometry:
 
 
 def _get_mangrove_mask() -> ee.Image:
-    """Get GMW v3.0 mangrove mask for the most recent year."""
-    gmw = ee.ImageCollection("projects/earthengine-legacy/assets/GMW/v3")
-    return gmw.sort("year", False).first()
+    """
+    Binary mangrove mask for restricting NDVI/NDWI to mangrove pixels.
+
+    Source: ESA WorldCover v200 (Zanaga et al. 2022, DOI:10.5281/zenodo.7254221)
+    Class 95 = mangrove, 10 m resolution, 2021 epoch.
+
+    Note: GMW v3.0 (Bunting et al. 2022) is preferred when GEE asset access
+    is granted. Replace with:
+        ee.ImageCollection("projects/earthengine-legacy/assets/GMW/v3")
+          .sort("year", False).first()
+    """
+    wc = ee.ImageCollection("ESA/WorldCover/v200").first()
+    return wc.eq(95).selfMask()
 
 
 def compute_monthly_indices(year: int, month: int) -> dict[str, Any]:
@@ -136,7 +153,7 @@ def compute_monthly_indices(year: int, month: int) -> dict[str, Any]:
         "period": f"{year}-{month:02d}",
         "ndvi_mean": round(ndvi_stats.get("NDVI_mean", 0) or 0, 4),
         "ndvi_stddev": round(ndvi_stats.get("NDVI_stdDev", 0) or 0, 4),
-        "ndwi_mean": round(ndwi_stats.get("NDWI_mean", 0) or 0, 4),
+        "ndwi_mean": round(ndwi_stats.get("NDWI", 0) or 0, 4),
         "zones": zones,
     }
 

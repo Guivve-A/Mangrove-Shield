@@ -7,7 +7,7 @@ from datetime import datetime, timedelta, timezone
 from functools import lru_cache
 from pathlib import Path
 from statistics import mean, pstdev
-from typing import Any
+from typing import Any, Literal
 
 import ee
 import httpx
@@ -16,7 +16,7 @@ import firebase_admin
 from firebase_admin import credentials, firestore
 from cachetools import TTLCache
 from dotenv import load_dotenv
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 
 load_dotenv(override=True)
@@ -43,11 +43,31 @@ SAR_CACHE_TTL_SECONDS = 6 * 60 * 60
 HEALTH_CACHE_TTL_SECONDS = 6 * 60 * 60
 WEATHER_CACHE_TTL_SECONDS = 30 * 60
 TIDE_CACHE_TTL_SECONDS = 60 * 60
+MANGROVE_TILE_CACHE_TTL_SECONDS = int(os.getenv("MANGROVE_TILE_CACHE_TTL_S", "1800"))
+MANGROVE_TIMELINE_CACHE_TTL_SECONDS = int(os.getenv("MANGROVE_TIMELINE_CACHE_TTL_S", str(6 * 60 * 60)))
 
 sar_cache = TTLCache(maxsize=1, ttl=SAR_CACHE_TTL_SECONDS)
 health_cache = TTLCache(maxsize=1, ttl=HEALTH_CACHE_TTL_SECONDS)
 weather_cache = TTLCache(maxsize=1, ttl=WEATHER_CACHE_TTL_SECONDS)
 tide_cache = TTLCache(maxsize=1, ttl=TIDE_CACHE_TTL_SECONDS)
+mangrove_tiles_cache = TTLCache(maxsize=128, ttl=MANGROVE_TILE_CACHE_TTL_SECONDS)
+mangrove_timeline_cache = TTLCache(maxsize=16, ttl=MANGROVE_TIMELINE_CACHE_TTL_SECONDS)
+
+# Default mangrove timeline bbox for Greater Guayaquil (W,S,E,N), WGS84.
+DEFAULT_MANGROVE_BBOX = [-80.1, -2.4, -79.4, -1.7]
+
+# Timeline years for the frontend slider (biennial 2014–2024).
+MANGROVE_TIMELINE_YEARS: list[int] = [2014, 2016, 2018, 2020, 2022, 2024]
+
+# Static fallback (used when neither Firestore nor Earth Engine are available).
+FALLBACK_MANGROVE_TIMELINE: list[dict[str, Any]] = [
+    {"year": 2014, "total_ha": 52480, "loss_ha": 0, "gain_ha": 0, "delta_ha": 0, "loss_rate_pct": 0.0},
+    {"year": 2016, "total_ha": 51340, "loss_ha": 1420, "gain_ha": 280, "delta_ha": -1140, "loss_rate_pct": 2.71},
+    {"year": 2018, "total_ha": 49870, "loss_ha": 1780, "gain_ha": 310, "delta_ha": -1470, "loss_rate_pct": 3.47},
+    {"year": 2020, "total_ha": 48320, "loss_ha": 1890, "gain_ha": 340, "delta_ha": -1550, "loss_rate_pct": 3.79},
+    {"year": 2022, "total_ha": 47650, "loss_ha": 920, "gain_ha": 250, "delta_ha": -670, "loss_rate_pct": 1.93},
+    {"year": 2024, "total_ha": 47180, "loss_ha": 740, "gain_ha": 270, "delta_ha": -470, "loss_rate_pct": 1.55},
+]
 
 _EE_INITIALIZED = False
 _FIREBASE_INITIALIZED = False
@@ -184,6 +204,176 @@ def _ensure_ee_initialized() -> None:
         ee.Initialize(project=EE_PROJECT, opt_url=EE_OPT_URL)
 
     _EE_INITIALIZED = True
+
+
+def _parse_bbox_param(bbox: str) -> list[float]:
+    parts = [part.strip() for part in bbox.split(",") if part.strip()]
+    if len(parts) != 4:
+        raise HTTPException(status_code=400, detail="bbox must have 4 comma-separated numbers (W,S,E,N)")
+
+    try:
+        values = [float(part) for part in parts]
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail="bbox contains non-numeric values") from exc
+
+    west, south, east, north = values
+    if west >= east or south >= north:
+        raise HTTPException(status_code=400, detail="bbox coordinates must satisfy W<E and S<N")
+    return values
+
+
+def _get_firestore_mangrove_timeline() -> list[dict[str, Any]] | None:
+    """
+    Attempt to load precomputed timeline records from Firestore.
+
+    Expected location: api_cache/mangrove_timeline with a {records: [...]} payload.
+    """
+    try:
+        _ensure_firebase_initialized()
+        if not db:
+            return None
+
+        doc = db.collection("api_cache").document("mangrove_timeline").get()
+        if not doc.exists:
+            return None
+
+        data = doc.to_dict() or {}
+        records = data.get("records")
+        if isinstance(records, list) and len(records) > 0:
+            return records
+    except Exception:
+        return None
+    return None
+
+
+def _mangrove_binary_proxy_fast(year: int, aoi: Any) -> Any:
+    """
+    Return a fast, 0/1 (unmasked) mangrove proxy mask for the given year.
+
+    Proxy sources (public, Earth Engine):
+      - 2017+ : Sentinel-2 SR Harmonized dry-season NDVI > 0.35, masked to a coastal/tidal zone
+      - 2014–2016 : Landsat-8 OLI Collection-2 dry-season NDVI > 0.35, same coastal mask
+
+    Note: This is a proxy for visualization. For strict GMW v3.0 change, run the pipeline and serve
+    precomputed assets from Firestore/PostGIS.
+    """
+    # Coastal / tidal zone: pixels with JRC water occurrence > 5 %, buffered 1 km
+    jrc = ee.Image("JRC/GSW1_4/GlobalSurfaceWater").select("occurrence")
+    coastal_zone = jrc.gt(5).focal_max(radius=1000, units="meters")
+
+    if year >= 2017:
+        base = (
+            ee.ImageCollection("COPERNICUS/S2_SR_HARMONIZED")
+            .filterBounds(aoi)
+            .filter(ee.Filter.calendarRange(year, year, "year"))
+            .filter(ee.Filter.calendarRange(6, 11, "month"))
+            .filter(ee.Filter.lt("CLOUDY_PIXEL_PERCENTAGE", 70))
+        )
+        has_images = base.size().gt(0)
+        ndvi = ee.Image(
+            ee.Algorithms.If(
+                has_images,
+                base.median().normalizedDifference(["B8", "B4"]).rename("ndvi"),
+                ee.Image(0).rename("ndvi"),
+            )
+        )
+        return ndvi.gt(0.35).And(coastal_zone).rename("b1").unmask(0)
+
+    base_col = (
+        ee.ImageCollection("LANDSAT/LC08/C02/T1_L2")
+        .filterBounds(aoi)
+        .filter(ee.Filter.calendarRange(year, year, "year"))
+        .filter(ee.Filter.calendarRange(6, 11, "month"))
+        .filter(ee.Filter.lt("CLOUD_COVER", 80))
+    )
+    has_images = base_col.size().gt(0)
+    scaled = base_col.map(
+        lambda img: img.select(["SR_B5", "SR_B4"]).multiply(0.0000275).add(-0.2)
+    )
+    ndvi = ee.Image(
+        ee.Algorithms.If(
+            has_images,
+            scaled.median().normalizedDifference(["SR_B5", "SR_B4"]).rename("ndvi"),
+            ee.Image(0).rename("ndvi"),
+        )
+    )
+    return ndvi.gt(0.35).And(coastal_zone).rename("b1").unmask(0)
+
+
+def _ee_tile_url(image: Any, vis_params: dict[str, Any]) -> str:
+    map_id = image.getMapId(vis_params)
+    return map_id["tile_fetcher"].url_format
+
+
+def _resolve_mangrove_compare_year(
+    year: int, compare: Literal["prev", "baseline", "none"]
+) -> int | None:
+    if compare == "none":
+        return None
+    if year not in MANGROVE_TIMELINE_YEARS:
+        raise HTTPException(
+            status_code=404,
+            detail=f"Year {year} not supported. Available: {MANGROVE_TIMELINE_YEARS}",
+        )
+    if compare == "baseline":
+        return None if year == MANGROVE_TIMELINE_YEARS[0] else MANGROVE_TIMELINE_YEARS[0]
+    idx = MANGROVE_TIMELINE_YEARS.index(year)
+    return None if idx == 0 else MANGROVE_TIMELINE_YEARS[idx - 1]
+
+
+def _compute_proxy_mangrove_timeline_records(bbox_vals: list[float]) -> list[dict[str, Any]]:
+    _ensure_ee_initialized()
+    aoi = ee.Geometry.Rectangle(bbox_vals)
+
+    records: list[dict[str, Any]] = []
+    prev_mask: Any | None = None
+
+    for year in MANGROVE_TIMELINE_YEARS:
+        mask = _mangrove_binary_proxy_fast(year, aoi)
+
+        if prev_mask is None:
+            area_img = mask.rename("total").multiply(ee.Image.pixelArea())
+            stats = area_img.reduceRegion(
+                reducer=ee.Reducer.sum(),
+                geometry=aoi,
+                scale=30,
+                maxPixels=1e10,
+                bestEffort=True,
+            ).getInfo()
+            total_ha = round((stats.get("total", 0.0) or 0.0) / 1e4, 1)
+            loss_ha = 0.0
+            gain_ha = 0.0
+        else:
+            loss = prev_mask.And(mask.Not()).rename("loss")
+            gain = mask.And(prev_mask.Not()).rename("gain")
+            area_img = ee.Image.cat([mask.rename("total"), loss, gain]).multiply(ee.Image.pixelArea())
+            stats = area_img.reduceRegion(
+                reducer=ee.Reducer.sum(),
+                geometry=aoi,
+                scale=30,
+                maxPixels=1e10,
+                bestEffort=True,
+            ).getInfo()
+            total_ha = round((stats.get("total", 0.0) or 0.0) / 1e4, 1)
+            loss_ha = round((stats.get("loss", 0.0) or 0.0) / 1e4, 1)
+            gain_ha = round((stats.get("gain", 0.0) or 0.0) / 1e4, 1)
+
+        delta_ha = round(gain_ha - loss_ha, 1)
+        loss_rate_pct = round((loss_ha / total_ha) * 100, 2) if total_ha else 0.0
+
+        records.append(
+            {
+                "year": year,
+                "total_ha": total_ha,
+                "loss_ha": loss_ha,
+                "gain_ha": gain_ha,
+                "delta_ha": delta_ha,
+                "loss_rate_pct": loss_rate_pct,
+            }
+        )
+        prev_mask = mask
+
+    return records
 
 
 @lru_cache(maxsize=1)
@@ -865,6 +1055,135 @@ async def get_live_capabilities() -> dict[str, Any]:
             "sar_data": sar_probe.get("error"),
         },
     }
+
+
+@app.get("/api/v1/mangrove/timeline")
+def mangrove_timeline(
+    bbox: str = Query("-80.1,-2.4,-79.4,-1.7", description="Bounding box (W,S,E,N)"),
+    mode: Literal["auto", "firestore", "earthengine", "fallback"] = Query(
+        "auto", description="Data mode preference: auto|firestore|earthengine|fallback"
+    ),
+) -> dict[str, Any]:
+    """
+    Return a mangrove coverage timeline (biennial 2014–2024) for the selected bbox.
+
+    Prefers Firestore cache (if present), otherwise computes a proxy via Earth Engine.
+    """
+    bbox_vals = _parse_bbox_param(bbox)
+    bbox_key = tuple(bbox_vals)  # type: ignore[assignment]
+
+    records: list[dict[str, Any]] | None = None
+    source: str = "calibrated_estimate"
+    source_detail: str | None = None
+
+    if mode in ("auto", "firestore"):
+        records = _get_firestore_mangrove_timeline()
+        if records is not None:
+            source = "firestore"
+            source_detail = "firestore:api_cache/mangrove_timeline"
+
+    if records is None and mode in ("auto", "earthengine"):
+        cached = mangrove_timeline_cache.get(bbox_key)
+        if cached is not None:
+            records = cached  # type: ignore[assignment]
+            source = "api"
+            source_detail = "earthengine-proxy:cached"
+        else:
+            try:
+                computed = _compute_proxy_mangrove_timeline_records(bbox_vals)
+                mangrove_timeline_cache[bbox_key] = computed
+                records = computed
+                source = "api"
+                source_detail = "earthengine-proxy:s2-ndvi/l8-ndvi+jrc-gsw"
+            except Exception as exc:
+                if mode == "earthengine":
+                    raise HTTPException(status_code=503, detail=f"Earth Engine unavailable: {exc}") from exc
+
+    if records is None:
+        records = FALLBACK_MANGROVE_TIMELINE
+        source = "calibrated_estimate"
+        source_detail = "static-fallback"
+
+    total_loss = float(sum(float(r.get("loss_ha") or 0.0) for r in records))
+    total_gain = float(sum(float(r.get("gain_ha") or 0.0) for r in records))
+
+    return {
+        "bbox": bbox_vals,
+        "years": [int(r["year"]) for r in records if "year" in r],
+        "summary": {
+            "total_loss_ha": round(total_loss, 1),
+            "total_gain_ha": round(total_gain, 1),
+            "net_change_ha": round(total_gain - total_loss, 1),
+        },
+        "records": records,
+        "_source": source,
+        "source_detail": source_detail,
+    }
+
+
+@app.get("/api/v1/mangrove/tiles")
+def mangrove_tiles(
+    year: int = Query(..., ge=2014, le=2024, description="Timeline year"),
+    compare: Literal["prev", "baseline", "none"] = Query(
+        "prev", description="Compare mode: prev|baseline|none"
+    ),
+    bbox: str = Query("-80.1,-2.4,-79.4,-1.7", description="Bounding box (W,S,E,N)"),
+) -> dict[str, Any]:
+    """
+    Return raster tile URLs to visualize mangrove change for a given year.
+
+    Tiles are produced in Google Earth Engine and intended for MapLibre/Mapbox raster sources.
+    """
+    bbox_vals = _parse_bbox_param(bbox)
+    bbox_key = tuple(bbox_vals)  # type: ignore[assignment]
+    compare_year = _resolve_mangrove_compare_year(year, compare)
+    cache_key = (year, compare_year, bbox_key)
+
+    cached = mangrove_tiles_cache.get(cache_key)
+    if cached is not None:
+        return cached  # type: ignore[return-value]
+
+    try:
+        _ensure_ee_initialized()
+        aoi = ee.Geometry.Rectangle(bbox_vals)
+
+        after_binary = _mangrove_binary_proxy_fast(year, aoi)
+        after_url = _ee_tile_url(
+            after_binary.selfMask(),
+            {"min": 0, "max": 1, "palette": ["10b981"]},
+        )
+
+        before_url = None
+        change_url = None
+        if compare_year is not None:
+            before_binary = _mangrove_binary_proxy_fast(compare_year, aoi)
+            before_url = _ee_tile_url(
+                before_binary.selfMask(),
+                {"min": 0, "max": 1, "palette": ["9ca3af"]},
+            )
+
+            loss = before_binary.And(after_binary.Not())
+            gain = after_binary.And(before_binary.Not())
+            change = ee.Image(0).where(loss, 1).where(gain, 2).selfMask()
+            change_url = _ee_tile_url(
+                change,
+                {"min": 1, "max": 2, "palette": ["ef4444", "22d3ee"]},
+            )
+
+        payload: dict[str, Any] = {
+            "bbox": bbox_vals,
+            "year": year,
+            "compare_to_year": compare_year,
+            "compare_mode": compare,
+            "tiles": {"before": before_url, "after": after_url, "change": change_url},
+            "_source": "api",
+            "source_detail": "earthengine-proxy:s2-ndvi/l8-ndvi+jrc-gsw",
+            "cache_ttl_s": MANGROVE_TILE_CACHE_TTL_SECONDS,
+        }
+        mangrove_tiles_cache[cache_key] = payload
+        return payload
+    except Exception as exc:
+        raise HTTPException(status_code=503, detail=f"Failed to build mangrove tiles: {exc}") from exc
 
 
 # ════════════════════════════════════════════════════════════════

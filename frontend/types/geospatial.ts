@@ -234,4 +234,20 @@ export interface MangroveTimelineResponse {
   };
   records: MangroveYearRecord[];
   _source?: 'firestore' | 'api' | 'calibrated_estimate';
+  source_detail?: string;
+}
+
+export interface MangroveTilesResponse {
+  bbox: [number, number, number, number];
+  year: number;
+  compare_to_year: number | null;
+  compare_mode: 'prev' | 'baseline' | 'none';
+  tiles: {
+    before: string | null;
+    after: string | null;
+    change: string | null;
+  };
+  cache_ttl_s?: number;
+  _source?: 'firestore' | 'api' | 'calibrated_estimate';
+  source_detail?: string;
 }

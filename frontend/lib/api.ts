@@ -8,6 +8,7 @@ import type {
   LayerBundle,
   MangroveCollection,
   MangroveTimelineResponse,
+  MangroveTilesResponse,
   MangroveYearRecord,
   PriorityCollection,
 } from '@/types/geospatial';
@@ -93,6 +94,15 @@ export async function loadMangroveTimeline(): Promise<MangroveTimelineResponse> 
       _source: 'calibrated_estimate',
     };
   }
+}
+
+export async function loadMangroveTiles(
+  year: number,
+  compare: MangroveTilesResponse['compare_mode'] = 'prev',
+): Promise<MangroveTilesResponse> {
+  return safeJsonFetch<MangroveTilesResponse>(
+    `${API_BASE_URL}/api/v1/mangrove/tiles?year=${encodeURIComponent(String(year))}&compare=${encodeURIComponent(compare)}`,
+  );
 }
 
 // --- Mangrove health indices (Sentinel-2 + NASA AGB) ---

@@ -1,7 +1,11 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useMemo, useState, useEffect, useRef, useCallback } from 'react';
 import { Oswald } from 'next/font/google';
-import type { MangroveTimelineResponse } from '@/types/geospatial';
-import { loadMangroveTimeline } from '@/lib/api';
+import { useT } from '@/lib/i18n/LanguageContext';
+import Map, { Layer, NavigationControl, Source } from 'react-map-gl/maplibre';
+import 'maplibre-gl/dist/maplibre-gl.css';
+
+import type { MangroveTilesResponse, MangroveTimelineResponse } from '@/types/geospatial';
+import { loadMangroveTimeline, loadMangroveTiles } from '@/lib/api';
 
 const oswald = Oswald({
   subsets: ['latin'],
@@ -50,16 +54,17 @@ interface TimeSliderProps {
   onChange: (index: number) => void;
   isPlaying: boolean;
   onTogglePlay: () => void;
+  labels: { playing: string; paused: string; pauseLabel: string; playLabel: string; selectYear: (y: number) => string };
 }
 
-function TimeSlider({ years, selectedIndex, onChange, isPlaying, onTogglePlay }: TimeSliderProps) {
+function TimeSlider({ years, selectedIndex, onChange, isPlaying, onTogglePlay, labels }: TimeSliderProps) {
   return (
     <div className="flex flex-col items-center gap-3">
       <div className="flex items-center gap-3">
         <button
           onClick={onTogglePlay}
           className="flex h-9 w-9 items-center justify-center rounded-full border border-white/20 bg-white/10 text-white backdrop-blur-md transition-all hover:bg-white/20 active:scale-95"
-          aria-label={isPlaying ? 'Pausar' : 'Reproducir'}
+          aria-label={isPlaying ? labels.pauseLabel : labels.playLabel}
         >
           {isPlaying ? (
             <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
@@ -73,7 +78,7 @@ function TimeSlider({ years, selectedIndex, onChange, isPlaying, onTogglePlay }:
           )}
         </button>
         <span className="font-mono text-[11px] uppercase tracking-[0.2em] text-white/50">
-          {isPlaying ? 'Reproduciendo' : 'Pausado'}
+          {isPlaying ? labels.playing : labels.paused}
         </span>
       </div>
 
@@ -90,7 +95,7 @@ function TimeSlider({ years, selectedIndex, onChange, isPlaying, onTogglePlay }:
               key={year}
               onClick={() => onChange(i)}
               className="group relative z-10 flex flex-col items-center"
-              aria-label={`Seleccionar año ${year}`}
+              aria-label={labels.selectYear(year)}
             >
               <div
                 className={`h-3 w-3 rounded-full border-2 transition-all duration-300 ${
@@ -119,10 +124,15 @@ function TimeSlider({ years, selectedIndex, onChange, isPlaying, onTogglePlay }:
 // ---------------------------------------------------------------------------
 
 export function MangroveTimelineSection() {
+  const { t } = useT();
   const [data, setData] = useState<MangroveTimelineResponse | null>(null);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
+  const [mapMode, setMapMode] = useState<'change' | 'before' | 'after'>('change');
+  const [tilesByYear, setTilesByYear] = useState<Record<number, MangroveTilesResponse | undefined>>({});
+  const [tilesLoading, setTilesLoading] = useState(false);
+  const [tilesError, setTilesError] = useState<string | null>(null);
   const sectionRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
@@ -179,6 +189,8 @@ export function MangroveTimelineSection() {
   const records = data?.records ?? [];
   const years = data?.years ?? [];
   const selectedRecord = records[selectedIndex] ?? null;
+  const selectedYear = selectedRecord?.year ?? null;
+  const selectedTiles = selectedYear ? tilesByYear[selectedYear] : undefined;
 
   const totalLoss = data?.summary.total_loss_ha ?? 0;
   const totalGain = data?.summary.total_gain_ha ?? 0;
@@ -188,11 +200,48 @@ export function MangroveTimelineSection() {
   const animGain = useCountUp(totalGain, 1800, isVisible);
   const animNet = useCountUp(Math.abs(netChange), 1800, isVisible);
 
+  const mapInitialViewState = useMemo(() => {
+    const bbox = data?.bbox ?? [-80.1, -2.4, -79.4, -1.7];
+    const longitude = (bbox[0] + bbox[2]) / 2;
+    const latitude = (bbox[1] + bbox[3]) / 2;
+    return { longitude, latitude, zoom: 10.2, pitch: 0, bearing: 0 };
+  }, [data?.bbox]);
+
+  useEffect(() => {
+    if (!selectedYear) return;
+
+    if (selectedTiles) {
+      setTilesLoading(false);
+      setTilesError(null);
+      return;
+    }
+
+    let cancelled = false;
+    setTilesLoading(true);
+    setTilesError(null);
+
+    loadMangroveTiles(selectedYear, 'prev')
+      .then((res) => {
+        if (cancelled) return;
+        setTilesByYear((prev) => ({ ...prev, [selectedYear]: res }));
+        if (!res.tiles?.change) setMapMode('after');
+      })
+      .catch((err: unknown) => {
+        if (cancelled) return;
+        setTilesError(err instanceof Error ? err.message : 'No se pudo cargar el mapa');
+      })
+      .finally(() => {
+        if (!cancelled) setTilesLoading(false);
+      });
+
+    return () => { cancelled = true; };
+  }, [selectedYear, selectedTiles]);
+
   if (!data) {
     return (
       <section className="flex min-h-[60vh] items-center justify-center bg-[#0a1628]">
         <div className="rounded-full border border-white/10 bg-ocean-dark/70 px-5 py-2 text-[11px] font-semibold uppercase tracking-[0.16em] text-white/55 backdrop-blur-md">
-          Cargando datos GMW v3.0...
+          {t.timeline.loading}
         </div>
       </section>
     );
@@ -214,8 +263,27 @@ export function MangroveTimelineSection() {
           <span className="mb-4 block font-mono text-[11px] uppercase tracking-[0.3em] text-emerald-400/70">
             Global Mangrove Watch v3.0
           </span>
+
+          {/* Data provenance badge */}
+          <div className="mb-8 flex justify-center">
+            <div className={`inline-flex items-center gap-2 rounded-full border px-4 py-1.5 font-mono text-[9px] uppercase tracking-[0.2em] backdrop-blur-md ${
+              data._source === 'firestore' || data._source === 'api'
+                ? 'border-emerald-500/30 bg-emerald-500/10 text-emerald-400'
+                : 'border-amber-500/30 bg-amber-500/10 text-amber-400'
+            }`}>
+              <div className={`h-1.5 w-1.5 rounded-full ${
+                data._source === 'firestore' || data._source === 'api' ? 'bg-emerald-400' : 'bg-amber-400 animate-pulse'
+              }`} />
+              {data._source === 'firestore'
+                ? 'Datos en vivo · Pipeline → Firestore'
+                : data._source === 'api'
+                  ? 'Datos satelitales · Earth Engine (proxy)'
+                  : 'Estimación calibrada · fallback'}
+            </div>
+          </div>
+
           <h2 className={`${oswald.className} text-4xl uppercase leading-none tracking-[0.05em] text-white md:text-6xl`}>
-            Cambio Histórico del Manglar
+            {t.timeline.title}
           </h2>
           <p className="mt-3 font-mono text-[13px] uppercase tracking-[0.15em] text-white/40">
             Gran Guayaquil &middot; 2014 &rarr; 2024
@@ -230,7 +298,7 @@ export function MangroveTimelineSection() {
                 -{animLoss.toLocaleString()} ha
               </span>
               <span className="mt-1 font-mono text-[10px] uppercase tracking-[0.2em] text-white/40">
-                Pérdidas
+                {t.timeline.losses}
               </span>
             </div>
 
@@ -240,7 +308,7 @@ export function MangroveTimelineSection() {
                 {netChange >= 0 ? '+' : '-'}{animNet.toLocaleString()} ha
               </span>
               <span className="mt-1 font-mono text-[10px] uppercase tracking-[0.2em] text-white/40">
-                Balance Neto
+                {t.timeline.netBalance}
               </span>
             </div>
 
@@ -250,7 +318,7 @@ export function MangroveTimelineSection() {
                 +{animGain.toLocaleString()} ha
               </span>
               <span className="mt-1 font-mono text-[10px] uppercase tracking-[0.2em] text-white/40">
-                Ganancias
+                {t.timeline.gains}
               </span>
             </div>
           </div>
@@ -307,7 +375,7 @@ export function MangroveTimelineSection() {
                   {selectedRecord?.year ?? '—'}
                 </span>
                 <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-white/30">
-                  año
+                  {t.timeline.year}
                 </span>
               </div>
             </div>
@@ -315,21 +383,21 @@ export function MangroveTimelineSection() {
             {/* Stats: Cobertura / Pérdida / Ganancia for selected year */}
             <div className="flex flex-col gap-6">
               <div>
-                <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-white/40">Cobertura</p>
+                <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-white/40">{t.timeline.coverage}</p>
                 <p className={`${oswald.className} tabular-nums mt-0.5 text-3xl font-bold text-white md:text-4xl`}>
                   {(selectedRecord?.total_ha ?? 0).toLocaleString()}
                   <span className="ml-1.5 text-base font-normal text-white/30">ha</span>
                 </p>
               </div>
               <div>
-                <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-white/40">Pérdida</p>
+                <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-white/40">{t.timeline.loss}</p>
                 <p className={`${oswald.className} tabular-nums mt-0.5 text-3xl font-bold text-red-400 md:text-4xl`}>
                   -{(selectedRecord?.loss_ha ?? 0).toLocaleString()}
                   <span className="ml-1.5 text-base font-normal text-white/30">ha</span>
                 </p>
               </div>
               <div>
-                <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-white/40">Ganancia</p>
+                <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-white/40">{t.timeline.gain}</p>
                 <p className={`${oswald.className} tabular-nums mt-0.5 text-3xl font-bold text-cyan-400 md:text-4xl`}>
                   +{(selectedRecord?.gain_ha ?? 0).toLocaleString()}
                   <span className="ml-1.5 text-base font-normal text-white/30">ha</span>
@@ -345,7 +413,147 @@ export function MangroveTimelineSection() {
               onChange={(i) => { setSelectedIndex(i); setIsPlaying(false); }}
               isPlaying={isPlaying}
               onTogglePlay={togglePlay}
+              labels={t.timeline}
             />
+          </div>
+
+          {/* Map: before/after + change overlay */}
+          <div className="border-t border-white/8 px-6 pb-7 pt-6">
+            <div className="flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
+              <div className="flex flex-col gap-1">
+                <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-white/40">
+                  Mapa de cambio{selectedRecord?.year ? ` · ${selectedRecord.year}` : ''}
+                </span>
+                <span className="font-mono text-[11px] uppercase tracking-[0.18em] text-white/60">
+                  {selectedTiles?.compare_to_year
+                    ? `Antes: ${selectedTiles.compare_to_year} · Después: ${selectedTiles.year}`
+                    : 'Cobertura (sin año previo)'}
+                </span>
+              </div>
+
+              <div className="flex flex-wrap items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => setMapMode('change')}
+                  disabled={!selectedTiles?.tiles?.change}
+                  className={`rounded-full border px-4 py-1.5 font-mono text-[10px] uppercase tracking-[0.18em] transition-all ${
+                    mapMode === 'change'
+                      ? 'border-amber-400/40 bg-amber-400/10 text-amber-300'
+                      : 'border-white/15 bg-white/5 text-white/55 hover:bg-white/10'
+                  } ${!selectedTiles?.tiles?.change ? 'cursor-not-allowed opacity-40' : ''}`}
+                >
+                  Cambio
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setMapMode('before')}
+                  disabled={!selectedTiles?.tiles?.before}
+                  className={`rounded-full border px-4 py-1.5 font-mono text-[10px] uppercase tracking-[0.18em] transition-all ${
+                    mapMode === 'before'
+                      ? 'border-white/30 bg-white/10 text-white/80'
+                      : 'border-white/15 bg-white/5 text-white/55 hover:bg-white/10'
+                  } ${!selectedTiles?.tiles?.before ? 'cursor-not-allowed opacity-40' : ''}`}
+                >
+                  Antes
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setMapMode('after')}
+                  disabled={!selectedTiles?.tiles?.after}
+                  className={`rounded-full border px-4 py-1.5 font-mono text-[10px] uppercase tracking-[0.18em] transition-all ${
+                    mapMode === 'after'
+                      ? 'border-emerald-400/40 bg-emerald-400/10 text-emerald-300'
+                      : 'border-white/15 bg-white/5 text-white/55 hover:bg-white/10'
+                  } ${!selectedTiles?.tiles?.after ? 'cursor-not-allowed opacity-40' : ''}`}
+                >
+                  Después
+                </button>
+              </div>
+            </div>
+
+            <div className="mt-5 grid grid-cols-1 gap-4 lg:grid-cols-12">
+              <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-black/20 lg:col-span-9">
+                <div className="h-[420px] w-full">
+                  <Map
+                    initialViewState={mapInitialViewState}
+                    mapStyle="https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json"
+                    interactive
+                  >
+                    <NavigationControl position="bottom-right" />
+
+                    {mapMode === 'before' && selectedTiles?.tiles.before && (
+                      <Source id={`mangrove-before-${selectedTiles.year}`} type="raster" tiles={[selectedTiles.tiles.before]} tileSize={256}>
+                        <Layer id={`mangrove-before-layer-${selectedTiles.year}`} type="raster" paint={{ 'raster-opacity': 0.75 }} />
+                      </Source>
+                    )}
+
+                    {mapMode !== 'before' && selectedTiles?.tiles.after && (
+                      <Source id={`mangrove-after-${selectedTiles.year}`} type="raster" tiles={[selectedTiles.tiles.after]} tileSize={256}>
+                        <Layer id={`mangrove-after-layer-${selectedTiles.year}`} type="raster" paint={{ 'raster-opacity': mapMode === 'change' ? 0.35 : 0.75 }} />
+                      </Source>
+                    )}
+
+                    {mapMode === 'change' && selectedTiles?.tiles.change && (
+                      <Source id={`mangrove-change-${selectedTiles.year}`} type="raster" tiles={[selectedTiles.tiles.change]} tileSize={256}>
+                        <Layer id={`mangrove-change-layer-${selectedTiles.year}`} type="raster" paint={{ 'raster-opacity': 0.9 }} />
+                      </Source>
+                    )}
+                  </Map>
+                </div>
+
+                {(tilesLoading || tilesError) && (
+                  <div className="absolute inset-0 flex items-center justify-center bg-[#07101f]/80 backdrop-blur-sm">
+                    <div className="flex max-w-[520px] flex-col items-center gap-2 px-6 text-center">
+                      {tilesLoading && (
+                        <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-white/60">
+                          Cargando mosaico satelital...
+                        </span>
+                      )}
+                      {tilesError && (
+                        <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-red-300">
+                          {tilesError}
+                        </span>
+                      )}
+                      {tilesError && (
+                        <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-white/40">
+                          Configura GEE_SERVICE_ACCOUNT_B64 y EE_PROJECT en el backend.
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              <div className="flex flex-col gap-4 rounded-2xl border border-white/10 bg-white/5 p-5 lg:col-span-3">
+                <div>
+                  <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-white/40">Leyenda</p>
+                  <div className="mt-3 flex flex-col gap-2">
+                    <div className="flex items-center gap-3">
+                      <span className="h-2.5 w-2.5 rounded-sm bg-emerald-400" />
+                      <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-white/70">Cobertura</span>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <span className="h-2.5 w-2.5 rounded-sm bg-red-400" />
+                      <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-white/70">Pérdida</span>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <span className="h-2.5 w-2.5 rounded-sm bg-cyan-300" />
+                      <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-white/70">Ganancia</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="border-t border-white/10 pt-4">
+                  <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-white/40">Proveniencia</p>
+                  <p className="mt-2 font-mono text-[10px] uppercase tracking-[0.18em] text-white/60">
+                    {selectedTiles?.source_detail ?? data.source_detail ?? '—'}
+                  </p>
+                  <p className="mt-2 text-[12px] leading-5 text-white/45">
+                    Las teselas se calculan en Google Earth Engine y se actualizan por año del timeline.
+                  </p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 

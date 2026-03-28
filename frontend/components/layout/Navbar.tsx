@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import gsap from "gsap";
 import { syncAllData } from "@/lib/liveApi";
+import { useT } from "@/lib/i18n/LanguageContext";
 
 // ==========================================
 // 1. Subcomponente Anímado: ScrambleText
@@ -61,21 +62,19 @@ const ScrambleText = ({ text, delay = 0 }: { text: string; delay?: number }) => 
 };
 
 
-// ==========================================
-// 2. Componente Principal: Navbar
-// ==========================================
-const NAV_ITEMS = [
-  { label: "Capacidades ", target: "longstrip" },
-  { label: "Motor Predictivo", target: "ecosystem" },
-  { label: "Simulacion3D", target: "simulation" },
-  { label: "Equipo", target: "team" }
-];
-
 export function Navbar() {
+  const { t } = useT();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showHeader, setShowHeader] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
   const [isScrolled, setIsScrolled] = useState(false);
+
+  const navItems = [
+    { label: t.nav.capabilities, target: "longstrip" },
+    { label: t.nav.predictiveEngine, target: "ecosystem" },
+    { label: t.nav.simulation3d, target: "simulation" },
+    { label: t.nav.team, target: "team" },
+  ];
 
   // Escuchando eventos de Scroll
   useEffect(() => {
@@ -158,7 +157,7 @@ export function Navbar() {
         {/* Links Desplegables */}
         {isMenuOpen && (
           <nav className="flex items-center gap-1 ml-1" aria-label="Main Navigation">
-            {NAV_ITEMS.map((item, index) => (
+            {navItems.map((item, index) => (
               <a
                 href={`#${item.target}`}
                 onClick={(e) => {

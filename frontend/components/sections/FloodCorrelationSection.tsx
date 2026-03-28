@@ -2,6 +2,8 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Oswald } from 'next/font/google';
 import type { FloodEvent, FloodEventsResponse } from '@/types/geospatial';
 import { loadFloodEvents } from '@/lib/api';
+import { useT } from '@/lib/i18n/LanguageContext';
+import type { Translations } from '@/lib/i18n/translations';
 
 const oswald = Oswald({ subsets: ['latin'], weight: ['400', '500', '600', '700'], display: 'swap' });
 
@@ -39,11 +41,13 @@ function Brackets({ className = '' }: { className?: string }) {
 
 // ─── Severity config ─────────────────────────────────────────────────────────
 
-const SEVERITY_META = {
-  moderate: { label: 'MODERADO', color: '#eab308', bg: 'rgba(234,179,8,0.08)',  border: 'rgba(234,179,8,0.2)',  dot: 'bg-yellow-400' },
-  severe:   { label: 'SEVERO',   color: '#f97316', bg: 'rgba(249,115,22,0.08)', border: 'rgba(249,115,22,0.2)', dot: 'bg-orange-400' },
-  extreme:  { label: 'EXTREMO',  color: '#ef4444', bg: 'rgba(239,68,68,0.08)',  border: 'rgba(239,68,68,0.2)',  dot: 'bg-red-400'    },
-} as const;
+function getSeverityMeta(t: Translations) {
+  return {
+    moderate: { label: t.flood.severity.moderate, color: '#eab308', bg: 'rgba(234,179,8,0.08)',  border: 'rgba(234,179,8,0.2)',  dot: 'bg-yellow-400' },
+    severe:   { label: t.flood.severity.severe,   color: '#f97316', bg: 'rgba(249,115,22,0.08)', border: 'rgba(249,115,22,0.2)', dot: 'bg-orange-400' },
+    extreme:  { label: t.flood.severity.extreme,  color: '#ef4444', bg: 'rgba(239,68,68,0.08)',  border: 'rgba(239,68,68,0.2)',  dot: 'bg-red-400'    },
+  } as const;
+}
 
 // ─── Stat card ────────────────────────────────────────────────────────────────
 
@@ -103,8 +107,8 @@ function StatCard({
 
 // ─── Event popup ─────────────────────────────────────────────────────────────
 
-function EventPopup({ event, onClose }: { event: FloodEvent; onClose: () => void }) {
-  const sev = SEVERITY_META[event.severity];
+function EventPopup({ event, onClose, t }: { event: FloodEvent; onClose: () => void; t: Translations }) {
+  const sev = getSeverityMeta(t)[event.severity];
   return (
     <div className="absolute z-20 w-72 rounded-lg border border-white/10 bg-[#050c18]/97 p-5 shadow-2xl backdrop-blur-xl"
       style={{ top: '-180px', left: '50%', transform: 'translateX(-50%)' }}>
@@ -122,11 +126,11 @@ function EventPopup({ event, onClose }: { event: FloodEvent; onClose: () => void
 
       <div className="mt-4 space-y-1.5">
         {[
-          { label: 'Lluvia pico',       value: `${event.rain_mm_day} mm/día` },
-          { label: 'Nivel de marea',    value: `${event.tide_level_m} m` },
-          { label: 'Área inundada',     value: `${event.flood_area_ha.toLocaleString('es-EC')} ha` },
-          { label: 'Afectados',         value: event.affected_people.toLocaleString('es-EC') },
-          { label: 'Correlac. manglar', value: `${event.correlation_pct}% zonas pérdida` },
+          { label: t.flood.popup.peakRain,    value: `${event.rain_mm_day} ${t.flood.popup.mmPerDay}` },
+          { label: t.flood.popup.tideLevel,   value: `${event.tide_level_m} m` },
+          { label: t.flood.popup.floodedArea, value: `${event.flood_area_ha.toLocaleString('es-EC')} ha` },
+          { label: t.flood.popup.affected,    value: event.affected_people.toLocaleString('es-EC') },
+          { label: t.flood.popup.mangroveCorr, value: `${event.correlation_pct}% ${t.flood.popup.lossZones}` },
         ].map(({ label, value }) => (
           <div key={label} className="flex justify-between border-b border-white/[0.04] pb-1 last:border-0">
             <span className="font-mono text-[9px] uppercase tracking-[0.12em] text-white/30">{label}</span>
@@ -147,13 +151,15 @@ function TimelineDot({
   maxArea,
   isSelected,
   onClick,
+  t,
 }: {
   event: FloodEvent;
   maxArea: number;
   isSelected: boolean;
   onClick: () => void;
+  t: Translations;
 }) {
-  const sev = SEVERITY_META[event.severity];
+  const sev = getSeverityMeta(t)[event.severity];
   const size = 8 + (event.flood_area_ha / maxArea) * 22;
 
   return (
@@ -192,7 +198,7 @@ function TimelineDot({
 
       {/* Popup */}
       {isSelected && (
-        <EventPopup event={event} onClose={onClick} />
+        <EventPopup event={event} onClose={onClick} t={t} />
       )}
     </div>
   );
@@ -202,17 +208,17 @@ function TimelineDot({
 
 type SeverityFilter = 'all' | 'moderate' | 'severe' | 'extreme';
 
-const FILTER_LABELS: Array<{ key: SeverityFilter; label: string; color: string }> = [
-  { key: 'all',      label: 'Todos',     color: 'rgba(255,255,255,0.5)' },
-  { key: 'moderate', label: 'Moderados', color: SEVERITY_META.moderate.color },
-  { key: 'severe',   label: 'Severos',   color: SEVERITY_META.severe.color },
-  { key: 'extreme',  label: 'Extremos',  color: SEVERITY_META.extreme.color },
-];
-
-function FloodTimeline({ events }: { events: FloodEvent[] }) {
+function FloodTimeline({ events, t }: { events: FloodEvent[]; t: Translations }) {
   const [filter, setFilter] = useState<SeverityFilter>('all');
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const severityMeta = getSeverityMeta(t);
+  const filterLabels: Array<{ key: SeverityFilter; label: string; color: string }> = [
+    { key: 'all',      label: t.flood.filters.all,      color: 'rgba(255,255,255,0.5)' },
+    { key: 'moderate', label: t.flood.filters.moderate, color: severityMeta.moderate.color },
+    { key: 'severe',   label: t.flood.filters.severe,   color: severityMeta.severe.color },
+    { key: 'extreme',  label: t.flood.filters.extreme,  color: severityMeta.extreme.color },
+  ];
 
   const filtered = filter === 'all' ? events : events.filter((e) => e.severity === filter);
   const maxArea = Math.max(...events.map((e) => e.flood_area_ha), 1);
@@ -229,16 +235,16 @@ function FloodTimeline({ events }: { events: FloodEvent[] }) {
       <div className="mb-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h3 className="font-mono text-[10px] uppercase tracking-[0.25em] text-white/35">
-            Registro de Eventos — 2015–2024
+            {t.flood.timelineTitle}
           </h3>
           <p className="mt-0.5 font-mono text-[9px] text-white/20">
-            Tamaño proporcional a área inundada · Click para detalles
+            {t.flood.timelineSubtitle}
           </p>
         </div>
 
         {/* Severity filter */}
         <div className="flex gap-1">
-          {FILTER_LABELS.map(({ key, label, color }) => (
+          {filterLabels.map(({ key, label, color }) => (
             <button
               key={key}
               onClick={() => setFilter(key)}
@@ -274,6 +280,7 @@ function FloodTimeline({ events }: { events: FloodEvent[] }) {
               maxArea={maxArea}
               isSelected={selectedId === ev.id}
               onClick={() => handleDotClick(ev.id)}
+              t={t}
             />
           ))}
         </div>
@@ -291,12 +298,18 @@ function FloodTimeline({ events }: { events: FloodEvent[] }) {
 
 // ─── Correlation bar chart (simple SVG, no extra dep) ────────────────────────
 
+const STATIC_SEVERITY_COLORS = {
+  moderate: '#eab308',
+  severe: '#f97316',
+  extreme: '#ef4444',
+} as const;
+
 function CorrelationBars({ events }: { events: FloodEvent[] }) {
   const sorted = [...events].sort((a, b) => b.correlation_pct - a.correlation_pct);
   return (
     <div className="space-y-2">
       {sorted.map((ev) => {
-        const sev = SEVERITY_META[ev.severity];
+        const sev = { color: STATIC_SEVERITY_COLORS[ev.severity] };
         return (
           <div key={ev.id} className="flex items-center gap-3">
             <span className="w-20 shrink-0 font-mono text-[9px] text-white/35 text-right">{ev.label}</span>
@@ -325,6 +338,7 @@ function CorrelationBars({ events }: { events: FloodEvent[] }) {
 // ═══════════════════════════════════════════════════════════════════════════
 
 export function FloodCorrelationSection() {
+  const { t } = useT();
   const [data, setData] = useState<FloodEventsResponse | null>(null);
   const [isVisible, setIsVisible] = useState(false);
   const sectionRef = useRef<HTMLElement | null>(null);
@@ -362,7 +376,7 @@ export function FloodCorrelationSection() {
         <div className="flex items-center gap-3">
           <div className="h-2 w-2 animate-pulse rounded-full bg-red-500/70" />
           <span className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/40">
-            Cargando registros de inundación...
+            {t.flood.loading}
           </span>
         </div>
       </section>
@@ -403,8 +417,8 @@ export function FloodCorrelationSection() {
               source === 'firestore' ? 'bg-emerald-400' : 'bg-red-400/70 animate-pulse'
             }`} />
             {source === 'firestore'
-              ? 'Datos en vivo · Copernicus EMS + INAMHI via GEE Pipeline → Firestore'
-              : 'Estimación calibrada · Copernicus EMS EMSR641/715 · INAMHI · SNGR · Sentinel-1 SAR'}
+              ? t.flood.liveData
+              : t.flood.calibratedData}
           </div>
         </div>
 
@@ -419,10 +433,10 @@ export function FloodCorrelationSection() {
           </div>
 
           <h2 className={`${oswald.className} text-4xl uppercase leading-none tracking-[0.06em] text-white/90 md:text-6xl`}>
-            Donde se perdió el manglar,
+            {t.flood.headlineTitle1}
           </h2>
           <h2 className={`${oswald.className} mt-1 text-4xl uppercase leading-none tracking-[0.06em] text-red-400/80 md:text-6xl`}>
-            llega la inundación
+            {t.flood.headlineTitle2}
           </h2>
 
           {/* 83% counter */}
@@ -443,8 +457,8 @@ export function FloodCorrelationSection() {
             </div>
 
             <p className="mt-4 max-w-md font-mono text-[11px] leading-6 tracking-[0.06em] text-white/40">
-              de las zonas inundadas en 2023–2024 coinciden con<br />
-              <span className="text-white/60">áreas de pérdida de manglar post-2010</span>
+              {t.flood.headlineDesc1}<br />
+              <span className="text-white/60">{t.flood.headlineDesc2}</span>
             </p>
 
             <p className="mt-2 font-mono text-[8px] uppercase tracking-[0.15em] text-white/20">
@@ -460,10 +474,10 @@ export function FloodCorrelationSection() {
           <div className="relative rounded-lg border border-white/[0.06] bg-white/[0.015] p-6">
             <Brackets className="border-white/[0.06]" />
             <h3 className="mb-1 font-mono text-[10px] uppercase tracking-[0.25em] text-white/35">
-              Correlación manglar–inundación por evento
+              {t.flood.correlationTitle}
             </h3>
             <p className="mb-5 font-mono text-[9px] text-white/20">
-              % área inundada coincidente con pérdida manglar post-2010
+              {t.flood.correlationSubtitle}
             </p>
             <CorrelationBars events={data.events} />
             <p className="mt-4 font-mono text-[8px] text-white/15">
@@ -477,11 +491,11 @@ export function FloodCorrelationSection() {
             <div className="mb-1 flex items-center gap-2">
               <div className="h-1.5 w-1.5 animate-pulse rounded-full bg-red-400" />
               <h3 className="font-mono text-[10px] uppercase tracking-[0.25em] text-red-400/70">
-                Eventos extremos
+                {t.flood.extremeTitle}
               </h3>
             </div>
             <p className="mb-5 font-mono text-[9px] text-white/20">
-              &gt;70 mm/día · coincidencia lluvia + marea + pérdida manglar
+              {t.flood.extremeSubtitle}
             </p>
 
             <div className="space-y-4">
@@ -498,9 +512,9 @@ export function FloodCorrelationSection() {
                   </div>
                   <div className="mt-3 grid grid-cols-3 gap-2">
                     {[
-                      { v: ev.affected_people.toLocaleString('es-EC'), l: 'afectados' },
-                      { v: `$${ev.damage_usd_m}M`,                     l: 'daños est.' },
-                      { v: `${ev.correlation_pct}%`,                    l: 'correl. mgv' },
+                      { v: ev.affected_people.toLocaleString('es-EC'), l: t.flood.stats.affected },
+                      { v: `$${ev.damage_usd_m}M`,                     l: t.flood.stats.estDamage },
+                      { v: `${ev.correlation_pct}%`,                    l: t.flood.stats.mgvCorrel },
                     ].map(({ v, l }) => (
                       <div key={l} className="flex flex-col items-center rounded border border-white/[0.04] bg-white/[0.02] py-2">
                         <span className={`${oswald.className} text-base font-bold text-white/80`}>{v}</span>
@@ -519,7 +533,7 @@ export function FloodCorrelationSection() {
         <div className="mb-12 grid grid-cols-1 gap-4 sm:grid-cols-3">
           <StatCard
             value={people}
-            label="personas afectadas · zonas sin cobertura manglar · Feb 2023"
+            label={t.flood.stats.peopleLabel}
             color="#ef4444"
             source="INAMHI / Copernicus EMS EMSR641 / SNGR-2023-EC-02"
             active={isVisible}
@@ -527,7 +541,7 @@ export function FloodCorrelationSection() {
           />
           <StatCard
             value={damage}
-            label="millones USD — daños estimados evento Feb 2023"
+            label={t.flood.stats.damageLabel}
             unit="M"
             color="#f97316"
             source="SNGR Ecuador · Evaluación de daños 2023"
@@ -536,7 +550,7 @@ export function FloodCorrelationSection() {
           />
           <StatCard
             value={risk}
-            label="veces más riesgo de inundación sin cobertura de manglar"
+            label={t.flood.stats.riskLabel}
             unit="×"
             color="#eab308"
             source="Spalding et al. (2014) Nature · estimación propia con índice correlación"
@@ -548,26 +562,20 @@ export function FloodCorrelationSection() {
 
         {/* ══ ZONE 4: Event timeline ══ */}
         <div className="mb-8">
-          <FloodTimeline events={data.events} />
+          <FloodTimeline events={data.events} t={t} />
         </div>
 
         {/* Scientific references footer */}
         <div className="rounded-lg border border-white/[0.04] bg-white/[0.008] p-5">
           <p className="mb-3 font-mono text-[8px] font-bold uppercase tracking-[0.3em] text-white/25">
-            Fuentes de datos & metodología
+            {t.flood.sourcesTitle}
           </p>
           <div className="grid gap-2 font-mono text-[8px] leading-4 text-white/18 md:grid-cols-2">
             <div className="space-y-1">
-              <p><span className="text-red-400/50">Eventos extremos</span> — Copernicus EMS Rapid Mapping EMSR641 (Feb 2023), EMSR715 (Ene 2024)</p>
-              <p><span className="text-orange-400/50">Registros hidrometeorológicos</span> — INAMHI Ecuador, series diarias 2015–2024</p>
-              <p><span className="text-yellow-400/50">Reportes de afectación</span> — SNGR Secretaría de Gestión de Riesgos, informes de situación</p>
-              <p><span className="text-white/30">Agua SAR</span> — Sentinel-1 GRD (COPERNICUS/S1_GRD), VV polarización, umbral &lt; -16 dB, GEE</p>
+              {t.flood.sources.slice(0, 4).map((s, i) => <p key={i}>{s}</p>)}
             </div>
             <div className="space-y-1">
-              <p><span className="text-white/30">Pérdida manglar</span> — GMW v3.0 Bunting et al. (2022) DOI:10.1038/s41597-022-01574-5</p>
-              <p><span className="text-white/30">Índice correlación</span> — freq_inund × (1 − cobertura_manglar_2024); umbral crítico &gt; 0.70</p>
-              <p><span className="text-white/30">Factor 3.2×</span> — Spalding et al. (2014) Nature, coastal protection value of mangroves</p>
-              <p><span className="text-white/30">Bbox</span> — Gran Guayaquil -80.1, -2.4, -79.4, -1.7 · CRS: EPSG:4326</p>
+              {t.flood.sources.slice(4).map((s, i) => <p key={i}>{s}</p>)}
             </div>
           </div>
         </div>

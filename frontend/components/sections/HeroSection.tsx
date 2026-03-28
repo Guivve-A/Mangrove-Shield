@@ -1,7 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
+import { useT } from '@/lib/i18n/LanguageContext';
 
 export function HeroSection(): JSX.Element {
+    const { t } = useT();
+    const fullText = t.hero.cta;
     const heroRef = useRef<HTMLElement | null>(null);
     const causticsRef = useRef<HTMLDivElement | null>(null);
     const gridRef = useRef<HTMLDivElement | null>(null);
@@ -11,10 +14,17 @@ export function HeroSection(): JSX.Element {
     const titleRef = useRef<HTMLHeadingElement | null>(null);
     const subtitleRef = useRef<HTMLParagraphElement | null>(null);
     const ctaRef = useRef<HTMLButtonElement | null>(null);
-    const [ctaText, setCtaText] = useState("Conoce más");
-    const fullText = "Conoce más";
+    const [ctaText, setCtaText] = useState(fullText);
     const mouseFrameRef = useRef<number | null>(null);
     const typeIntervalRef = useRef<ReturnType<typeof window.setInterval> | null>(null);
+
+    useEffect(() => {
+        if (typeIntervalRef.current) {
+            window.clearInterval(typeIntervalRef.current);
+            typeIntervalRef.current = null;
+        }
+        setCtaText(fullText);
+    }, [fullText]);
 
     useEffect(() => {
         const heroElement = heroRef.current;

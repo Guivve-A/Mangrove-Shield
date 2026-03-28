@@ -63,7 +63,7 @@ const ScrambleText = ({ text, delay = 0 }: { text: string; delay?: number }) => 
 
 
 export function Navbar() {
-  const { t } = useT();
+  const { t, lang, toggleLang } = useT();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showHeader, setShowHeader] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
@@ -177,6 +177,13 @@ export function Navbar() {
 
       {/* SECCIÓN DERECHA: Botón Contacto y Añadir */}
       <div className={glassContainerClasses}>
+        <button
+          className={`${pillClasses} gsap-header-capsule`}
+          onClick={toggleLang}
+          aria-label="Toggle language"
+        >
+          {lang === 'en' ? 'ES' : 'EN'}
+        </button>
         <button
           className={`${pillClasses} gsap-header-capsule`}
           onClick={async (e) => {

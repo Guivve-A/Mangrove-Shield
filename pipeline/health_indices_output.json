@@ -1,0 +1,376 @@
+[
+  {
+    "year": 2024,
+    "month": 4,
+    "period": "2024-04",
+    "ndvi_mean": 0.7639,
+    "ndvi_stddev": 0.1775,
+    "ndwi_mean": -0.6435,
+    "zones": {
+      "Guayaquil": {
+        "ndvi": 0.786
+      },
+      "Duran": {
+        "ndvi": 0
+      },
+      "Daule": {
+        "ndvi": 0
+      },
+      "Samborondon": {
+        "ndvi": 0
+      }
+    }
+  },
+  {
+    "year": 2024,
+    "month": 6,
+    "period": "2024-06",
+    "ndvi_mean": 0.8721,
+    "ndvi_stddev": 0.1178,
+    "ndwi_mean": -0.7524,
+    "zones": {
+      "Guayaquil": {
+        "ndvi": 0
+      },
+      "Duran": {
+        "ndvi": 0
+      },
+      "Daule": {
+        "ndvi": 0
+      },
+      "Samborondon": {
+        "ndvi": 0
+      }
+    }
+  },
+  {
+    "year": 2024,
+    "month": 7,
+    "period": "2024-07",
+    "ndvi_mean": 0.8087,
+    "ndvi_stddev": 0.1235,
+    "ndwi_mean": -0.7149,
+    "zones": {
+      "Guayaquil": {
+        "ndvi": 0.8063
+      },
+      "Duran": {
+        "ndvi": 0
+      },
+      "Daule": {
+        "ndvi": 0
+      },
+      "Samborondon": {
+        "ndvi": 0
+      }
+    }
+  },
+  {
+    "year": 2024,
+    "month": 8,
+    "period": "2024-08",
+    "ndvi_mean": 0.8227,
+    "ndvi_stddev": 0.1368,
+    "ndwi_mean": -0.7061,
+    "zones": {
+      "Guayaquil": {
+        "ndvi": 0.8277
+      },
+      "Duran": {
+        "ndvi": 0.7883
+      },
+      "Daule": {
+        "ndvi": 0
+      },
+      "Samborondon": {
+        "ndvi": 0
+      }
+    }
+  },
+  {
+    "year": 2024,
+    "month": 9,
+    "period": "2024-09",
+    "ndvi_mean": 0.6806,
+    "ndvi_stddev": 0.1609,
+    "ndwi_mean": -0.589,
+    "zones": {
+      "Guayaquil": {
+        "ndvi": 0
+      },
+      "Duran": {
+        "ndvi": 0
+      },
+      "Daule": {
+        "ndvi": 0
+      },
+      "Samborondon": {
+        "ndvi": 0
+      }
+    }
+  },
+  {
+    "year": 2024,
+    "month": 10,
+    "period": "2024-10",
+    "ndvi_mean": 0,
+    "ndvi_stddev": 0,
+    "ndwi_mean": 0,
+    "zones": {
+      "Guayaquil": {
+        "ndvi": 0
+      },
+      "Duran": {
+        "ndvi": 0
+      },
+      "Daule": {
+        "ndvi": 0
+      },
+      "Samborondon": {
+        "ndvi": 0
+      }
+    }
+  },
+  {
+    "year": 2024,
+    "month": 12,
+    "period": "2024-12",
+    "ndvi_mean": 0.8149,
+    "ndvi_stddev": 0.1322,
+    "ndwi_mean": -0.7015,
+    "zones": {
+      "Guayaquil": {
+        "ndvi": 0.8462
+      },
+      "Duran": {
+        "ndvi": 0
+      },
+      "Daule": {
+        "ndvi": 0
+      },
+      "Samborondon": {
+        "ndvi": 0
+      }
+    }
+  },
+  {
+    "year": 2025,
+    "month": 1,
+    "period": "2025-01",
+    "ndvi_mean": 0.8395,
+    "ndvi_stddev": 0.1366,
+    "ndwi_mean": -0.7119,
+    "zones": {
+      "Guayaquil": {
+        "ndvi": 0
+      },
+      "Duran": {
+        "ndvi": 0
+      },
+      "Daule": {
+        "ndvi": 0
+      },
+      "Samborondon": {
+        "ndvi": 0
+      }
+    }
+  },
+  {
+    "year": 2025,
+    "month": 3,
+    "period": "2025-03",
+    "ndvi_mean": 0.7079,
+    "ndvi_stddev": 0.2274,
+    "ndwi_mean": -0.5735,
+    "zones": {
+      "Guayaquil": {
+        "ndvi": 0.7539
+      },
+      "Duran": {
+        "ndvi": 0
+      },
+      "Daule": {
+        "ndvi": 0
+      },
+      "Samborondon": {
+        "ndvi": 0
+      }
+    }
+  },
+  {
+    "year": 2025,
+    "month": 4,
+    "period": "2025-04",
+    "ndvi_mean": 0.8192,
+    "ndvi_stddev": 0.1682,
+    "ndwi_mean": -0.6887,
+    "zones": {
+      "Guayaquil": {
+        "ndvi": 0.8572
+      },
+      "Duran": {
+        "ndvi": 0
+      },
+      "Daule": {
+        "ndvi": 0
+      },
+      "Samborondon": {
+        "ndvi": 0
+      }
+    }
+  },
+  {
+    "year": 2025,
+    "month": 5,
+    "period": "2025-05",
+    "ndvi_mean": 0.8247,
+    "ndvi_stddev": 0.138,
+    "ndwi_mean": -0.7065,
+    "zones": {
+      "Guayaquil": {
+        "ndvi": 0
+      },
+      "Duran": {
+        "ndvi": 0
+      },
+      "Daule": {
+        "ndvi": 0
+      },
+      "Samborondon": {
+        "ndvi": 0
+      }
+    }
+  },
+  {
+    "year": 2025,
+    "month": 6,
+    "period": "2025-06",
+    "ndvi_mean": 0.8699,
+    "ndvi_stddev": 0.1294,
+    "ndwi_mean": -0.7571,
+    "zones": {
+      "Guayaquil": {
+        "ndvi": 0.8855
+      },
+      "Duran": {
+        "ndvi": 0
+      },
+      "Daule": {
+        "ndvi": 0
+      },
+      "Samborondon": {
+        "ndvi": 0
+      }
+    }
+  },
+  {
+    "year": 2025,
+    "month": 7,
+    "period": "2025-07",
+    "ndvi_mean": 0.8709,
+    "ndvi_stddev": 0.1418,
+    "ndwi_mean": -0.7571,
+    "zones": {
+      "Guayaquil": {
+        "ndvi": 0.887
+      },
+      "Duran": {
+        "ndvi": 0
+      },
+      "Daule": {
+        "ndvi": 0
+      },
+      "Samborondon": {
+        "ndvi": 0
+      }
+    }
+  },
+  {
+    "year": 2025,
+    "month": 8,
+    "period": "2025-08",
+    "ndvi_mean": 0.7995,
+    "ndvi_stddev": 0.1456,
+    "ndwi_mean": -0.6933,
+    "zones": {
+      "Guayaquil": {
+        "ndvi": 0.8141
+      },
+      "Duran": {
+        "ndvi": 0
+      },
+      "Daule": {
+        "ndvi": 0
+      },
+      "Samborondon": {
+        "ndvi": 0
+      }
+    }
+  },
+  {
+    "year": 2025,
+    "month": 9,
+    "period": "2025-09",
+    "ndvi_mean": 0.8244,
+    "ndvi_stddev": 0.1492,
+    "ndwi_mean": -0.7239,
+    "zones": {
+      "Guayaquil": {
+        "ndvi": 0.8612
+      },
+      "Duran": {
+        "ndvi": 0
+      },
+      "Daule": {
+        "ndvi": 0
+      },
+      "Samborondon": {
+        "ndvi": 0
+      }
+    }
+  },
+  {
+    "year": 2025,
+    "month": 12,
+    "period": "2025-12",
+    "ndvi_mean": 0.816,
+    "ndvi_stddev": 0.1482,
+    "ndwi_mean": -0.707,
+    "zones": {
+      "Guayaquil": {
+        "ndvi": 0.8503
+      },
+      "Duran": {
+        "ndvi": 0
+      },
+      "Daule": {
+        "ndvi": 0
+      },
+      "Samborondon": {
+        "ndvi": 0
+      }
+    }
+  },
+  {
+    "year": 2026,
+    "month": 1,
+    "period": "2026-01",
+    "ndvi_mean": 0.8275,
+    "ndvi_stddev": 0.1415,
+    "ndwi_mean": -0.7139,
+    "zones": {
+      "Guayaquil": {
+        "ndvi": 0.8619
+      },
+      "Duran": {
+        "ndvi": 0
+      },
+      "Daule": {
+        "ndvi": 0
+      },
+      "Samborondon": {
+        "ndvi": 0
+      }
+    }
+  }
+]

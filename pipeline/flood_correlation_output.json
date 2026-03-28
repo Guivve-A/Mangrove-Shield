@@ -1,0 +1,2026 @@
+{
+  "cells": [
+    {
+      "cell_id": "c001",
+      "lon": -80.075,
+      "lat": -2.375,
+      "loss_ha": 41.8,
+      "flood_frequency": 0.0259,
+      "mangrove_cover": 0.2865,
+      "correlation_index": 0.0185,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c002",
+      "lon": -80.075,
+      "lat": -2.325,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0006,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0006,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c003",
+      "lon": -80.075,
+      "lat": -2.275,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0026,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0026,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c004",
+      "lon": -80.075,
+      "lat": -2.225,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0031,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0031,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c005",
+      "lon": -80.075,
+      "lat": -2.175,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0009,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0009,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c006",
+      "lon": -80.075,
+      "lat": -2.125,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0004,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0004,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c007",
+      "lon": -80.075,
+      "lat": -2.075,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c008",
+      "lon": -80.075,
+      "lat": -2.025,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0004,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0004,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c009",
+      "lon": -80.075,
+      "lat": -1.975,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0001,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0001,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c010",
+      "lon": -80.075,
+      "lat": -1.925,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.004,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.004,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c011",
+      "lon": -80.075,
+      "lat": -1.875,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.003,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.003,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c012",
+      "lon": -80.075,
+      "lat": -1.825,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0078,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0078,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c013",
+      "lon": -80.075,
+      "lat": -1.775,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0057,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0057,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c014",
+      "lon": -80.075,
+      "lat": -1.725,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0045,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0045,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c015",
+      "lon": -80.025,
+      "lat": -2.375,
+      "loss_ha": 7.7,
+      "flood_frequency": 0.1752,
+      "mangrove_cover": 0.0672,
+      "correlation_index": 0.1634,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c016",
+      "lon": -80.025,
+      "lat": -2.325,
+      "loss_ha": 19.5,
+      "flood_frequency": 0.0457,
+      "mangrove_cover": 0.239,
+      "correlation_index": 0.0348,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c017",
+      "lon": -80.025,
+      "lat": -2.275,
+      "loss_ha": 47.4,
+      "flood_frequency": 0.0802,
+      "mangrove_cover": 0.2405,
+      "correlation_index": 0.0609,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c018",
+      "lon": -80.025,
+      "lat": -2.225,
+      "loss_ha": 70.3,
+      "flood_frequency": 0.1266,
+      "mangrove_cover": 0.0997,
+      "correlation_index": 0.114,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c019",
+      "lon": -80.025,
+      "lat": -2.175,
+      "loss_ha": 7.7,
+      "flood_frequency": 0.0033,
+      "mangrove_cover": 0.0616,
+      "correlation_index": 0.0031,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c020",
+      "lon": -80.025,
+      "lat": -2.125,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c021",
+      "lon": -80.025,
+      "lat": -2.075,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0014,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0014,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c022",
+      "lon": -80.025,
+      "lat": -2.025,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0019,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0019,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c023",
+      "lon": -80.025,
+      "lat": -1.975,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0092,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0092,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c024",
+      "lon": -80.025,
+      "lat": -1.925,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0202,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0202,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c025",
+      "lon": -80.025,
+      "lat": -1.875,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0149,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0149,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c026",
+      "lon": -80.025,
+      "lat": -1.825,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0322,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0322,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c027",
+      "lon": -80.025,
+      "lat": -1.775,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0296,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0296,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c028",
+      "lon": -80.025,
+      "lat": -1.725,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0376,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0376,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c029",
+      "lon": -79.975,
+      "lat": -2.375,
+      "loss_ha": 71.9,
+      "flood_frequency": 0.1045,
+      "mangrove_cover": 0.4992,
+      "correlation_index": 0.0523,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c030",
+      "lon": -79.975,
+      "lat": -2.325,
+      "loss_ha": 83.6,
+      "flood_frequency": 0.1594,
+      "mangrove_cover": 0.327,
+      "correlation_index": 0.1073,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c031",
+      "lon": -79.975,
+      "lat": -2.275,
+      "loss_ha": 101.6,
+      "flood_frequency": 0.0871,
+      "mangrove_cover": 0.6303,
+      "correlation_index": 0.0322,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c032",
+      "lon": -79.975,
+      "lat": -2.225,
+      "loss_ha": 145.0,
+      "flood_frequency": 0.0544,
+      "mangrove_cover": 0.7196,
+      "correlation_index": 0.0153,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c033",
+      "lon": -79.975,
+      "lat": -2.175,
+      "loss_ha": 61.0,
+      "flood_frequency": 0.0012,
+      "mangrove_cover": 0.1095,
+      "correlation_index": 0.0011,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c034",
+      "lon": -79.975,
+      "lat": -2.125,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0004,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0004,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c035",
+      "lon": -79.975,
+      "lat": -2.075,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0006,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0006,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c036",
+      "lon": -79.975,
+      "lat": -2.025,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0136,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0136,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c037",
+      "lon": -79.975,
+      "lat": -1.975,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0286,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0286,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c038",
+      "lon": -79.975,
+      "lat": -1.925,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0387,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0387,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c039",
+      "lon": -79.975,
+      "lat": -1.875,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0495,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0495,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c040",
+      "lon": -79.975,
+      "lat": -1.825,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0335,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0335,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c041",
+      "lon": -79.975,
+      "lat": -1.775,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0125,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0125,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c042",
+      "lon": -79.975,
+      "lat": -1.725,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0188,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0188,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c043",
+      "lon": -79.925,
+      "lat": -2.375,
+      "loss_ha": 101.6,
+      "flood_frequency": 0.0732,
+      "mangrove_cover": 0.6431,
+      "correlation_index": 0.0261,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c044",
+      "lon": -79.925,
+      "lat": -2.325,
+      "loss_ha": 104.4,
+      "flood_frequency": 0.1176,
+      "mangrove_cover": 0.4706,
+      "correlation_index": 0.0623,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c045",
+      "lon": -79.925,
+      "lat": -2.275,
+      "loss_ha": 146.2,
+      "flood_frequency": 0.0805,
+      "mangrove_cover": 0.5089,
+      "correlation_index": 0.0395,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c046",
+      "lon": -79.925,
+      "lat": -2.225,
+      "loss_ha": 8.4,
+      "flood_frequency": 0.0315,
+      "mangrove_cover": 0.0757,
+      "correlation_index": 0.0291,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c047",
+      "lon": -79.925,
+      "lat": -2.175,
+      "loss_ha": 6.2,
+      "flood_frequency": 0.0044,
+      "mangrove_cover": 0.0131,
+      "correlation_index": 0.0043,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c048",
+      "lon": -79.925,
+      "lat": -2.125,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0006,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0006,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c049",
+      "lon": -79.925,
+      "lat": -2.075,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0202,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0202,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c050",
+      "lon": -79.925,
+      "lat": -2.025,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0144,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0144,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c051",
+      "lon": -79.925,
+      "lat": -1.975,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.021,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.021,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c052",
+      "lon": -79.925,
+      "lat": -1.925,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0819,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0819,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c053",
+      "lon": -79.925,
+      "lat": -1.875,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.082,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.082,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c054",
+      "lon": -79.925,
+      "lat": -1.825,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0591,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0591,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c055",
+      "lon": -79.925,
+      "lat": -1.775,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0157,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0157,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c056",
+      "lon": -79.925,
+      "lat": -1.725,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0048,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0048,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c057",
+      "lon": -79.875,
+      "lat": -2.375,
+      "loss_ha": 54.5,
+      "flood_frequency": 0.1547,
+      "mangrove_cover": 0.3266,
+      "correlation_index": 0.1042,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c058",
+      "lon": -79.875,
+      "lat": -2.325,
+      "loss_ha": 114.9,
+      "flood_frequency": 0.1446,
+      "mangrove_cover": 0.2396,
+      "correlation_index": 0.11,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c059",
+      "lon": -79.875,
+      "lat": -2.275,
+      "loss_ha": 48.9,
+      "flood_frequency": 0.1064,
+      "mangrove_cover": 0.0864,
+      "correlation_index": 0.0972,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c060",
+      "lon": -79.875,
+      "lat": -2.225,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.1078,
+      "mangrove_cover": 0.0086,
+      "correlation_index": 0.1069,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c061",
+      "lon": -79.875,
+      "lat": -2.175,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.1496,
+      "mangrove_cover": 0.0047,
+      "correlation_index": 0.1489,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c062",
+      "lon": -79.875,
+      "lat": -2.125,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.1159,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.1159,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c063",
+      "lon": -79.875,
+      "lat": -2.075,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0701,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0701,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c064",
+      "lon": -79.875,
+      "lat": -2.025,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0119,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0119,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c065",
+      "lon": -79.875,
+      "lat": -1.975,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0325,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0325,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c066",
+      "lon": -79.875,
+      "lat": -1.925,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.084,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.084,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c067",
+      "lon": -79.875,
+      "lat": -1.875,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0638,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0638,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c068",
+      "lon": -79.875,
+      "lat": -1.825,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0341,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0341,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c069",
+      "lon": -79.875,
+      "lat": -1.775,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0242,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0242,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c070",
+      "lon": -79.875,
+      "lat": -1.725,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0128,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0128,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c071",
+      "lon": -79.825,
+      "lat": -2.375,
+      "loss_ha": 135.1,
+      "flood_frequency": 0.1742,
+      "mangrove_cover": 0.1735,
+      "correlation_index": 0.144,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c072",
+      "lon": -79.825,
+      "lat": -2.325,
+      "loss_ha": 37.5,
+      "flood_frequency": 0.2249,
+      "mangrove_cover": 0.0088,
+      "correlation_index": 0.2229,
+      "risk_category": "moderate"
+    },
+    {
+      "cell_id": "c073",
+      "lon": -79.825,
+      "lat": -2.275,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.2519,
+      "mangrove_cover": 0.0227,
+      "correlation_index": 0.2462,
+      "risk_category": "moderate"
+    },
+    {
+      "cell_id": "c074",
+      "lon": -79.825,
+      "lat": -2.225,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.1016,
+      "mangrove_cover": 0.0047,
+      "correlation_index": 0.1011,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c075",
+      "lon": -79.825,
+      "lat": -2.175,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0276,
+      "mangrove_cover": 0.0001,
+      "correlation_index": 0.0276,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c076",
+      "lon": -79.825,
+      "lat": -2.125,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0933,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0933,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c077",
+      "lon": -79.825,
+      "lat": -2.075,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.109,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.109,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c078",
+      "lon": -79.825,
+      "lat": -2.025,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.1093,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.1093,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c079",
+      "lon": -79.825,
+      "lat": -1.975,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.1896,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.1896,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c080",
+      "lon": -79.825,
+      "lat": -1.925,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.1735,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.1735,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c081",
+      "lon": -79.825,
+      "lat": -1.875,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0658,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0658,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c082",
+      "lon": -79.825,
+      "lat": -1.825,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0165,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0165,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c083",
+      "lon": -79.825,
+      "lat": -1.775,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0221,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0221,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c084",
+      "lon": -79.825,
+      "lat": -1.725,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0237,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0237,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c085",
+      "lon": -79.775,
+      "lat": -2.375,
+      "loss_ha": 66.0,
+      "flood_frequency": 0.0987,
+      "mangrove_cover": 0.027,
+      "correlation_index": 0.096,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c086",
+      "lon": -79.775,
+      "lat": -2.325,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.073,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.073,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c087",
+      "lon": -79.775,
+      "lat": -2.275,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.1453,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.1453,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c088",
+      "lon": -79.775,
+      "lat": -2.225,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0566,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0566,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c089",
+      "lon": -79.775,
+      "lat": -2.175,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0056,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0056,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c090",
+      "lon": -79.775,
+      "lat": -2.125,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0528,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0528,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c091",
+      "lon": -79.775,
+      "lat": -2.075,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0494,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0494,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c092",
+      "lon": -79.775,
+      "lat": -2.025,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0881,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0881,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c093",
+      "lon": -79.775,
+      "lat": -1.975,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.1439,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.1439,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c094",
+      "lon": -79.775,
+      "lat": -1.925,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.231,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.231,
+      "risk_category": "moderate"
+    },
+    {
+      "cell_id": "c095",
+      "lon": -79.775,
+      "lat": -1.875,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.1101,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.1101,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c096",
+      "lon": -79.775,
+      "lat": -1.825,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.029,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.029,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c097",
+      "lon": -79.775,
+      "lat": -1.775,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0073,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0073,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c098",
+      "lon": -79.775,
+      "lat": -1.725,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0111,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0111,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c099",
+      "lon": -79.725,
+      "lat": -2.375,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0822,
+      "mangrove_cover": 0.0216,
+      "correlation_index": 0.0804,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c100",
+      "lon": -79.725,
+      "lat": -2.325,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.032,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.032,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c101",
+      "lon": -79.725,
+      "lat": -2.275,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0468,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0468,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c102",
+      "lon": -79.725,
+      "lat": -2.225,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0234,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0234,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c103",
+      "lon": -79.725,
+      "lat": -2.175,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0086,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0086,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c104",
+      "lon": -79.725,
+      "lat": -2.125,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0472,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0472,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c105",
+      "lon": -79.725,
+      "lat": -2.075,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0586,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0586,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c106",
+      "lon": -79.725,
+      "lat": -2.025,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.1277,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.1277,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c107",
+      "lon": -79.725,
+      "lat": -1.975,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.1523,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.1523,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c108",
+      "lon": -79.725,
+      "lat": -1.925,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.1389,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.1389,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c109",
+      "lon": -79.725,
+      "lat": -1.875,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.159,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.159,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c110",
+      "lon": -79.725,
+      "lat": -1.825,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.1073,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.1073,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c111",
+      "lon": -79.725,
+      "lat": -1.775,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0074,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0074,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c112",
+      "lon": -79.725,
+      "lat": -1.725,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0046,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0046,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c113",
+      "lon": -79.675,
+      "lat": -2.375,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0061,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0061,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c114",
+      "lon": -79.675,
+      "lat": -2.325,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0093,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0093,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c115",
+      "lon": -79.675,
+      "lat": -2.275,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0005,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0005,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c116",
+      "lon": -79.675,
+      "lat": -2.225,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0017,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0017,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c117",
+      "lon": -79.675,
+      "lat": -2.175,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0009,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0009,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c118",
+      "lon": -79.675,
+      "lat": -2.125,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0021,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0021,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c119",
+      "lon": -79.675,
+      "lat": -2.075,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.1045,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.1045,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c120",
+      "lon": -79.675,
+      "lat": -2.025,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.2121,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.2121,
+      "risk_category": "moderate"
+    },
+    {
+      "cell_id": "c121",
+      "lon": -79.675,
+      "lat": -1.975,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.3358,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.3358,
+      "risk_category": "moderate"
+    },
+    {
+      "cell_id": "c122",
+      "lon": -79.675,
+      "lat": -1.925,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.2954,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.2954,
+      "risk_category": "moderate"
+    },
+    {
+      "cell_id": "c123",
+      "lon": -79.675,
+      "lat": -1.875,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.1438,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.1438,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c124",
+      "lon": -79.675,
+      "lat": -1.825,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.1818,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.1818,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c125",
+      "lon": -79.675,
+      "lat": -1.775,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0485,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0485,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c126",
+      "lon": -79.675,
+      "lat": -1.725,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0288,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0288,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c127",
+      "lon": -79.625,
+      "lat": -2.375,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0066,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0066,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c128",
+      "lon": -79.625,
+      "lat": -2.325,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.001,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.001,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c129",
+      "lon": -79.625,
+      "lat": -2.275,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.001,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.001,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c130",
+      "lon": -79.625,
+      "lat": -2.225,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c131",
+      "lon": -79.625,
+      "lat": -2.175,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c132",
+      "lon": -79.625,
+      "lat": -2.125,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.002,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.002,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c133",
+      "lon": -79.625,
+      "lat": -2.075,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0077,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0077,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c134",
+      "lon": -79.625,
+      "lat": -2.025,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0292,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0292,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c135",
+      "lon": -79.625,
+      "lat": -1.975,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0728,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0728,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c136",
+      "lon": -79.625,
+      "lat": -1.925,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.2904,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.2904,
+      "risk_category": "moderate"
+    },
+    {
+      "cell_id": "c137",
+      "lon": -79.625,
+      "lat": -1.875,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.2066,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.2066,
+      "risk_category": "moderate"
+    },
+    {
+      "cell_id": "c138",
+      "lon": -79.625,
+      "lat": -1.825,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0552,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0552,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c139",
+      "lon": -79.625,
+      "lat": -1.775,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0156,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0156,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c140",
+      "lon": -79.625,
+      "lat": -1.725,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0012,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0012,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c141",
+      "lon": -79.575,
+      "lat": -2.375,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0116,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0116,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c142",
+      "lon": -79.575,
+      "lat": -2.325,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0001,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0001,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c143",
+      "lon": -79.575,
+      "lat": -2.275,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c144",
+      "lon": -79.575,
+      "lat": -2.225,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c145",
+      "lon": -79.575,
+      "lat": -2.175,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0001,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0001,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c146",
+      "lon": -79.575,
+      "lat": -2.125,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0001,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0001,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c147",
+      "lon": -79.575,
+      "lat": -2.075,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0003,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0003,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c148",
+      "lon": -79.575,
+      "lat": -2.025,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0003,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0003,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c149",
+      "lon": -79.575,
+      "lat": -1.975,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.003,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.003,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c150",
+      "lon": -79.575,
+      "lat": -1.925,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0654,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0654,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c151",
+      "lon": -79.575,
+      "lat": -1.875,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.1348,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.1348,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c152",
+      "lon": -79.575,
+      "lat": -1.825,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.052,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.052,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c153",
+      "lon": -79.575,
+      "lat": -1.775,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0754,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0754,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c154",
+      "lon": -79.575,
+      "lat": -1.725,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0063,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0063,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c155",
+      "lon": -79.525,
+      "lat": -2.375,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0021,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0021,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c156",
+      "lon": -79.525,
+      "lat": -2.325,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0006,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0006,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c157",
+      "lon": -79.525,
+      "lat": -2.275,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0003,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0003,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c158",
+      "lon": -79.525,
+      "lat": -2.225,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c159",
+      "lon": -79.525,
+      "lat": -2.175,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c160",
+      "lon": -79.525,
+      "lat": -2.125,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0001,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0001,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c161",
+      "lon": -79.525,
+      "lat": -2.075,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c162",
+      "lon": -79.525,
+      "lat": -2.025,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c163",
+      "lon": -79.525,
+      "lat": -1.975,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0017,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0017,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c164",
+      "lon": -79.525,
+      "lat": -1.925,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0068,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0068,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c165",
+      "lon": -79.525,
+      "lat": -1.875,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.1088,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.1088,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c166",
+      "lon": -79.525,
+      "lat": -1.825,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.1268,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.1268,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c167",
+      "lon": -79.525,
+      "lat": -1.775,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0926,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0926,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c168",
+      "lon": -79.525,
+      "lat": -1.725,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.002,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.002,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c169",
+      "lon": -79.475,
+      "lat": -2.375,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0025,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0025,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c170",
+      "lon": -79.475,
+      "lat": -2.325,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0004,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0004,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c171",
+      "lon": -79.475,
+      "lat": -2.275,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0002,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0002,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c172",
+      "lon": -79.475,
+      "lat": -2.225,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c173",
+      "lon": -79.475,
+      "lat": -2.175,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0001,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0001,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c174",
+      "lon": -79.475,
+      "lat": -2.125,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0001,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0001,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c175",
+      "lon": -79.475,
+      "lat": -2.075,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c176",
+      "lon": -79.475,
+      "lat": -2.025,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0001,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0001,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c177",
+      "lon": -79.475,
+      "lat": -1.975,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0007,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0007,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c178",
+      "lon": -79.475,
+      "lat": -1.925,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0042,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0042,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c179",
+      "lon": -79.475,
+      "lat": -1.875,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0668,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0668,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c180",
+      "lon": -79.475,
+      "lat": -1.825,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0975,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0975,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c181",
+      "lon": -79.475,
+      "lat": -1.775,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.1326,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.1326,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c182",
+      "lon": -79.475,
+      "lat": -1.725,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0774,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0774,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c183",
+      "lon": -79.425,
+      "lat": -2.375,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c184",
+      "lon": -79.425,
+      "lat": -2.325,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0003,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0003,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c185",
+      "lon": -79.425,
+      "lat": -2.275,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0001,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0001,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c186",
+      "lon": -79.425,
+      "lat": -2.225,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0003,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0003,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c187",
+      "lon": -79.425,
+      "lat": -2.175,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0003,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0003,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c188",
+      "lon": -79.425,
+      "lat": -2.125,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c189",
+      "lon": -79.425,
+      "lat": -2.075,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c190",
+      "lon": -79.425,
+      "lat": -2.025,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0003,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0003,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c191",
+      "lon": -79.425,
+      "lat": -1.975,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0018,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0018,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c192",
+      "lon": -79.425,
+      "lat": -1.925,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0054,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0054,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c193",
+      "lon": -79.425,
+      "lat": -1.875,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0275,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0275,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c194",
+      "lon": -79.425,
+      "lat": -1.825,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.1855,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.1855,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c195",
+      "lon": -79.425,
+      "lat": -1.775,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.0494,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.0494,
+      "risk_category": "low"
+    },
+    {
+      "cell_id": "c196",
+      "lon": -79.425,
+      "lat": -1.725,
+      "loss_ha": 0.0,
+      "flood_frequency": 0.008,
+      "mangrove_cover": 0.0,
+      "correlation_index": 0.008,
+      "risk_category": "low"
+    }
+  ],
+  "events": [
+    {
+      "year": 2015,
+      "month": 3,
+      "flood_area_ha": 74633.0,
+      "correlation_pct": 0.2
+    },
+    {
+      "year": 2016,
+      "month": 2,
+      "flood_area_ha": 70684.0,
+      "correlation_pct": 0.3
+    },
+    {
+      "year": 2018,
+      "month": 3,
+      "flood_area_ha": 120760.0,
+      "correlation_pct": 0.3
+    },
+    {
+      "year": 2019,
+      "month": 2,
+      "flood_area_ha": 115390.0,
+      "correlation_pct": 0.2
+    },
+    {
+      "year": 2020,
+      "month": 1,
+      "flood_area_ha": 65590.0,
+      "correlation_pct": 0.4
+    },
+    {
+      "year": 2021,
+      "month": 4,
+      "flood_area_ha": 106220.0,
+      "correlation_pct": 0.3
+    },
+    {
+      "year": 2023,
+      "month": 2,
+      "flood_area_ha": 109474.0,
+      "correlation_pct": 0.2
+    },
+    {
+      "year": 2023,
+      "month": 3,
+      "flood_area_ha": 122070.0,
+      "correlation_pct": 0.2
+    },
+    {
+      "year": 2024,
+      "month": 1,
+      "flood_area_ha": 71654.0,
+      "correlation_pct": 0.4
+    },
+    {
+      "year": 2024,
+      "month": 3,
+      "flood_area_ha": 117218.0,
+      "correlation_pct": 0.3
+    }
+  ]
+}

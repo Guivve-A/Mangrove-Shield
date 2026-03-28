@@ -1,0 +1,56 @@
+[
+  {
+    "year": 2014,
+    "total_ha": 190715.3,
+    "loss_ha": 0.0,
+    "gain_ha": 0.0,
+    "delta_ha": 0.0,
+    "loss_rate_pct": 0.0,
+    "gmw_source_year": 2014
+  },
+  {
+    "year": 2016,
+    "total_ha": 231282.3,
+    "loss_ha": 0.0,
+    "gain_ha": 0.0,
+    "delta_ha": 0.0,
+    "loss_rate_pct": 0.0,
+    "gmw_source_year": 2016
+  },
+  {
+    "year": 2018,
+    "total_ha": 13888.1,
+    "loss_ha": 0.0,
+    "gain_ha": 0.0,
+    "delta_ha": 0.0,
+    "loss_rate_pct": 0.0,
+    "gmw_source_year": 2018
+  },
+  {
+    "year": 2020,
+    "total_ha": 83145.4,
+    "loss_ha": 0.0,
+    "gain_ha": 0.0,
+    "delta_ha": 0.0,
+    "loss_rate_pct": 0.0,
+    "gmw_source_year": 2020
+  },
+  {
+    "year": 2022,
+    "total_ha": 18086.3,
+    "loss_ha": 0.0,
+    "gain_ha": 0.0,
+    "delta_ha": 0.0,
+    "loss_rate_pct": 0.0,
+    "gmw_source_year": 2022
+  },
+  {
+    "year": 2024,
+    "total_ha": 18086.3,
+    "loss_ha": 0.0,
+    "gain_ha": 0.0,
+    "delta_ha": 0.0,
+    "loss_rate_pct": 0.0,
+    "gmw_source_year": 2024
+  }
+]

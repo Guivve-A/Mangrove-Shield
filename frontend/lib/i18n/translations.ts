@@ -212,6 +212,20 @@ const en = {
     ],
   },
 
+  map: {
+    initializing: 'INITIALIZING HUD...',
+    live: 'MANGROVESHIELD LIVE',
+    lastSarScan: 'Latest SAR scan',
+    tideLevel: 'Tide level',
+    rain1h: 'Rain (1h)',
+    healthNdvi: 'Mangrove health (NDVI)',
+    waveHeight: 'Wave height',
+    waterTemp: 'Water temp.',
+    windSpeed: 'Wind speed',
+    backendOffline: 'Backend offline',
+    threatLevel: 'Threat level',
+  },
+
   flood: {
     loading: 'Loading flood records...',
     liveData: 'Live data · Copernicus EMS + INAMHI via GEE Pipeline → Firestore',
@@ -519,6 +533,20 @@ const es: Translations = {
           'Se incluye una visualización técnica que muestra la fecha y el estado del último escaneo del satélite Sentinel-2, permitiendo al usuario saber exactamente cuándo se adquirieron los datos de salud ecosistémica que está observando.',
       },
     ],
+  },
+
+  map: {
+    initializing: 'INICIALIZANDO HUD...',
+    live: 'MANGROVESHIELD LIVE',
+    lastSarScan: 'Ultimo escaneo SAR',
+    tideLevel: 'Nivel marea',
+    rain1h: 'Lluvia (1h)',
+    healthNdvi: 'Salud manglar (NDVI)',
+    waveHeight: 'Altura ola',
+    waterTemp: 'Temp. agua',
+    windSpeed: 'Velocidad viento',
+    backendOffline: 'Backend offline',
+    threatLevel: 'Nivel de amenaza',
   },
 
   flood: {

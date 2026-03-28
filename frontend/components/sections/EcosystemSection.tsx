@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Oswald } from 'next/font/google';
 
 import type { LiveData } from '@/hooks/useLiveData';
+import { useT } from '@/lib/i18n/LanguageContext';
 
 const oswald = Oswald({
   subsets: ['latin'],
@@ -236,6 +237,7 @@ function NdviGraphic({ accent }: { accent: string }): JSX.Element {
 }
 
 export function EcosystemSection({ liveData }: EcosystemSectionProps): JSX.Element {
+  const { t, lang } = useT();
   const sectionRef = useRef<HTMLElement | null>(null);
   const cursorRef = useRef<HTMLDivElement | null>(null);
   const [isVisible, setIsVisible] = useState(false);
@@ -382,58 +384,58 @@ export function EcosystemSection({ liveData }: EcosystemSectionProps): JSX.Eleme
         : 'BOOT';
 
   const ndviSummary = ndviClassification
-    ? `Sentinel-2 sigue el vigor del manglar. Estado ${ndviClassification.toUpperCase()} con tendencia ${(ndviTrend ?? 'stable').toUpperCase()}.`
+    ? t.ecosystem.ndvi.summaryWithStatus(ndviClassification.toUpperCase(), (ndviTrend ?? 'stable').toUpperCase())
     : ecosystemFeed
-    ? `Sentinel-2 sigue el vigor del manglar. Estado ${ecosystemFeed.classification.toUpperCase()} con tendencia ${ecosystemFeed.trend.toUpperCase()}.`
+    ? t.ecosystem.ndvi.summaryWithStatus(ecosystemFeed.classification.toUpperCase(), ecosystemFeed.trend.toUpperCase())
     : localEcosystemFeed?.error === 'AWAITING_TRIGGER'
-      ? 'La capa satelital esta en espera. Usa Sync para solicitar una lectura NDVI.'
+      ? t.ecosystem.ndvi.summaryAwaiting
       : ndviError
-        ? 'La capa ecosistemica esta degradada. El panel conserva el ultimo indice disponible.'
-        : 'El motor ecosistemico esta enlazando la ultima escena satelital disponible.';
+        ? t.ecosystem.ndvi.summaryOffline
+        : t.ecosystem.ndvi.summaryBooting;
 
   const pillars: PillarConfig[] = [
     {
       id: 'rain',
       number: '.01',
-      title: ['PRECIPITACION', 'ACTIVA'],
+      title: t.ecosystem.rain.titles as unknown as string[],
       accent: 'var(--storm-orange)',
       value: rainValue,
       decimals: 1,
-      unit: 'MM / HR',
+      unit: t.ecosystem.rain.unit,
       source: 'OPENWEATHER / RAIN PROXY',
       state: rainState,
       summary:
         rainState === 'AWAITING'
-          ? 'El stream meteorologico esta en espera. Usa Sync para solicitar una lectura inmediata.'
+          ? t.ecosystem.rain.summaryAwaiting
           : rainState === 'OFFLINE'
-            ? 'La capa meteorologica esta degradada. El panel conserva el ultimo proxy disponible.'
-            : 'OpenWeather y los proxies hidrologicos siguen la lluvia horaria para anticipar saturacion.',
+            ? t.ecosystem.rain.summaryOffline
+            : t.ecosystem.rain.summaryLive,
     },
     {
       id: 'tide',
       number: '.02',
-      title: ['OSCILACION', 'MARITIMA'],
+      title: t.ecosystem.tide.titles as unknown as string[],
       accent: 'var(--sat-cyan)',
       value: tideValue,
       decimals: 2,
-      unit: 'METROS',
+      unit: t.ecosystem.tide.unit,
       source: 'STORMGLASS / SEA LEVEL',
       state: tideState,
       summary:
         tideState === 'AWAITING'
-          ? 'La cola costera esta inactiva. Usa Sync para pedir una lectura de nivel del mar.'
+          ? t.ecosystem.tide.summaryAwaiting
           : tideState === 'OFFLINE'
-            ? 'La telemetria maritima esta degradada. El motor espera un nuevo paquete costero.'
-            : 'El feed costero consulta el nivel del mar para detectar amplitud anomala antes de la intrusion.',
+            ? t.ecosystem.tide.summaryOffline
+            : t.ecosystem.tide.summaryLive,
     },
     {
       id: 'ndvi',
       number: '.03',
-      title: ['COBERTURA', 'NDVI'],
+      title: t.ecosystem.ndvi.titles as unknown as string[],
       accent: 'var(--estuary)',
       value: ndviValue,
       decimals: 2,
-      unit: 'INDICE',
+      unit: t.ecosystem.ndvi.unit,
       source: localEcosystemFeed?.model?.version
         ? `SENTINEL-2 / ${localEcosystemFeed.model.version}`
         : ecosystemFeed?.model?.version
@@ -490,7 +492,7 @@ export function EcosystemSection({ liveData }: EcosystemSectionProps): JSX.Eleme
               <h2
                 className={`${oswald.className} mx-2 whitespace-nowrap text-center text-4xl uppercase leading-none tracking-[0.08em] text-white md:text-6xl lg:text-[5.2rem]`}
               >
-                Motor Predictivo
+                {t.ecosystem.title}
               </h2>
 
               <span className="hidden h-px flex-1 bg-white/15 md:block" />
@@ -505,7 +507,7 @@ export function EcosystemSection({ liveData }: EcosystemSectionProps): JSX.Eleme
             </div>
 
             <div className="mt-5 flex w-full items-center justify-between gap-3 font-mono text-[10px] uppercase tracking-[0.24em] text-white/35">
-              <span>{localStatusError ? 'Local feed offline' : 'Operational matrix'}</span>
+              <span>{localStatusError ? (lang === 'en' ? 'Local feed offline' : 'Feed local inactivo') : (lang === 'en' ? 'Operational matrix' : 'Matriz operativa')}</span>
               <span>{syncLabel}</span>
             </div>
           </div>
@@ -579,14 +581,14 @@ export function EcosystemSection({ liveData }: EcosystemSectionProps): JSX.Eleme
                   {pillar.id === 'ndvi' && (canopyCover !== null || fragmentationIndex !== null) && (
                     <div className="mt-3 border-b pb-3 grid grid-cols-2 gap-x-4 gap-y-1" style={{ borderColor: `${pillar.accent}33` }}>
                       <div className="flex flex-col">
-                        <span className="text-[9px] uppercase tracking-[0.22em] text-white/40">Cobertura Dosel</span>
+                        <span className="text-[9px] uppercase tracking-[0.22em] text-white/40">{lang === 'en' ? 'Canopy Cover' : 'Cobertura Dosel'}</span>
                         <span className="text-lg font-medium leading-none mt-1">
                           <AnimatedMetric value={canopyCover !== null ? canopyCover * 100 : null} decimals={1} isActive={isVisible} />
                           <span className="text-[10px] text-white/45 ml-1">%</span>
                         </span>
                       </div>
                       <div className="flex flex-col">
-                        <span className="text-[9px] uppercase tracking-[0.22em] text-white/40">Fragmentación</span>
+                        <span className="text-[9px] uppercase tracking-[0.22em] text-white/40">{lang === 'en' ? 'Fragmentation' : 'Fragmentación'}</span>
                         <span className="text-lg font-medium leading-none mt-1">
                           <AnimatedMetric value={fragmentationIndex} decimals={3} isActive={isVisible} />
                           <span className="text-[10px] text-white/45 ml-1">idx</span>

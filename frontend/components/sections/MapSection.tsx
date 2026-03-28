@@ -3,6 +3,7 @@ import type { FeatureCollection } from 'geojson';
 import { Waves, Satellite, Droplets, Activity, AlertTriangle, RadioReceiver, TreePine, Wind, Thermometer } from 'lucide-react';
 import Map, { Source, Layer, NavigationControl } from 'react-map-gl/maplibre';
 import 'maplibre-gl/dist/maplibre-gl.css';
+import { useT } from '@/lib/i18n/LanguageContext';
 
 import { getFloodStatus } from '@/lib/liveApi';
 
@@ -35,6 +36,7 @@ interface MapSectionProps {
 }
 
 export function MapSection({ waterMaskGeoJson }: MapSectionProps) {
+    const { t } = useT();
     const [data, setData] = useState<FloodStatusResponse | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -103,7 +105,7 @@ export function MapSection({ waterMaskGeoJson }: MapSectionProps) {
             {loading && (
                 <div className="absolute inset-0 z-50 flex flex-col items-center justify-center bg-black/80 backdrop-blur-md">
                     <Activity className="w-12 h-12 text-[#22d3ee] animate-pulse mb-4" />
-                    <h2 className="text-xl font-mono tracking-widest text-white/90">INICIALIZANDO HUD...</h2>
+                    <h2 className="text-xl font-mono tracking-widest text-white/90">{t.map.initializing}</h2>
                 </div>
             )}
 
@@ -116,14 +118,14 @@ export function MapSection({ waterMaskGeoJson }: MapSectionProps) {
                                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
                                 <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500" />
                             </span>
-                            <span className="font-mono text-xs tracking-[0.15em] font-medium text-white/90">MANGROVESHIELD LIVE</span>
+                            <span className="font-mono text-xs tracking-[0.15em] font-medium text-white/90">{t.map.live}</span>
                         </div>
 
                         {data?.sar_data?.date_acquired && (
                             <div className="bg-black/40 backdrop-blur-md border border-white/10 px-4 py-2.5 rounded-xl flex items-center gap-3 shadow-lg">
                                 <Satellite className="w-4 h-4 text-[#22d3ee]" />
                                 <div className="flex flex-col">
-                                    <span className="text-[9px] text-white/50 uppercase tracking-widest">Ultimo escaneo SAR</span>
+                                    <span className="text-[9px] text-white/50 uppercase tracking-widest">{t.map.lastSarScan}</span>
                                     <span className="font-mono text-xs text-[#22d3ee] tracking-widest">{data.sar_data.date_acquired}</span>
                                 </div>
                             </div>
@@ -135,7 +137,7 @@ export function MapSection({ waterMaskGeoJson }: MapSectionProps) {
                         {/* Tide */}
                         <div className="bg-black/40 backdrop-blur-md border border-white/10 p-3 rounded-xl flex items-center gap-6 shadow-lg min-w-[195px]">
                             <div className="flex flex-col items-start">
-                                <span className="text-[10px] text-white/50 uppercase tracking-widest">Nivel marea</span>
+                                <span className="text-[10px] text-white/50 uppercase tracking-widest">{t.map.tideLevel}</span>
                                 <span className="font-mono text-xl font-medium text-blue-300">
                                     {data?.tide?.error
                                         ? <AlertTriangle className="w-5 h-5 text-yellow-500 inline-block mt-1" />
@@ -150,7 +152,7 @@ export function MapSection({ waterMaskGeoJson }: MapSectionProps) {
                         {/* Rain */}
                         <div className="bg-black/40 backdrop-blur-md border border-white/10 p-3 rounded-xl flex items-center gap-6 shadow-lg min-w-[195px]">
                             <div className="flex flex-col items-start">
-                                <span className="text-[10px] text-white/50 uppercase tracking-widest">Lluvia (1h)</span>
+                                <span className="text-[10px] text-white/50 uppercase tracking-widest">{t.map.rain1h}</span>
                                 <span className="font-mono text-xl font-medium text-[#22d3ee]">
                                     {data?.weather?.error
                                         ? <AlertTriangle className="w-5 h-5 text-yellow-500 inline-block mt-1" />
@@ -165,7 +167,7 @@ export function MapSection({ waterMaskGeoJson }: MapSectionProps) {
                         {/* NDVI */}
                         <div className="bg-black/40 backdrop-blur-md border border-white/10 p-3 rounded-xl flex items-center gap-6 shadow-lg min-w-[195px]">
                             <div className="flex flex-col items-start">
-                                <span className="text-[10px] text-white/50 uppercase tracking-widest">Salud manglar (NDVI)</span>
+                                <span className="text-[10px] text-white/50 uppercase tracking-widest">{t.map.healthNdvi}</span>
                                 <span className="font-mono text-xl font-medium text-green-400">
                                     {data?.ecosystem_health?.error
                                         ? <AlertTriangle className="w-5 h-5 text-yellow-500 inline-block mt-1" />
@@ -180,7 +182,7 @@ export function MapSection({ waterMaskGeoJson }: MapSectionProps) {
                         {/* Wave Height */}
                         <div className="bg-black/40 backdrop-blur-md border border-white/10 p-3 rounded-xl flex items-center gap-6 shadow-lg min-w-[195px]">
                             <div className="flex flex-col items-start">
-                                <span className="text-[10px] text-white/50 uppercase tracking-widest">Altura ola</span>
+                                <span className="text-[10px] text-white/50 uppercase tracking-widest">{t.map.waveHeight}</span>
                                 <span className="font-mono text-xl font-medium text-cyan-300">
                                     {data?.tide?.error
                                         ? <AlertTriangle className="w-5 h-5 text-yellow-500 inline-block mt-1" />
@@ -195,7 +197,7 @@ export function MapSection({ waterMaskGeoJson }: MapSectionProps) {
                         {/* Water Temperature */}
                         <div className="bg-black/40 backdrop-blur-md border border-white/10 p-3 rounded-xl flex items-center gap-6 shadow-lg min-w-[195px]">
                             <div className="flex flex-col items-start">
-                                <span className="text-[10px] text-white/50 uppercase tracking-widest">Temp. agua</span>
+                                <span className="text-[10px] text-white/50 uppercase tracking-widest">{t.map.waterTemp}</span>
                                 <span className="font-mono text-xl font-medium text-orange-300">
                                     {data?.tide?.error
                                         ? <AlertTriangle className="w-5 h-5 text-yellow-500 inline-block mt-1" />
@@ -210,7 +212,7 @@ export function MapSection({ waterMaskGeoJson }: MapSectionProps) {
                         {/* Wind Speed */}
                         <div className="bg-black/40 backdrop-blur-md border border-white/10 p-3 rounded-xl flex items-center gap-6 shadow-lg min-w-[195px]">
                             <div className="flex flex-col items-start">
-                                <span className="text-[10px] text-white/50 uppercase tracking-widest">Velocidad viento</span>
+                                <span className="text-[10px] text-white/50 uppercase tracking-widest">{t.map.windSpeed}</span>
                                 <span className="font-mono text-xl font-medium text-purple-300">
                                     {data?.tide?.error
                                         ? <AlertTriangle className="w-5 h-5 text-yellow-500 inline-block mt-1" />
@@ -225,7 +227,7 @@ export function MapSection({ waterMaskGeoJson }: MapSectionProps) {
                         {error && (
                             <div className="bg-red-500/10 backdrop-blur-md border border-red-500/20 px-4 py-2 rounded-xl flex items-center gap-2 pointer-events-auto">
                                 <AlertTriangle className="w-4 h-4 text-red-400 shrink-0 animate-pulse" />
-                                <span className="text-[9px] text-red-300 font-mono tracking-widest uppercase">Backend offline</span>
+                                <span className="text-[9px] text-red-300 font-mono tracking-widest uppercase">{t.map.backendOffline}</span>
                             </div>
                         )}
                     </div>
@@ -237,7 +239,7 @@ export function MapSection({ waterMaskGeoJson }: MapSectionProps) {
                                 <RadioReceiver className={`w-5 h-5 ${threat.pulse ? 'animate-pulse' : ''}`} />
                             </div>
                             <div className="flex flex-col">
-                                <span className="text-[10px] uppercase tracking-[0.2em] opacity-70">Nivel de amenaza</span>
+                                <span className="text-[10px] uppercase tracking-[0.2em] opacity-70">{t.map.threatLevel}</span>
                                 <span className="font-mono font-bold tracking-widest text-base">{threat.level}</span>
                             </div>
                         </div>

@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Oswald } from 'next/font/google';
+import { useT } from '@/lib/i18n/LanguageContext';
 
 const oswald = Oswald({
   subsets: ['latin'],
@@ -7,41 +8,10 @@ const oswald = Oswald({
   display: 'swap',
 });
 
-// Definición de las tarjetas con el contenido proporcionado
-const EXPLANATION_CARDS = [
-  {
-    id: 'layer-geo',
-    tag: 'CAPAS GEOESPACIALES',
-    description:
-      'El mapa integra una máscara de agua (water-mask) que resalta las zonas hídricas actuales en un tono cian, junto con una capa de detección satelital SAR (sar-data) que muestra el escaneo más reciente de inundaciones detectadas por radar.',
-  },
-  {
-    id: 'vuln-points',
-    tag: 'VULNERABILIDAD',
-    description:
-      'Se despliegan marcadores circulares sobre el mapa cuyo tamaño y color indican el nivel de riesgo en zonas específicas; los puntos varían desde verde (bajo) hasta rojo (crítico) según su "Vulnerability Score".',
-  },
-  {
-    id: 'realtime-hud',
-    tag: 'MONITOREO HUD',
-    description:
-      'Un panel lateral (HUD) muestra lecturas en vivo provenientes del backend, incluyendo el nivel de marea exacto en metros, la precipitación acumulada por hora (mm/h) y el índice de salud del manglar (NDVI).',
-  },
-  {
-    id: 'threat-engine',
-    tag: 'AMENAZA INTELIGENTE',
-    description:
-      'El mapa cuenta con un motor de lógica que evalúa la combinación de marea alta y lluvias intensas para dictar un "Nivel de Amenaza" global (Normal, Warning o Critical), visualizado mediante un distintivo flotante con efectos de pulso.',
-  },
-  {
-    id: 'sat-control',
-    tag: 'CONTROL SATELITAL',
-    description:
-      'Se incluye una visualización técnica que muestra la fecha y el estado del último escaneo del satélite Sentinel-2, permitiendo al usuario saber exactamente cuándo se adquirieron los datos de salud ecosistémica que está observando.',
-  },
-];
 
 export function OutcomesSection() {
+  const { t } = useT();
+  const EXPLANATION_CARDS = t.outcomes.cards;
   const [activeIndex, setActiveIndex] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
 
@@ -81,12 +51,12 @@ export function OutcomesSection() {
         {/* Encabezado de la Sección */}
         <div className="mb-16 text-center">
           <span className="mb-4 block font-mono text-[11px] uppercase tracking-[0.3em] text-black/50">
-            Arquitectura del Sistema
+            {t.outcomes.badgeLabel}
           </span>
           <h2
             className={`${oswald.className} text-4xl uppercase leading-none tracking-[0.05em] text-[#1A1A1A] md:text-6xl`}
           >
-            Mecánica Operativa
+            {t.outcomes.title}
           </h2>
         </div>
 
@@ -105,7 +75,7 @@ export function OutcomesSection() {
 
             return (
               <div
-                key={card.id}
+                key={index}
                 className="absolute top-0 w-full max-w-[850px] transition-all duration-700 ease-[cubic-bezier(0.25,1,0.5,1)]"
                 style={{
                   zIndex: 30 - offset * 10,
@@ -158,7 +128,7 @@ export function OutcomesSection() {
 
                     {/* Botón Decorativo */}
                     <button className="rounded-full border border-[#FCE166] bg-[#FCE166]/10 px-8 py-3 font-mono text-[10px] uppercase tracking-[0.2em] text-[#FCE166] backdrop-blur-md transition-all duration-300 hover:bg-[#FCE166] hover:text-[#1A1A1A] active:scale-95">
-                      Inspeccionar
+                      {t.outcomes.inspectButton}
                     </button>
                   </div>
                 </div>

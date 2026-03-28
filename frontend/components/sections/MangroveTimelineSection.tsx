@@ -96,7 +96,7 @@ function TimeSlider({ years, selectedIndex, onChange, isPlaying, onTogglePlay }:
         <div className="absolute left-2 right-2 top-1/2 h-px -translate-y-1/2 bg-white/15" />
         {/* Progress line */}
         <div
-          className="absolute left-2 top-1/2 h-px -translate-y-1/2 bg-emerald-400/60 transition-all duration-400"
+          className="absolute left-2 top-1/2 h-px -translate-y-1/2 bg-emerald-400/60 transition-all duration-300"
           style={{ width: `${(selectedIndex / Math.max(years.length - 1, 1)) * 100}%` }}
         />
 
@@ -132,51 +132,6 @@ function TimeSlider({ years, selectedIndex, onChange, isPlaying, onTogglePlay }:
 }
 
 // ---------------------------------------------------------------------------
-// Floating stats panel (top-right of map area)
-// ---------------------------------------------------------------------------
-
-interface StatsPanelProps {
-  record: MangroveYearRecord;
-  prevRecord: MangroveYearRecord | null;
-}
-
-function StatsPanel({ record, prevRecord }: StatsPanelProps) {
-  const deltaSign = record.delta_ha >= 0 ? '+' : '';
-  const deltaColor = record.delta_ha >= 0 ? 'text-emerald-400' : 'text-red-400';
-  const arrow = record.delta_ha >= 0 ? '\u25B2' : '\u25BC';
-
-  return (
-    <div className="rounded-xl border border-white/10 bg-black/70 px-5 py-4 backdrop-blur-xl">
-      <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-white/40">
-        Cobertura {record.year}
-      </p>
-      <div className="mt-2 space-y-1.5">
-        <div className="flex items-baseline justify-between gap-6">
-          <span className="text-[12px] text-white/60">Total</span>
-          <span className="font-mono text-[15px] font-semibold text-white">
-            {record.total_ha.toLocaleString()} ha
-          </span>
-        </div>
-        {prevRecord && (
-          <div className="flex items-baseline justify-between gap-6">
-            <span className="text-[12px] text-white/60">vs anterior</span>
-            <span className={`font-mono text-[15px] font-semibold ${deltaColor}`}>
-              {deltaSign}{record.delta_ha.toLocaleString()} ha {arrow}
-            </span>
-          </div>
-        )}
-        <div className="flex items-baseline justify-between gap-6">
-          <span className="text-[12px] text-white/60">Tasa de pérdida</span>
-          <span className="font-mono text-[15px] font-semibold text-amber-400">
-            {record.loss_rate_pct}% anual
-          </span>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-// ---------------------------------------------------------------------------
 // Custom tooltip for Recharts
 // ---------------------------------------------------------------------------
 
@@ -193,9 +148,9 @@ function ChartTooltip({ active, payload, label }: {
         <div key={entry.dataKey} className="flex items-center gap-2">
           <div className="h-2 w-2 rounded-full" style={{ backgroundColor: entry.color }} />
           <span className="text-white/60">
-            {entry.dataKey === 'total_ha' ? 'Cobertura' : 'Pérdida acum.'}:
+            {entry.dataKey === 'total_ha' ? 'Cobertura' : 'P\u00e9rdida acum.'}:
           </span>
-          <span className="font-mono font-semibold text-white">
+          <span className="tabular-nums font-mono font-semibold text-white">
             {entry.value.toLocaleString()} ha
           </span>
         </div>
@@ -293,6 +248,11 @@ export function MangroveTimelineSection() {
   const animGain = useCountUp(totalGain, 1800, isVisible);
   const animNet = useCountUp(Math.abs(netChange), 1800, isVisible);
 
+  // Selected year derived values
+  const deltaDelta = selectedRecord?.delta_ha ?? 0;
+  const deltaSign = deltaDelta >= 0 ? '+' : '';
+  const deltaColor = deltaDelta >= 0 ? 'text-emerald-400' : 'text-red-400';
+
   if (!data) {
     return (
       <section className="flex min-h-[60vh] items-center justify-center bg-[#0a1628]">
@@ -314,6 +274,7 @@ export function MangroveTimelineSection() {
       <div className="pointer-events-none absolute bottom-0 left-0 h-[400px] w-[400px] rounded-full bg-red-500/5 blur-[160px]" />
 
       <div className="relative z-10 mx-auto max-w-6xl px-4">
+
         {/* Data provenance badge */}
         <div className="mb-6 flex justify-center">
           <div className={`inline-flex items-center gap-2 rounded-full border px-4 py-1.5 font-mono text-[9px] uppercase tracking-[0.2em] backdrop-blur-md ${
@@ -330,7 +291,7 @@ export function MangroveTimelineSection() {
           </div>
         </div>
 
-        {/* ─── Zone 1: Header with animated metrics ─── */}
+        {/* ─── Zone 1: Header + KPI Row ─── */}
         <div className="mb-16 text-center">
           <span className="mb-4 block font-mono text-[11px] uppercase tracking-[0.3em] text-emerald-400/70">
             Global Mangrove Watch v3.0
@@ -338,50 +299,56 @@ export function MangroveTimelineSection() {
           <h2
             className={`${oswald.className} text-4xl uppercase leading-none tracking-[0.05em] text-white md:text-6xl`}
           >
-            Cambio Histórico de Manglar
+            Cambio Hist\u00f3rico de Manglar
           </h2>
           <p className="mt-3 font-mono text-[13px] uppercase tracking-[0.15em] text-white/40">
             Gran Guayaquil &middot; 2014 &rarr; 2024
           </p>
 
-          {/* Metric cards */}
-          <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row sm:gap-8">
+          {/* KPI Row: net_change hero (center) + loss/gain secondary */}
+          <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row sm:gap-6">
+
+            {/* Secondary: losses */}
             <div className="flex flex-col items-center rounded-xl border border-red-500/20 bg-red-500/5 px-6 py-4 backdrop-blur-sm">
-              <span className={`${oswald.className} text-3xl font-bold text-red-400 md:text-4xl`}>
+              <span className={`${oswald.className} tabular-nums text-2xl font-bold text-red-400 md:text-3xl`}>
                 -{animLoss.toLocaleString()} ha
               </span>
               <span className="mt-1 font-mono text-[10px] uppercase tracking-[0.2em] text-white/40">
-                Pérdidas
+                P\u00e9rdidas
               </span>
             </div>
-            <div className="flex flex-col items-center rounded-xl border border-emerald-500/20 bg-emerald-500/5 px-6 py-4 backdrop-blur-sm">
-              <span className={`${oswald.className} text-3xl font-bold text-emerald-400 md:text-4xl`}>
-                +{animGain.toLocaleString()} ha
-              </span>
-              <span className="mt-1 font-mono text-[10px] uppercase tracking-[0.2em] text-white/40">
-                Ganancias
-              </span>
-            </div>
-            <div className="flex flex-col items-center rounded-xl border border-amber-500/20 bg-amber-500/5 px-6 py-4 backdrop-blur-sm">
-              <span className={`${oswald.className} text-3xl font-bold text-amber-400 md:text-4xl`}>
+
+            {/* HERO: net_change — larger size + center position = hierarchy signal */}
+            <div className="flex flex-col items-center rounded-xl border border-amber-500/20 bg-amber-500/5 px-8 py-5 backdrop-blur-sm">
+              <span className={`${oswald.className} tabular-nums text-4xl font-bold text-amber-400 md:text-5xl`}>
                 {netChange >= 0 ? '+' : '-'}{animNet.toLocaleString()} ha
               </span>
               <span className="mt-1 font-mono text-[10px] uppercase tracking-[0.2em] text-white/40">
                 Balance Neto
               </span>
             </div>
+
+            {/* Secondary: gains */}
+            <div className="flex flex-col items-center rounded-xl border border-emerald-500/20 bg-emerald-500/5 px-6 py-4 backdrop-blur-sm">
+              <span className={`${oswald.className} tabular-nums text-2xl font-bold text-emerald-400 md:text-3xl`}>
+                +{animGain.toLocaleString()} ha
+              </span>
+              <span className="mt-1 font-mono text-[10px] uppercase tracking-[0.2em] text-white/40">
+                Ganancias
+              </span>
+            </div>
           </div>
         </div>
 
-        {/* ─── Zone 2: Interactive map area with slider ─── */}
-        <div className="relative mb-12 rounded-2xl border border-white/8 bg-[#0d1a2e] p-1">
-          {/* Map placeholder with coverage visualization */}
-          <div className="relative h-[380px] overflow-hidden rounded-xl bg-gradient-to-br from-[#0b1929] to-[#0a1220] md:h-[480px]">
+        {/* ─── Zone 2: 12-col grid — Coverage Viz (8) + Selected Year Panel (4) ─── */}
+        <div className="mb-12 grid grid-cols-1 gap-4 md:grid-cols-12">
+
+          {/* Coverage visualization — left 8 cols */}
+          <div className="relative overflow-hidden rounded-2xl border border-white/8 bg-[#0d1a2e] md:col-span-8">
             {/* Grid overlay */}
             <div className="absolute inset-0 opacity-10 [background-image:linear-gradient(rgba(255,255,255,0.12)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.12)_1px,transparent_1px)] [background-size:48px_48px]" />
 
-            {/* Central coverage visualization */}
-            <div className="absolute inset-0 flex flex-col items-center justify-center">
+            <div className="relative flex flex-col items-center justify-center py-10">
               {/* Mangrove coverage circle */}
               <div className="relative">
                 <svg viewBox="0 0 200 200" width="220" height="220" className="drop-shadow-[0_0_30px_rgba(16,185,129,0.2)]">
@@ -436,18 +403,13 @@ export function MangroveTimelineSection() {
                   </defs>
                 </svg>
 
-                {/* Center text */}
+                {/* Center text: total_ha only — delta_ha lives as hero in the right panel */}
                 <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
-                  <span className={`${oswald.className} text-3xl font-bold text-white md:text-4xl`}>
+                  <span className={`${oswald.className} tabular-nums text-3xl font-bold text-white md:text-4xl`}>
                     {(selectedRecord?.total_ha ?? 0).toLocaleString()}
                   </span>
                   <span className="font-mono text-[10px] uppercase tracking-[0.15em] text-white/40">
-                    hectáreas
-                  </span>
-                  <span className={`mt-1 font-mono text-[13px] font-bold ${
-                    (selectedRecord?.delta_ha ?? 0) >= 0 ? 'text-emerald-400' : 'text-red-400'
-                  }`}>
-                    {(selectedRecord?.delta_ha ?? 0) >= 0 ? '+' : ''}{(selectedRecord?.delta_ha ?? 0).toLocaleString()} ha
+                    hect\u00e1reas
                   </span>
                 </div>
               </div>
@@ -460,7 +422,7 @@ export function MangroveTimelineSection() {
                 </div>
                 <div className="flex items-center gap-1.5">
                   <div className="h-2 w-2 rounded-full bg-red-500" />
-                  Pérdida
+                  P\u00e9rdida
                 </div>
                 <div className="flex items-center gap-1.5">
                   <div className="h-2 w-2 rounded-full bg-cyan-500" />
@@ -469,45 +431,87 @@ export function MangroveTimelineSection() {
               </div>
             </div>
 
-            {/* Floating stats panel — top right */}
-            {selectedRecord && (
-              <div className="absolute right-3 top-3 w-56">
-                <StatsPanel record={selectedRecord} prevRecord={prevRecord} />
-              </div>
-            )}
-
-            {/* Year badge — top left */}
-            <div className="absolute left-3 top-3 rounded-md border border-white/10 bg-black/60 px-3 py-1.5 backdrop-blur-md">
-              <span className="font-mono text-[10px] uppercase tracking-[0.15em] text-white/40">
-                Año Seleccionado
-              </span>
-              <span className={`${oswald.className} ml-2 text-lg font-bold text-emerald-400`}>
-                {selectedRecord?.year ?? '—'}
-              </span>
+            {/* Timeline control — anchored at bottom of left card */}
+            <div className="border-t border-white/8 px-6 pb-5 pt-4">
+              <TimeSlider
+                years={years}
+                selectedIndex={selectedIndex}
+                onChange={(i) => { setSelectedIndex(i); setIsPlaying(false); }}
+                isPlaying={isPlaying}
+                onTogglePlay={togglePlay}
+              />
             </div>
           </div>
 
-          {/* Slider below the map */}
-          <div className="mt-4 px-4 pb-3">
-            <TimeSlider
-              years={years}
-              selectedIndex={selectedIndex}
-              onChange={(i) => { setSelectedIndex(i); setIsPlaying(false); }}
-              isPlaying={isPlaying}
-              onTogglePlay={togglePlay}
-            />
+          {/* Selected Year Panel — right 4 cols (replaces floating StatsPanel + year badge) */}
+          <div className="flex flex-col rounded-2xl border border-white/8 bg-[#0d1a2e] p-6 md:col-span-4">
+
+            {/* Year header */}
+            <div className="mb-5 border-b border-white/8 pb-4">
+              <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-white/40">
+                A\u00f1o seleccionado
+              </p>
+              <span className={`${oswald.className} tabular-nums mt-0.5 block text-3xl font-bold text-emerald-400`}>
+                {selectedRecord?.year ?? '\u2014'}
+              </span>
+            </div>
+
+            {/* HERO: delta_ha — the change signal for this year */}
+            <div className="mb-6">
+              <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-white/40">
+                Cambio neto
+              </p>
+              <div className={`${oswald.className} tabular-nums mt-1 text-5xl font-bold leading-none ${deltaColor}`}>
+                {deltaSign}{deltaDelta.toLocaleString()}
+                <span className="ml-1 text-xl font-normal text-white/40">ha</span>
+              </div>
+              {prevRecord && (
+                <p className="mt-1.5 font-mono text-[10px] text-white/30">
+                  vs {prevRecord.year} &middot; {prevRecord.total_ha.toLocaleString()} ha
+                </p>
+              )}
+            </div>
+
+            {/* Secondary metrics */}
+            <div className="space-y-3 border-t border-white/8 pt-4">
+              <div className="flex items-baseline justify-between">
+                <span className="font-mono text-[11px] text-white/50">P\u00e9rdida</span>
+                <span className="tabular-nums font-mono text-[13px] font-semibold text-red-400">
+                  -{(selectedRecord?.loss_ha ?? 0).toLocaleString()} ha
+                </span>
+              </div>
+              <div className="flex items-baseline justify-between">
+                <span className="font-mono text-[11px] text-white/50">Ganancia</span>
+                <span className="tabular-nums font-mono text-[13px] font-semibold text-cyan-400">
+                  +{(selectedRecord?.gain_ha ?? 0).toLocaleString()} ha
+                </span>
+              </div>
+              <div className="flex items-baseline justify-between border-t border-white/8 pt-3">
+                <span className="font-mono text-[11px] text-white/50">Tasa de p\u00e9rdida</span>
+                <span className="tabular-nums font-mono text-[13px] font-semibold text-amber-400">
+                  {selectedRecord?.loss_rate_pct}% / a\u00f1o
+                </span>
+              </div>
+            </div>
+
+            {/* Footer: dataset reference */}
+            <div className="mt-auto pt-6">
+              <p className="font-mono text-[9px] uppercase tracking-[0.15em] text-white/20">
+                GMW v3.0 &middot; 2014\u20132024 &middot; EPSG:4326
+              </p>
+            </div>
           </div>
         </div>
 
-        {/* ─── Zone 3: Area chart ─── */}
+        {/* ─── Zone 3: Trend Chart — total_ha as hero visual, cumulative_loss secondary ─── */}
         <div className="rounded-2xl border border-white/8 bg-[#0d1a2e] p-6">
           <div className="mb-4 flex items-baseline justify-between">
             <div>
               <h3 className="font-mono text-[11px] uppercase tracking-[0.25em] text-white/40">
-                Evolución de Cobertura
+                Evoluci\u00f3n de Cobertura
               </h3>
               <p className="mt-1 text-[13px] text-white/25">
-                Hectáreas de manglar &middot; 2014 – 2024
+                Hect\u00e1reas de manglar &middot; 2014 \u2013 2024
               </p>
             </div>
             <div className="flex items-center gap-4 font-mono text-[10px] text-white/40">
@@ -517,7 +521,7 @@ export function MangroveTimelineSection() {
               </div>
               <div className="flex items-center gap-1.5">
                 <div className="h-0.5 w-5 border-t border-dashed border-red-400" />
-                Pérdida acum.
+                P\u00e9rdida acum.
               </div>
             </div>
           </div>

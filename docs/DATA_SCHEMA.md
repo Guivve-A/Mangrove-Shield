@@ -118,6 +118,53 @@ Required metadata fields:
 
 Source: Global Mangrove Watch v3.0 (Bunting et al., 2022), extended with SERVIR Amazonia v1.1 for 2022 and SAR GEE for 2024.
 
+## Mangrove health indices (Sentinel-2 + NASA AGB)
+
+### `GET /api/v1/health/summary`
+
+Global health summary with municipality breakdown:
+```json
+{
+  "period": "2024-12",
+  "global_health_pct": 72,
+  "ndvi_mean": 0.6875,
+  "ndwi_mean": 0.34,
+  "classification": { "status": "Moderado", "level": "moderate", "color": "#eab308" },
+  "distribution": { "healthy": 18, "moderate": 54, "degraded": 23, "critical": 5 },
+  "municipalities": [
+    {
+      "name": "Guayaquil",
+      "ndvi": 0.68,
+      "ndwi": 0.34,
+      "agb_mg_ha": 168.4,
+      "canopy_height_m": 12.8,
+      "annual_delta": -0.04,
+      "status": "Moderado",
+      "level": "moderate",
+      "color": "#eab308"
+    }
+  ]
+}
+```
+
+### `GET /api/v1/health/timeseries?months={24}`
+
+Monthly NDVI time series per municipality:
+```json
+{
+  "municipalities": ["Guayaquil", "Duran", "Daule", "Samborondon"],
+  "months": ["2024-01", "2024-02"],
+  "series": { "Guayaquil": [0.71, 0.72], "Duran": [0.73, 0.74] },
+  "regional_mean": [0.6875, 0.6950]
+}
+```
+
+### `GET /api/v1/health/ndvi?month={m}&year={y}&index={ndvi|ndwi|agb|height}`
+
+Single-month index values per municipality.
+
+Sources: Sentinel-2 SR Harmonized (COPERNICUS/S2_SR_HARMONIZED, 10m monthly median), NASA Global Mangrove AGB v1.3 (ORNL DAAC, 30m year 2000 baseline).
+
 ## Offline fallback
 
 If API is unavailable, frontend falls back to local demo files:

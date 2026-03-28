@@ -1,5 +1,7 @@
 import type {
   FloodCollection,
+  HealthSummaryResponse,
+  HealthTimeseriesResponse,
   HotspotCollection,
   LayerBundle,
   MangroveCollection,
@@ -84,6 +86,66 @@ export async function loadMangroveTimeline(): Promise<MangroveTimelineResponse> 
       },
       records,
     };
+  }
+}
+
+// --- Mangrove health indices (Sentinel-2 + NASA AGB) ---
+
+export async function loadHealthSummary(): Promise<HealthSummaryResponse> {
+  try {
+    return await safeJsonFetch<HealthSummaryResponse>(
+      `${API_BASE_URL}/api/v1/health/summary`,
+    );
+  } catch {
+    return {
+      period: '2024-12',
+      global_health_pct: 72,
+      ndvi_mean: 0.6875,
+      ndwi_mean: 0.34,
+      classification: { status: 'Moderado', level: 'moderate', color: '#eab308' },
+      distribution: { healthy: 18, moderate: 54, degraded: 23, critical: 5 },
+      municipalities: [
+        { name: 'Guayaquil', ndvi: 0.68, ndwi: 0.34, agb_mg_ha: 168.4, canopy_height_m: 12.8, annual_delta: -0.04, status: 'Moderado', level: 'moderate', color: '#eab308' },
+        { name: 'Duran', ndvi: 0.71, ndwi: 0.35, agb_mg_ha: 182.1, canopy_height_m: 14.2, annual_delta: -0.02, status: 'Moderado', level: 'moderate', color: '#eab308' },
+        { name: 'Daule', ndvi: 0.81, ndwi: 0.39, agb_mg_ha: 204.7, canopy_height_m: 16.5, annual_delta: 0.01, status: 'Saludable', level: 'healthy', color: '#10b981' },
+        { name: 'Samborondon', ndvi: 0.55, ndwi: 0.28, agb_mg_ha: 121.3, canopy_height_m: 9.1, annual_delta: -0.08, status: 'Degradado', level: 'degraded', color: '#f97316' },
+      ],
+    };
+  }
+}
+
+export async function loadHealthTimeseries(months: number = 24): Promise<HealthTimeseriesResponse> {
+  try {
+    return await safeJsonFetch<HealthTimeseriesResponse>(
+      `${API_BASE_URL}/api/v1/health/timeseries?months=${months}`,
+    );
+  } catch {
+    // Generate fallback 24-month series
+    const base: Record<string, number> = { Guayaquil: 0.68, Duran: 0.71, Daule: 0.81, Samborondon: 0.55 };
+    const delta: Record<string, number> = { Guayaquil: -0.04, Duran: -0.02, Daule: 0.01, Samborondon: -0.08 };
+    const seasonal = [0.03, 0.04, 0.05, 0.04, 0.03, 0.00, -0.03, -0.05, -0.04, -0.02, 0.00, 0.02];
+    const munis = ['Guayaquil', 'Duran', 'Daule', 'Samborondon'];
+    const monthLabels: string[] = [];
+    const series: Record<string, number[]> = {};
+    const regionalMean: number[] = [];
+    munis.forEach((m) => { series[m] = []; });
+
+    for (let i = 0; i < 24; i++) {
+      const y = 2024 + Math.floor(i / 12);
+      const mo = (i % 12) + 1;
+      monthLabels.push(`${y}-${String(mo).padStart(2, '0')}`);
+      const s = seasonal[mo - 1];
+      const yearOff = (i - 12) / 12;
+      let sum = 0;
+      for (const m of munis) {
+        const v = Math.max(0.1, Math.min(1.0, +(base[m] + delta[m] * yearOff + s).toFixed(4)));
+        series[m].push(v);
+        sum += v;
+      }
+      regionalMean.push(+(sum / munis.length).toFixed(4));
+    }
+
+    return { municipalities: munis, months: monthLabels, series, regional_mean: regionalMean };
   }
 }
 

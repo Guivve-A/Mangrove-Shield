@@ -27,6 +27,11 @@ const MangroveTimelineSection = dynamic(
   { ssr: false },
 );
 
+const MangroveHealthSection = dynamic(
+  () => import('@/components/sections/MangroveHealthSection').then((m) => m.MangroveHealthSection),
+  { ssr: false },
+);
+
 const SimulationSection = dynamic(
   () => import('@/components/sections/SimulationSection').then((m) => m.SimulationSection),
   { ssr: false },
@@ -195,6 +200,8 @@ export default function HomePage(): JSX.Element {
         <OutcomesSection />
 
         <MangroveTimelineSection />
+
+        <MangroveHealthSection />
 
         <SimulationSection />
 

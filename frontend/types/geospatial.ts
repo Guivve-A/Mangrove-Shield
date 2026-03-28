@@ -133,6 +133,37 @@ export interface MangroveYearRecord {
   loss_rate_pct: number;
 }
 
+// Mangrove health indices (Sentinel-2 NDVI / NASA AGB)
+
+export interface MunicipalityHealth {
+  name: string;
+  ndvi: number;
+  ndwi: number;
+  agb_mg_ha: number;
+  canopy_height_m: number;
+  annual_delta: number;
+  status: string;
+  level: 'healthy' | 'moderate' | 'degraded' | 'critical';
+  color: string;
+}
+
+export interface HealthSummaryResponse {
+  period: string;
+  global_health_pct: number;
+  ndvi_mean: number;
+  ndwi_mean: number;
+  classification: { status: string; level: string; color: string };
+  distribution: { healthy: number; moderate: number; degraded: number; critical: number };
+  municipalities: MunicipalityHealth[];
+}
+
+export interface HealthTimeseriesResponse {
+  municipalities: string[];
+  months: string[];
+  series: Record<string, number[]>;
+  regional_mean: number[];
+}
+
 export interface MangroveTimelineResponse {
   bbox: [number, number, number, number];
   years: number[];

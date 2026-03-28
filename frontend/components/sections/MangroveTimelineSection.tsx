@@ -256,12 +256,15 @@ export function MangroveTimelineSection() {
           </div>
         </div>
 
-        {/* ─── Zone 2: Coverage Circle + Timeline ─── */}
+        {/* ─── Zone 2: Coverage Circle + Year Stats + Timeline ─── */}
         <div className="relative overflow-hidden rounded-2xl border border-white/8 bg-[#0d1a2e]">
           <div className="absolute inset-0 opacity-10 [background-image:linear-gradient(rgba(255,255,255,0.12)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.12)_1px,transparent_1px)] [background-size:48px_48px]" />
 
-          <div className="relative flex flex-col items-center justify-center py-10">
-            <div className="relative">
+          {/* Circle left + Stats right */}
+          <div className="relative flex flex-col items-center gap-8 py-10 md:flex-row md:items-center md:justify-center md:gap-16">
+
+            {/* Circle */}
+            <div className="relative flex-shrink-0">
               <svg viewBox="0 0 200 200" width="220" height="220" className="drop-shadow-[0_0_30px_rgba(16,185,129,0.2)]">
                 <circle cx="100" cy="100" r="85" fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth="8" />
                 <circle
@@ -298,25 +301,39 @@ export function MangroveTimelineSection() {
                 </defs>
               </svg>
 
+              {/* Center: selected year */}
               <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
-                <span className={`${oswald.className} tabular-nums text-3xl font-bold text-white md:text-4xl`}>
-                  {(selectedRecord?.total_ha ?? 0).toLocaleString()}
+                <span className={`${oswald.className} tabular-nums text-4xl font-bold text-emerald-400 md:text-5xl`}>
+                  {selectedRecord?.year ?? '—'}
                 </span>
-                <span className="font-mono text-[10px] uppercase tracking-[0.15em] text-white/40">
-                  hectáreas
+                <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-white/30">
+                  año
                 </span>
               </div>
             </div>
 
-            <div className="mt-6 flex items-center gap-5 font-mono text-[10px] text-white/50">
-              <div className="flex items-center gap-1.5">
-                <div className="h-2 w-2 rounded-full bg-emerald-500" /> Cobertura
+            {/* Stats: Cobertura / Pérdida / Ganancia for selected year */}
+            <div className="flex flex-col gap-6">
+              <div>
+                <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-white/40">Cobertura</p>
+                <p className={`${oswald.className} tabular-nums mt-0.5 text-3xl font-bold text-white md:text-4xl`}>
+                  {(selectedRecord?.total_ha ?? 0).toLocaleString()}
+                  <span className="ml-1.5 text-base font-normal text-white/30">ha</span>
+                </p>
               </div>
-              <div className="flex items-center gap-1.5">
-                <div className="h-2 w-2 rounded-full bg-red-500" /> Pérdida
+              <div>
+                <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-white/40">Pérdida</p>
+                <p className={`${oswald.className} tabular-nums mt-0.5 text-3xl font-bold text-red-400 md:text-4xl`}>
+                  -{(selectedRecord?.loss_ha ?? 0).toLocaleString()}
+                  <span className="ml-1.5 text-base font-normal text-white/30">ha</span>
+                </p>
               </div>
-              <div className="flex items-center gap-1.5">
-                <div className="h-2 w-2 rounded-full bg-cyan-500" /> Ganancia
+              <div>
+                <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-white/40">Ganancia</p>
+                <p className={`${oswald.className} tabular-nums mt-0.5 text-3xl font-bold text-cyan-400 md:text-4xl`}>
+                  +{(selectedRecord?.gain_ha ?? 0).toLocaleString()}
+                  <span className="ml-1.5 text-base font-normal text-white/30">ha</span>
+                </p>
               </div>
             </div>
           </div>

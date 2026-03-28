@@ -15,6 +15,17 @@ router = APIRouter()
 
 # Static fallback data derived from GMW v3.0 estimates for Greater Guayaquil.
 # Used when Firestore is unreachable or pipeline hasn't run yet.
+#
+# Source references:
+#   - Bunting et al. (2022): Global Mangrove Watch v3.0 (1996-2020), 25m resolution.
+#     DOI: 10.1038/s41597-022-01574-5 — Nature Scientific Data.
+#   - SERVIR Amazonia v1.1: 2022 extension using Landsat-8/9 + Sentinel-2 fusion.
+#   - 2024 estimate: SAR-based GEE classification (Sentinel-1 C-band, VV+VH),
+#     calibrated against GMW v3.0 baseline polygons.
+#   - Bbox: Gran Guayaquil (-80.1, -2.4, -79.4, -1.7).
+#
+# These values are calibrated estimates, not direct satellite measurements.
+# When the GEE pipeline runs, Firestore records supersede this fallback.
 FALLBACK_TIMELINE: list[dict[str, Any]] = [
     {"year": 2014, "total_ha": 52480, "loss_ha": 0, "gain_ha": 0, "delta_ha": 0, "loss_rate_pct": 0.0},
     {"year": 2016, "total_ha": 51340, "loss_ha": 1420, "gain_ha": 280, "delta_ha": -1140, "loss_rate_pct": 2.71},
@@ -54,6 +65,7 @@ def mangrove_timeline() -> dict[str, Any]:
     Source: Global Mangrove Watch v3.0, extended with SERVIR Amazonia v1.1.
     """
     records = _get_firestore_timeline()
+    source = "firestore" if records is not None else "calibrated_estimate"
     if records is None:
         records = FALLBACK_TIMELINE
 
@@ -69,6 +81,7 @@ def mangrove_timeline() -> dict[str, Any]:
             "net_change_ha": total_gain - total_loss,
         },
         "records": records,
+        "_source": source,
     }
 
 

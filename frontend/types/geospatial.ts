@@ -155,6 +155,7 @@ export interface HealthSummaryResponse {
   classification: { status: string; level: string; color: string };
   distribution: { healthy: number; moderate: number; degraded: number; critical: number };
   municipalities: MunicipalityHealth[];
+  _source?: 'firestore' | 'api' | 'calibrated_estimate';
 }
 
 export interface HealthTimeseriesResponse {
@@ -162,6 +163,7 @@ export interface HealthTimeseriesResponse {
   months: string[];
   series: Record<string, number[]>;
   regional_mean: number[];
+  _source?: 'firestore' | 'api' | 'calibrated_estimate';
 }
 
 export interface MangroveTimelineResponse {
@@ -173,4 +175,5 @@ export interface MangroveTimelineResponse {
     net_change_ha: number;
   };
   records: MangroveYearRecord[];
+  _source?: 'firestore' | 'api' | 'calibrated_estimate';
 }

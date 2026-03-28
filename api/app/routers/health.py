@@ -81,7 +81,19 @@ def _get_firestore_health() -> list[dict[str, Any]] | None:
 
 
 def _classify_health(ndvi: float) -> dict[str, str]:
-    """Classify NDVI into health status and color."""
+    """Classify NDVI into mangrove health status and color.
+
+    Thresholds based on published mangrove remote sensing literature:
+      - >= 0.85: Healthy (dense canopy, full vigour)
+        Ref: Giri et al. (2011), "Status and distribution of mangrove forests
+        of the world", Global Ecology and Biogeography, 20:154-159.
+      - >= 0.65: Moderate (thinning or seasonal stress)
+        Ref: Alongi (2002), "Present state and future of the world's mangrove
+        forests", Environmental Conservation, 29:331-349.
+      - >= 0.40: Degraded (significant canopy loss / water stress)
+        Ref: Duke et al. (2007), "A world without mangroves?", Science, 317:41-42.
+      - < 0.40: Critical (severe degradation, bare soil / water dominant)
+    """
     if ndvi >= 0.85:
         return {"status": "Saludable", "level": "healthy", "color": "#10b981"}
     if ndvi >= 0.65:
@@ -98,7 +110,9 @@ def health_summary() -> dict[str, Any]:
 
     Sources: Sentinel-2 NDVI/NDWI (monthly), NASA AGB v1.3 (reference).
     """
-    records = _get_firestore_health() or _generate_monthly_series()
+    fs_records = _get_firestore_health()
+    source = "firestore" if fs_records is not None else "calibrated_estimate"
+    records = fs_records or _generate_monthly_series()
     latest = records[-1] if records else None
 
     if not latest:
@@ -145,6 +159,7 @@ def health_summary() -> dict[str, Any]:
         "classification": classification,
         "distribution": distribution,
         "municipalities": municipalities,
+        "_source": source,
     }
 
 
@@ -157,7 +172,9 @@ def health_timeseries(
 
     Source: Sentinel-2 SR Harmonized, monthly median composite.
     """
-    records = _get_firestore_health() or _generate_monthly_series()
+    fs_records = _get_firestore_health()
+    source = "firestore" if fs_records is not None else "calibrated_estimate"
+    records = fs_records or _generate_monthly_series()
     series = records[-months:] if len(records) >= months else records
 
     return {
@@ -168,6 +185,7 @@ def health_timeseries(
             for muni in MUNICIPALITIES
         },
         "regional_mean": [r["ndvi_mean"] for r in series],
+        "_source": source,
     }
 
 

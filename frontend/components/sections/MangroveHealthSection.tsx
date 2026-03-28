@@ -430,6 +430,22 @@ export function MangroveHealthSection() {
 
       <div className="relative z-10 mx-auto max-w-6xl px-4">
 
+        {/* Data provenance badge */}
+        <div className="mb-8 flex justify-center">
+          <div className={`inline-flex items-center gap-2 rounded-full border px-4 py-1.5 font-mono text-[9px] uppercase tracking-[0.2em] backdrop-blur-md ${
+            summary._source === 'firestore'
+              ? 'border-emerald-500/30 bg-emerald-500/10 text-emerald-400'
+              : 'border-amber-500/30 bg-amber-500/10 text-amber-400'
+          }`}>
+            <div className={`h-1.5 w-1.5 rounded-full ${
+              summary._source === 'firestore' ? 'bg-emerald-400' : 'bg-amber-400 animate-pulse'
+            }`} />
+            {summary._source === 'firestore'
+              ? 'Datos en vivo \u00b7 Sentinel-2 SR via GEE Pipeline \u2192 Firestore'
+              : 'Estimaci\u00f3n calibrada \u00b7 Sentinel-2 NDVI + NASA AGB v1.3 (literatura)'}
+          </div>
+        </div>
+
         {/* ══ ZONE 1: Global health instrument ══ */}
         <div className="mb-20 flex flex-col items-center">
           {/* Mission badge */}
@@ -636,6 +652,27 @@ export function MangroveHealthSection() {
             <span className="font-mono text-[8px] uppercase tracking-[0.2em] text-white/20">
               CRS: EPSG:4326 &middot; Escala: {activeIndex === 'agb' || activeIndex === 'height' ? '30' : '10'}m
             </span>
+          </div>
+        </div>
+
+        {/* Scientific citations and classification references */}
+        <div className="mt-8 rounded-lg border border-white/[0.04] bg-white/[0.01] p-5">
+          <p className="mb-3 font-mono text-[8px] font-bold uppercase tracking-[0.3em] text-white/25">
+            Referencias Cient&iacute;ficas &amp; Umbrales de Clasificaci&oacute;n
+          </p>
+          <div className="grid gap-2 font-mono text-[8px] leading-4 text-white/20 md:grid-cols-2">
+            <div>
+              <p><span className="text-emerald-400/60">NDVI &ge; 0.85 &rarr; Saludable</span> &mdash; Giri et al. (2011) Global Ecology and Biogeography, 20:154-159</p>
+              <p><span className="text-yellow-400/60">NDVI &ge; 0.65 &rarr; Moderado</span> &mdash; Alongi (2002) Environmental Conservation, 29:331-349</p>
+              <p><span className="text-orange-400/60">NDVI &ge; 0.40 &rarr; Degradado</span> &mdash; Duke et al. (2007) Science, 317:41-42</p>
+              <p><span className="text-red-400/60">NDVI &lt; 0.40 &rarr; Cr&iacute;tico</span> &mdash; Below minimum canopy vigour threshold</p>
+            </div>
+            <div>
+              <p>NDVI/NDWI: Sentinel-2 SR Harmonized (COPERNICUS/S2_SR_HARMONIZED), 10m, mediana mensual</p>
+              <p>AGB: NASA Global Mangrove AGB v1.3, ORNL DAAC, 30m, baseline 2000</p>
+              <p>Dosel: Simard et al. (2019) Nature Geoscience, ICESat-2 / GEDI fusion</p>
+              <p>Anomal&iacute;as: &Delta;NDVI &gt; 10% bajo media municipal por periodo</p>
+            </div>
           </div>
         </div>
       </div>

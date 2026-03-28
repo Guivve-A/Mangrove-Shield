@@ -69,9 +69,12 @@ const MANGROVE_TIMELINE_FALLBACK: MangroveYearRecord[] = [
 
 export async function loadMangroveTimeline(): Promise<MangroveTimelineResponse> {
   try {
-    return await safeJsonFetch<MangroveTimelineResponse>(
+    const res = await safeJsonFetch<MangroveTimelineResponse>(
       `${API_BASE_URL}/api/v1/mangrove/timeline`,
     );
+    // API may return Firestore data or its own fallback; tag if not already tagged
+    if (!res._source) res._source = 'api';
+    return res;
   } catch {
     const records = MANGROVE_TIMELINE_FALLBACK;
     const totalLoss = records.reduce((s, r) => s + r.loss_ha, 0);
@@ -85,6 +88,7 @@ export async function loadMangroveTimeline(): Promise<MangroveTimelineResponse> 
         net_change_ha: totalGain - totalLoss,
       },
       records,
+      _source: 'calibrated_estimate',
     };
   }
 }
@@ -93,11 +97,14 @@ export async function loadMangroveTimeline(): Promise<MangroveTimelineResponse> 
 
 export async function loadHealthSummary(): Promise<HealthSummaryResponse> {
   try {
-    return await safeJsonFetch<HealthSummaryResponse>(
+    const res = await safeJsonFetch<HealthSummaryResponse>(
       `${API_BASE_URL}/api/v1/health/summary`,
     );
+    if (!res._source) res._source = 'api';
+    return res;
   } catch {
     return {
+      _source: 'calibrated_estimate',
       period: '2024-12',
       global_health_pct: 72,
       ndvi_mean: 0.6875,
@@ -116,9 +123,11 @@ export async function loadHealthSummary(): Promise<HealthSummaryResponse> {
 
 export async function loadHealthTimeseries(months: number = 24): Promise<HealthTimeseriesResponse> {
   try {
-    return await safeJsonFetch<HealthTimeseriesResponse>(
+    const res = await safeJsonFetch<HealthTimeseriesResponse>(
       `${API_BASE_URL}/api/v1/health/timeseries?months=${months}`,
     );
+    if (!res._source) res._source = 'api';
+    return res;
   } catch {
     // Generate fallback 24-month series
     const base: Record<string, number> = { Guayaquil: 0.68, Duran: 0.71, Daule: 0.81, Samborondon: 0.55 };
@@ -145,7 +154,7 @@ export async function loadHealthTimeseries(months: number = 24): Promise<HealthT
       regionalMean.push(+(sum / munis.length).toFixed(4));
     }
 
-    return { municipalities: munis, months: monthLabels, series, regional_mean: regionalMean };
+    return { municipalities: munis, months: monthLabels, series, regional_mean: regionalMean, _source: 'calibrated_estimate' };
   }
 }
 

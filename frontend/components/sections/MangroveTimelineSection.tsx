@@ -314,6 +314,22 @@ export function MangroveTimelineSection() {
       <div className="pointer-events-none absolute bottom-0 left-0 h-[400px] w-[400px] rounded-full bg-red-500/5 blur-[160px]" />
 
       <div className="relative z-10 mx-auto max-w-6xl px-4">
+        {/* Data provenance badge */}
+        <div className="mb-6 flex justify-center">
+          <div className={`inline-flex items-center gap-2 rounded-full border px-4 py-1.5 font-mono text-[9px] uppercase tracking-[0.2em] backdrop-blur-md ${
+            data._source === 'firestore'
+              ? 'border-emerald-500/30 bg-emerald-500/10 text-emerald-400'
+              : 'border-amber-500/30 bg-amber-500/10 text-amber-400'
+          }`}>
+            <div className={`h-1.5 w-1.5 rounded-full ${
+              data._source === 'firestore' ? 'bg-emerald-400' : 'bg-amber-400 animate-pulse'
+            }`} />
+            {data._source === 'firestore'
+              ? 'Datos en vivo \u00b7 GMW v3.0 via GEE Pipeline \u2192 Firestore'
+              : 'Estimaci\u00f3n calibrada \u00b7 GMW v3.0 + SERVIR Amazonia v1.1 (literatura)'}
+          </div>
+        </div>
+
         {/* ─── Zone 1: Header with animated metrics ─── */}
         <div className="mb-16 text-center">
           <span className="mb-4 block font-mono text-[11px] uppercase tracking-[0.3em] text-emerald-400/70">
@@ -584,6 +600,17 @@ export function MangroveTimelineSection() {
               </AreaChart>
             </ResponsiveContainer>
           </div>
+        </div>
+
+        {/* Source attribution footer */}
+        <div className="mt-6 border-t border-white/[0.04] pt-4 text-center">
+          <p className="font-mono text-[8px] uppercase leading-5 tracking-[0.15em] text-white/20">
+            Fuentes: Bunting et al. (2022) Global Mangrove Watch v3.0, Nature Sci. Data.
+            &middot; SERVIR Amazonia v1.1 (2022) &middot; Sentinel-1 SAR GEE (2024)
+          </p>
+          <p className="font-mono text-[8px] uppercase tracking-[0.15em] text-white/15">
+            DOI: 10.1038/s41597-022-01574-5 &middot; Bbox: -80.1, -2.4, -79.4, -1.7 &middot; CRS: EPSG:4326
+          </p>
         </div>
       </div>
     </section>

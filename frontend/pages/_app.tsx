@@ -1,6 +1,7 @@
 import type { AppProps } from 'next/app';
 import { Inter, JetBrains_Mono } from 'next/font/google';
 import { BackToTop } from '@/components/ui/BackToTop';
+import { LanguageProvider } from '@/lib/i18n/LanguageContext';
 
 import '@/styles/design-system.css';
 import '@/styles/globals.css';
@@ -19,9 +20,11 @@ const jetBrainsMono = JetBrains_Mono({
 
 export default function MangroveShieldApp({ Component, pageProps }: AppProps): JSX.Element {
   return (
-    <div className={`${inter.variable} ${jetBrainsMono.variable}`}>
-      <Component {...pageProps} />
-      <BackToTop />
-    </div>
+    <LanguageProvider>
+      <div className={`${inter.variable} ${jetBrainsMono.variable}`}>
+        <Component {...pageProps} />
+        <BackToTop />
+      </div>
+    </LanguageProvider>
   );
 }

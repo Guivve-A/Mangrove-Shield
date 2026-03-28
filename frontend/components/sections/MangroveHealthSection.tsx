@@ -18,7 +18,7 @@ import type {
 } from '@/types/geospatial';
 import { loadHealthSummary, loadHealthTimeseries } from '@/lib/api';
 
-const oswald = Oswald({ subsets: ['latin'], weight: ['400', '500', '600', '700'], display: 'swap' });
+const oswald = Oswald({ subsets: ['latin'], weight: ['400', '700'], display: 'swap' });
 
 // ─── Instrument index tabs ──────────────────────────────────────────────────
 
@@ -50,24 +50,20 @@ function useAnimatedValue(target: number, duration: number, active: boolean): nu
   return val;
 }
 
-// ─── Corner bracket decorators (NASA targeting reticle feel) ────────────────
+// ─── Corner bracket decorators ──────────────────────────────────────────────
 
 function Brackets({ className = '' }: { className?: string }) {
   return (
     <>
-      {/* top-left */}
       <div className={`pointer-events-none absolute left-0 top-0 h-4 w-4 border-l border-t ${className}`} />
-      {/* top-right */}
       <div className={`pointer-events-none absolute right-0 top-0 h-4 w-4 border-r border-t ${className}`} />
-      {/* bottom-left */}
       <div className={`pointer-events-none absolute bottom-0 left-0 h-4 w-4 border-b border-l ${className}`} />
-      {/* bottom-right */}
       <div className={`pointer-events-none absolute bottom-0 right-0 h-4 w-4 border-b border-r ${className}`} />
     </>
   );
 }
 
-// ─── SVG Instrument Gauge (altimeter style) ─────────────────────────────────
+// ─── SVG Instrument Gauge — HERO metric for Zone 1 ──────────────────────────
 
 function InstrumentGauge({ value, label, classification }: {
   value: number;
@@ -77,14 +73,11 @@ function InstrumentGauge({ value, label, classification }: {
   const radius = 88;
   const stroke = 7;
   const circumference = 2 * Math.PI * radius;
-  // Arc spans 270 degrees (3/4 of circle)
   const arcLength = circumference * 0.75;
   const filledLength = (value / 100) * arcLength;
 
-  // Tick marks around the gauge (every 10%)
   const ticks = Array.from({ length: 11 }, (_, i) => {
     const pct = i * 10;
-    // Map 0-100% to -225deg to +45deg (270 deg sweep starting from bottom-left)
     const angle = -225 + (pct / 100) * 270;
     const rad = (angle * Math.PI) / 180;
     const outerR = radius + 14;
@@ -104,11 +97,9 @@ function InstrumentGauge({ value, label, classification }: {
   return (
     <div className="relative flex flex-col items-center">
       <svg viewBox="0 0 200 200" width="260" height="260" className="drop-shadow-[0_0_40px_rgba(16,185,129,0.08)]">
-        {/* Outer ring (instrument bezel) */}
         <circle cx="100" cy="100" r="98" fill="none" stroke="rgba(255,255,255,0.04)" strokeWidth="1" />
         <circle cx="100" cy="100" r={radius + 16} fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth="0.5" />
 
-        {/* Tick marks */}
         {ticks.map((t) => (
           <g key={t.label}>
             <line
@@ -118,72 +109,64 @@ function InstrumentGauge({ value, label, classification }: {
             />
             {t.major && (
               <text x={t.lx} y={t.ly} textAnchor="middle" dominantBaseline="middle"
-                fill="rgba(255,255,255,0.3)" fontSize="7" fontFamily="monospace">
+                fill="rgba(255,255,255,0.3)" fontSize="7" fontFamily="sans-serif">
                 {t.label}
               </text>
             )}
           </g>
         ))}
 
-        {/* Background arc */}
         <circle
           cx="100" cy="100" r={radius} fill="none"
           stroke="rgba(255,255,255,0.06)" strokeWidth={stroke}
           strokeDasharray={`${arcLength} ${circumference}`}
-          strokeDashoffset={0}
-          strokeLinecap="round"
+          strokeDashoffset={0} strokeLinecap="round"
           transform="rotate(135 100 100)"
         />
 
-        {/* Filled arc */}
         <circle
           cx="100" cy="100" r={radius} fill="none"
-          stroke={classification.color}
-          strokeWidth={stroke}
+          stroke={classification.color} strokeWidth={stroke}
           strokeDasharray={`${filledLength} ${circumference}`}
-          strokeDashoffset={0}
-          strokeLinecap="round"
+          strokeDashoffset={0} strokeLinecap="round"
           transform="rotate(135 100 100)"
           className="transition-all duration-1000"
           style={{ filter: `drop-shadow(0 0 8px ${classification.color}50)` }}
         />
 
-        {/* Inner glow ring */}
         <circle cx="100" cy="100" r={radius - 14} fill="none"
           stroke={classification.color} strokeWidth="0.5" opacity="0.2" />
 
-        {/* Cross-hair center */}
         <line x1="95" y1="100" x2="105" y2="100" stroke="rgba(255,255,255,0.12)" strokeWidth="0.5" />
         <line x1="100" y1="95" x2="100" y2="105" stroke="rgba(255,255,255,0.12)" strokeWidth="0.5" />
       </svg>
 
-      {/* Center readout (overlaid) */}
+      {/* Center readout — HERO: accent color only here */}
       <div className="absolute inset-0 flex flex-col items-center justify-center" style={{ paddingTop: '10px' }}>
-        <span className={`${oswald.className} text-5xl font-bold tracking-tight`}
+        <span className={`${oswald.className} tabular-nums text-5xl font-bold tracking-tight`}
           style={{ color: classification.color, textShadow: `0 0 30px ${classification.color}30` }}>
           {Math.round(value)}%
         </span>
-        <span className="mt-0.5 font-mono text-[10px] font-bold uppercase tracking-[0.25em]"
+        <span className="mt-0.5 font-mono text-[11px] font-bold uppercase tracking-[0.2em]"
           style={{ color: classification.color }}>
           {classification.status}
         </span>
       </div>
 
-      {/* Label below */}
-      <span className="mt-1 font-mono text-[9px] uppercase tracking-[0.3em] text-white/30">
+      <span className="mt-1 font-mono text-[9px] uppercase tracking-[0.2em] text-white/30">
         {label}
       </span>
     </div>
   );
 }
 
-// ─── Health distribution bar (segmented, NASA telemetry style) ──────────────
+// ─── Health distribution bar ────────────────────────────────────────────────
 
 const DIST_SEGMENTS: Array<{ key: string; label: string; color: string }> = [
   { key: 'healthy',  label: 'SANO',      color: '#10b981' },
   { key: 'moderate', label: 'MODERADO',  color: '#eab308' },
   { key: 'degraded', label: 'DEGRADADO', color: '#f97316' },
-  { key: 'critical', label: 'CRITICO',   color: '#ef4444' },
+  { key: 'critical', label: 'CRÍTICO',   color: '#ef4444' },
 ];
 
 function DistributionBar({ distribution, visible }: {
@@ -192,7 +175,6 @@ function DistributionBar({ distribution, visible }: {
 }) {
   return (
     <div className="w-full max-w-lg">
-      {/* Segmented bar */}
       <div className="flex h-2 overflow-hidden rounded-full bg-white/5">
         {DIST_SEGMENTS.map((seg) => (
           <div
@@ -206,14 +188,17 @@ function DistributionBar({ distribution, visible }: {
           />
         ))}
       </div>
-      {/* Labels */}
+      {/* Labels — secondary: colored dot + white text (no accent on numbers) */}
       <div className="mt-3 flex justify-between">
         {DIST_SEGMENTS.map((seg) => (
           <div key={seg.key} className="flex flex-col items-center">
-            <span className="font-mono text-[13px] font-bold" style={{ color: seg.color }}>
-              {distribution[seg.key] ?? 0}%
-            </span>
-            <span className="mt-0.5 font-mono text-[8px] uppercase tracking-[0.2em] text-white/30">
+            <div className="flex items-center gap-1.5">
+              <div className="h-2 w-2 rounded-full" style={{ backgroundColor: seg.color }} />
+              <span className="tabular-nums font-mono text-[13px] font-bold text-white/70">
+                {distribution[seg.key] ?? 0}%
+              </span>
+            </div>
+            <span className="mt-0.5 font-mono text-[9px] uppercase tracking-[0.2em] text-white/30">
               {seg.label}
             </span>
           </div>
@@ -223,7 +208,7 @@ function DistributionBar({ distribution, visible }: {
   );
 }
 
-// ─── Municipality instrument card ───────────────────────────────────────────
+// ─── Municipality card ──────────────────────────────────────────────────────
 
 function MunicipalityCard({ muni, activeIndex, onSelect }: {
   muni: MunicipalityHealth;
@@ -239,32 +224,32 @@ function MunicipalityCard({ muni, activeIndex, onSelect }: {
   return (
     <button
       onClick={onSelect}
-      className="group relative overflow-hidden rounded-lg border border-white/[0.06] bg-gradient-to-b from-white/[0.03] to-transparent p-5 text-left transition-all duration-300 hover:border-white/[0.12] hover:from-white/[0.05]"
+      className="group relative overflow-hidden rounded-2xl border border-white/[0.06] bg-white/[0.02] p-5 text-left transition-all duration-300 hover:border-white/[0.12] hover:bg-white/[0.04]"
     >
       <Brackets className="border-white/[0.08] group-hover:border-white/20 transition-colors" />
 
-      {/* Status LED */}
+      {/* Municipality name */}
       <div className="flex items-center gap-2.5">
         <div className="relative h-2 w-2">
           <div className="absolute inset-0 rounded-full" style={{ backgroundColor: muni.color }} />
           <div className="absolute inset-0 animate-ping rounded-full opacity-40" style={{ backgroundColor: muni.color }} />
         </div>
-        <span className="font-mono text-[10px] font-bold uppercase tracking-[0.25em] text-white/50">
+        <span className="font-mono text-[11px] font-bold uppercase tracking-[0.2em] text-white/50">
           {muni.name}
         </span>
       </div>
 
-      {/* Primary readout */}
+      {/* HERO: primary readout */}
       <div className="mt-4 flex items-baseline gap-2">
-        <span className={`${oswald.className} text-3xl font-bold text-white`}>
+        <span className={`${oswald.className} tabular-nums text-3xl font-bold text-white`}>
           {displayValue}
         </span>
         {meta.unit && (
-          <span className="font-mono text-[10px] text-white/30">{meta.unit}</span>
+          <span className="font-mono text-[11px] text-white/30">{meta.unit}</span>
         )}
       </div>
 
-      {/* NDVI bar */}
+      {/* NDVI bar (graphic — keeps accent color) */}
       <div className="mt-3 h-1 w-full overflow-hidden rounded-full bg-white/[0.06]">
         <div
           className="h-full rounded-full transition-all duration-700"
@@ -272,36 +257,36 @@ function MunicipalityCard({ muni, activeIndex, onSelect }: {
         />
       </div>
 
-      {/* Status + delta */}
+      {/* Status + delta — secondary (no accent, plain white) */}
       <div className="mt-3 flex items-center justify-between">
-        <span className="font-mono text-[10px]" style={{ color: muni.color }}>
+        <span className="font-mono text-[11px] text-white/40">
           {muni.status}
         </span>
-        <span className={`font-mono text-[10px] font-bold ${isPositive ? 'text-emerald-400' : 'text-red-400'}`}>
-          {isPositive ? '\u25B2' : '\u25BC'} {muni.annual_delta >= 0 ? '+' : ''}{muni.annual_delta}/a
+        <span className="tabular-nums font-mono text-[11px] text-white/40">
+          {isPositive ? '▲' : '▼'} {muni.annual_delta >= 0 ? '+' : ''}{muni.annual_delta}/a
         </span>
       </div>
     </button>
   );
 }
 
-// ─── Telemetry readout line ─────────────────────────────────────────────────
+// ─── Telemetry readout line — secondary (no accent color) ───────────────────
 
-function TelemetryReadout({ label, value, unit, color }: {
-  label: string; value: string; unit?: string; color?: string;
+function TelemetryReadout({ label, value, unit }: {
+  label: string; value: string; unit?: string;
 }) {
   return (
     <div className="flex items-baseline justify-between border-b border-white/[0.04] py-2 first:pt-0 last:border-0 last:pb-0">
       <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-white/30">{label}</span>
       <div className="flex items-baseline gap-1">
-        <span className="font-mono text-[13px] font-bold" style={{ color: color ?? '#fff' }}>{value}</span>
+        <span className="tabular-nums font-mono text-[13px] font-bold text-white">{value}</span>
         {unit && <span className="font-mono text-[9px] text-white/25">{unit}</span>}
       </div>
     </div>
   );
 }
 
-// ─── Chart tooltip (instrument style) ───────────────────────────────────────
+// ─── Chart tooltip ──────────────────────────────────────────────────────────
 
 const MUNI_COLORS: Record<string, string> = {
   Guayaquil: '#3b82f6',
@@ -317,8 +302,8 @@ function ChartTooltipContent({ active, payload, label }: {
 }) {
   if (!active || !payload?.length) return null;
   return (
-    <div className="rounded-md border border-white/10 bg-[#070d18]/95 px-4 py-3 font-mono text-[11px] shadow-2xl backdrop-blur-xl">
-      <p className="mb-2 border-b border-white/[0.06] pb-1.5 text-[9px] uppercase tracking-[0.2em] text-white/40">
+    <div className="rounded-lg border border-white/10 bg-[#070d18]/95 px-4 py-3 text-[11px] shadow-2xl backdrop-blur-xl">
+      <p className="mb-2 border-b border-white/[0.06] pb-1.5 font-mono text-[9px] uppercase tracking-[0.2em] text-white/40">
         {label}
       </p>
       {payload.map((entry) => (
@@ -327,7 +312,7 @@ function ChartTooltipContent({ active, payload, label }: {
             <div className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: entry.color }} />
             <span className="text-white/50">{entry.dataKey}</span>
           </div>
-          <span className="font-bold text-white">{entry.value.toFixed(3)}</span>
+          <span className="tabular-nums font-bold text-white">{entry.value.toFixed(3)}</span>
         </div>
       ))}
     </div>
@@ -347,7 +332,6 @@ export function MangroveHealthSection() {
   const [selectedMuni, setSelectedMuni] = useState<string | null>(null);
   const sectionRef = useRef<HTMLElement | null>(null);
 
-  // Viewport detection
   useEffect(() => {
     const node = sectionRef.current;
     if (!node || typeof IntersectionObserver === 'undefined') { setIsVisible(true); return; }
@@ -359,7 +343,6 @@ export function MangroveHealthSection() {
     return () => obs.disconnect();
   }, []);
 
-  // Load data
   useEffect(() => {
     let c = false;
     Promise.all([loadHealthSummary(), loadHealthTimeseries()]).then(([s, t]) => {
@@ -368,10 +351,8 @@ export function MangroveHealthSection() {
     return () => { c = true; };
   }, []);
 
-  // Animated gauge value
   const gaugeValue = useAnimatedValue(summary?.global_health_pct ?? 0, 2000, isVisible);
 
-  // Chart data
   const chartData = useMemo(() => {
     if (!timeseries) return [];
     return timeseries.months.map((month, i) => {
@@ -384,7 +365,6 @@ export function MangroveHealthSection() {
     });
   }, [timeseries]);
 
-  // Anomaly detection: months where any municipality's NDVI drops >10% below its own mean
   const anomalyMonths = useMemo(() => {
     if (!timeseries) return new Set<string>();
     const set = new Set<string>();
@@ -407,7 +387,7 @@ export function MangroveHealthSection() {
       <section className="flex min-h-[60vh] items-center justify-center bg-[#070d18]">
         <div className="flex items-center gap-3">
           <div className="h-2 w-2 animate-pulse rounded-full bg-emerald-500" />
-          <span className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/40">
+          <span className="font-mono text-[11px] uppercase tracking-[0.2em] text-white/40">
             Cargando telemetría Sentinel-2...
           </span>
         </div>
@@ -441,17 +421,17 @@ export function MangroveHealthSection() {
               summary._source === 'firestore' ? 'bg-emerald-400' : 'bg-amber-400 animate-pulse'
             }`} />
             {summary._source === 'firestore'
-              ? 'Datos en vivo \u00b7 Sentinel-2 SR via GEE Pipeline \u2192 Firestore'
-              : 'Estimaci\u00f3n calibrada \u00b7 Sentinel-2 NDVI + NASA AGB v1.3 (literatura)'}
+              ? 'Datos en vivo · Sentinel-2 SR via GEE Pipeline → Firestore'
+              : 'Estimación calibrada · Sentinel-2 NDVI + NASA AGB v1.3 (literatura)'}
           </div>
         </div>
 
-        {/* ══ ZONE 1: Global health instrument ══ */}
-        <div className="mb-20 flex flex-col items-center">
+        {/* ══ ZONE 1: Global health — gauge hero (7col) + telemetry (5col) ══ */}
+        <div className="mb-20">
           {/* Mission badge */}
-          <div className="mb-6 flex items-center gap-3">
+          <div className="mb-6 flex items-center justify-center gap-3">
             <div className="h-px w-12 bg-gradient-to-r from-transparent to-white/20" />
-            <span className="font-mono text-[9px] uppercase tracking-[0.4em] text-white/25">
+            <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-white/25">
               Sentinel-2 MSI &middot; 10m &middot; Compuesto Mensual
             </span>
             <div className="h-px w-12 bg-gradient-to-l from-transparent to-white/20" />
@@ -461,34 +441,37 @@ export function MangroveHealthSection() {
             Salud del Ecosistema
           </h2>
 
-          <p className="mt-2 font-mono text-[11px] uppercase tracking-[0.15em] text-white/25">
+          <p className="mt-2 text-center font-mono text-[11px] uppercase tracking-[0.15em] text-white/25">
             {summary.period} &middot; Gran Guayaquil
           </p>
 
-          {/* Gauge + telemetry panel */}
-          <div className="mt-10 flex flex-col items-center gap-8 md:flex-row md:gap-16">
-            <InstrumentGauge
-              value={gaugeValue}
-              label="Indice de salud global"
-              classification={summary.classification}
-            />
+          {/* 12-col grid: Gauge (hero) left + Telemetry right */}
+          <div className="mt-10 grid grid-cols-1 items-center gap-8 md:grid-cols-12">
+            <div className="flex justify-center md:col-span-7">
+              <InstrumentGauge
+                value={gaugeValue}
+                label="Índice de salud global"
+                classification={summary.classification}
+              />
+            </div>
 
-            {/* Telemetry readouts */}
-            <div className="relative w-64 rounded-lg border border-white/[0.06] bg-white/[0.02] p-5">
-              <Brackets className="border-white/[0.08]" />
-              <p className="mb-3 font-mono text-[8px] uppercase tracking-[0.3em] text-white/25">
-                Lecturas en vivo
-              </p>
-              <TelemetryReadout label="NDVI medio" value={summary.ndvi_mean.toFixed(4)} color={summary.classification.color} />
-              <TelemetryReadout label="NDWI medio" value={summary.ndwi_mean.toFixed(4)} color="#06b6d4" />
-              <TelemetryReadout label="Cobertura" value={summary.period} />
-              <TelemetryReadout label="Nubosidad" value="< 20%" unit="filtro" />
-              <TelemetryReadout label="Resolución" value="10" unit="m/px" />
+            {/* Telemetry readouts — trimmed to core metrics only */}
+            <div className="md:col-span-5">
+              <div className="relative rounded-2xl border border-white/[0.06] bg-white/[0.02] p-5">
+                <Brackets className="border-white/[0.08]" />
+                <p className="mb-3 font-mono text-[9px] uppercase tracking-[0.2em] text-white/25">
+                  Lecturas
+                </p>
+                <TelemetryReadout label="NDVI medio" value={summary.ndvi_mean.toFixed(4)} />
+                <TelemetryReadout label="NDWI medio" value={summary.ndwi_mean.toFixed(4)} />
+                <TelemetryReadout label="Periodo" value={summary.period} />
+                <TelemetryReadout label="Resolución" value="10" unit="m/px" />
+              </div>
             </div>
           </div>
 
           {/* Distribution bar */}
-          <div className="mt-12">
+          <div className="mt-12 flex justify-center">
             <DistributionBar distribution={summary.distribution} visible={isVisible} />
           </div>
         </div>
@@ -500,7 +483,7 @@ export function MangroveHealthSection() {
               <button
                 key={key}
                 onClick={() => setActiveIndex(key)}
-                className={`relative rounded-sm px-4 py-2 font-mono text-[10px] uppercase tracking-[0.2em] transition-all ${
+                className={`relative rounded-sm px-4 py-2 font-mono text-[11px] uppercase tracking-[0.2em] transition-all ${
                   activeIndex === key
                     ? 'bg-white/[0.08] text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.1)]'
                     : 'text-white/30 hover:bg-white/[0.03] hover:text-white/50'
@@ -514,13 +497,12 @@ export function MangroveHealthSection() {
             ))}
           </div>
 
-          {/* Source badge */}
-          <span className="hidden font-mono text-[8px] uppercase tracking-[0.2em] text-white/20 md:block">
-            {activeIndex === 'agb' || activeIndex === 'height' ? 'NASA AGB v1.3 \u00b7 30m' : 'Sentinel-2 SR \u00b7 10m'}
+          <span className="hidden font-mono text-[9px] uppercase tracking-[0.2em] text-white/20 md:block">
+            {activeIndex === 'agb' || activeIndex === 'height' ? 'NASA AGB v1.3 · 30m' : 'Sentinel-2 SR · 10m'}
           </span>
         </div>
 
-        {/* ══ ZONE 3: Municipality instrument cards ══ */}
+        {/* ══ ZONE 3: Municipality cards ══ */}
         <div className="mb-12 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
           {summary.municipalities.map((muni) => (
             <MunicipalityCard
@@ -532,17 +514,17 @@ export function MangroveHealthSection() {
           ))}
         </div>
 
-        {/* ══ ZONE 4: Monthly NDVI evolution chart ══ */}
-        <div className="relative rounded-lg border border-white/[0.06] bg-white/[0.015] p-6">
+        {/* ══ ZONE 4: NDVI evolution chart ══ */}
+        <div className="relative rounded-2xl border border-white/[0.06] bg-white/[0.02] p-6">
           <Brackets className="border-white/[0.06]" />
 
           {/* Chart header */}
           <div className="mb-5 flex flex-col items-start justify-between gap-3 sm:flex-row sm:items-center">
             <div>
-              <h3 className="font-mono text-[10px] uppercase tracking-[0.25em] text-white/35">
+              <h3 className="font-mono text-[11px] uppercase tracking-[0.2em] text-white/35">
                 Evolución Temporal NDVI
               </h3>
-              <p className="mt-1 font-mono text-[9px] text-white/20">
+              <p className="mt-1 font-mono text-[11px] text-white/20">
                 24 meses &middot; compuesto mediana por municipio
               </p>
             </div>
@@ -553,11 +535,11 @@ export function MangroveHealthSection() {
                 onClick={() => setShowAnomalies((v) => !v)}
                 className={`flex items-center gap-2 rounded-sm px-3 py-1.5 font-mono text-[9px] uppercase tracking-[0.15em] transition-all ${
                   showAnomalies
-                    ? 'bg-red-500/10 text-red-400 border border-red-500/20'
-                    : 'text-white/25 hover:text-white/40 border border-white/[0.06]'
+                    ? 'border border-red-500/20 bg-red-500/10 text-red-400'
+                    : 'border border-white/[0.06] text-white/25 hover:text-white/40'
                 }`}
               >
-                <div className={`h-1.5 w-1.5 rounded-full ${showAnomalies ? 'bg-red-400 animate-pulse' : 'bg-white/20'}`} />
+                <div className={`h-1.5 w-1.5 rounded-full ${showAnomalies ? 'animate-pulse bg-red-400' : 'bg-white/20'}`} />
                 Anomalías
               </button>
 
@@ -566,7 +548,7 @@ export function MangroveHealthSection() {
                 {timeseries?.municipalities.map((m) => (
                   <div key={m} className="flex items-center gap-1.5">
                     <div className="h-1.5 w-4 rounded-sm" style={{ backgroundColor: MUNI_COLORS[m] ?? '#888' }} />
-                    <span className="font-mono text-[8px] uppercase tracking-wider text-white/30">{m}</span>
+                    <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-white/30">{m}</span>
                   </div>
                 ))}
               </div>
@@ -588,7 +570,7 @@ export function MangroveHealthSection() {
 
                 <XAxis
                   dataKey="month"
-                  tick={{ fill: 'rgba(255,255,255,0.25)', fontSize: 9, fontFamily: 'monospace' }}
+                  tick={{ fill: 'rgba(255,255,255,0.25)', fontSize: 9, fontFamily: 'sans-serif' }}
                   axisLine={{ stroke: 'rgba(255,255,255,0.06)' }}
                   tickLine={false}
                   interval={2}
@@ -601,20 +583,18 @@ export function MangroveHealthSection() {
 
                 <YAxis
                   domain={[0.3, 1.0]}
-                  tick={{ fill: 'rgba(255,255,255,0.2)', fontSize: 9, fontFamily: 'monospace' }}
+                  tick={{ fill: 'rgba(255,255,255,0.2)', fontSize: 9, fontFamily: 'sans-serif' }}
                   axisLine={false}
                   tickLine={false}
                   tickFormatter={(v: number) => v.toFixed(1)}
                 />
 
-                {/* Healthy zone band */}
                 <ReferenceArea yAxisId={0} y1={0.65} y2={1.0} fill="url(#healthyBand)" />
                 <ReferenceLine y={0.65} stroke="rgba(16,185,129,0.15)" strokeDasharray="4 6"
                   label={{ value: 'Umbral sano', position: 'right', fill: 'rgba(16,185,129,0.3)', fontSize: 8 }} />
 
                 <Tooltip content={<ChartTooltipContent />} cursor={{ stroke: 'rgba(255,255,255,0.08)' }} />
 
-                {/* Anomaly highlights */}
                 {showAnomalies && chartData.map((d, i) => (
                   anomalyMonths.has(d.month as string) ? (
                     <ReferenceArea
@@ -627,7 +607,6 @@ export function MangroveHealthSection() {
                   ) : null
                 ))}
 
-                {/* Municipality lines */}
                 {timeseries?.municipalities.map((muni) => (
                   <Line
                     key={muni}
@@ -646,34 +625,27 @@ export function MangroveHealthSection() {
 
           {/* Bottom data strip */}
           <div className="mt-4 flex items-center justify-between border-t border-white/[0.04] pt-3">
-            <span className="font-mono text-[8px] uppercase tracking-[0.2em] text-white/20">
+            <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-white/20">
               Fuente: COPERNICUS/S2_SR_HARMONIZED &middot; NASA ORNL DAAC AGB v1.3
             </span>
-            <span className="font-mono text-[8px] uppercase tracking-[0.2em] text-white/20">
+            <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-white/20">
               CRS: EPSG:4326 &middot; Escala: {activeIndex === 'agb' || activeIndex === 'height' ? '30' : '10'}m
             </span>
           </div>
         </div>
 
-        {/* Scientific citations and classification references */}
-        <div className="mt-8 rounded-lg border border-white/[0.04] bg-white/[0.01] p-5">
-          <p className="mb-3 font-mono text-[8px] font-bold uppercase tracking-[0.3em] text-white/25">
-            Referencias Cient&iacute;ficas &amp; Umbrales de Clasificaci&oacute;n
+        {/* Sources + classification thresholds (compact 2-line footer) */}
+        <div className="mt-6 border-t border-white/[0.04] pt-4 text-center">
+          <p className="font-mono text-[9px] uppercase leading-5 tracking-[0.15em] text-white/20">
+            Fuentes: Sentinel-2 SR Harmonized (10m) &middot; NASA AGB v1.3, ORNL DAAC (30m)
+            &middot; Simard et al. (2019) Nature Geoscience &middot; Giri et al. (2011) GEB
           </p>
-          <div className="grid gap-2 font-mono text-[8px] leading-4 text-white/20 md:grid-cols-2">
-            <div>
-              <p><span className="text-emerald-400/60">NDVI &ge; 0.85 &rarr; Saludable</span> &mdash; Giri et al. (2011) Global Ecology and Biogeography, 20:154-159</p>
-              <p><span className="text-yellow-400/60">NDVI &ge; 0.65 &rarr; Moderado</span> &mdash; Alongi (2002) Environmental Conservation, 29:331-349</p>
-              <p><span className="text-orange-400/60">NDVI &ge; 0.40 &rarr; Degradado</span> &mdash; Duke et al. (2007) Science, 317:41-42</p>
-              <p><span className="text-red-400/60">NDVI &lt; 0.40 &rarr; Cr&iacute;tico</span> &mdash; Below minimum canopy vigour threshold</p>
-            </div>
-            <div>
-              <p>NDVI/NDWI: Sentinel-2 SR Harmonized (COPERNICUS/S2_SR_HARMONIZED), 10m, mediana mensual</p>
-              <p>AGB: NASA Global Mangrove AGB v1.3, ORNL DAAC, 30m, baseline 2000</p>
-              <p>Dosel: Simard et al. (2019) Nature Geoscience, ICESat-2 / GEDI fusion</p>
-              <p>Anomal&iacute;as: &Delta;NDVI &gt; 10% bajo media municipal por periodo</p>
-            </div>
-          </div>
+          <p className="font-mono text-[9px] uppercase tracking-[0.15em] text-white/15">
+            Umbrales NDVI: <span className="text-emerald-400/50">&ge;0.85 Sano</span> &middot;
+            <span className="text-yellow-400/50"> &ge;0.65 Moderado</span> &middot;
+            <span className="text-orange-400/50"> &ge;0.40 Degradado</span> &middot;
+            <span className="text-red-400/50"> &lt;0.40 Crítico</span>
+          </p>
         </div>
       </div>
     </section>

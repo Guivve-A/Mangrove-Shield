@@ -66,6 +66,17 @@ const teamData = [
         bio2: "His vision is to create an open-source digital ecosystem where developers from around the world can contribute to the preservation of the coastal environment.",
         bio3: "",
         linkedin: "#"
+    },
+    {
+        id: 4,
+        name: "Isaac Pruna",
+        role: "Researcher",
+        fullRole: "Researcher · ESPOL",
+        image: "/assets/team/member-4.webp",
+        bio1: "I am a student of Electronics and Automation Engineering at ESPOL, with a background in control systems, electronics, and industrial automation. I am interested in developing technological solutions that improve system performance and facilitate decision-making in industrial environments.",
+        bio2: "I have a focus on energy efficiency and process optimization, using data analysis tools and analytical thinking. I seek to contribute to projects that reduce energy consumption, improve operational efficiency, and promote sustainable practices in industry.",
+        bio3: "I complement my technical training with leadership, organizational, and teamwork skills, actively participating in student initiatives and academic projects. I adapt easily to new challenges and collaborative environments, contributing with responsibility and proactivity.",
+        linkedin: "#"
     }
 ];
 
@@ -188,11 +199,11 @@ export function TeamSection() {
                     </div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-16">
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
                     {teamData.map((member) => (
                         <div
                             key={member.id}
-                            className="team-anim-card group relative h-[500px] md:h-[600px] rounded-sm overflow-hidden hide-cursor bg-neutral-100 cursor-none"
+                            className="team-anim-card group relative h-[380px] md:h-[480px] lg:h-[540px] rounded-sm overflow-hidden hide-cursor bg-neutral-100 cursor-none"
                             onMouseEnter={handleCardEnter}
                             onMouseLeave={handleCardLeave}
                             onClick={() => setSelectedMember(member)}

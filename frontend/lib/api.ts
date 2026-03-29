@@ -62,37 +62,15 @@ export async function loadTimeline(): Promise<string[]> {
 // --- Mangrove historical change (GMW v3.0) ---
 
 /**
- * When the pipeline only stored per-year total area (loss/gain all zeros),
- * derive them from consecutive total_ha differences and recompute the summary.
+ * Returns true only if every consecutive year-to-year total_ha change is ≤ 40 % of the
+ * previous value. Larger swings indicate GEE cloud-cover artefacts, not real ecology.
  */
-function fillLossGainFromTotals(res: MangroveTimelineResponse): MangroveTimelineResponse {
-  const records = res.records;
-  if (records.length < 2) return res;
-  const alreadyComputed = records.slice(1).some((r) => r.loss_ha !== 0 || r.gain_ha !== 0);
-  if (alreadyComputed) return res;
-
-  const filled: MangroveYearRecord[] = records.map((r, i) => {
-    if (i === 0) return r;
-    const prevTotal = records[i - 1].total_ha;
-    const diff = r.total_ha - prevTotal;
-    const loss_ha = Math.round(Math.max(0, -diff) * 10) / 10;
-    const gain_ha = Math.round(Math.max(0, diff) * 10) / 10;
-    return {
-      ...r,
-      loss_ha,
-      gain_ha,
-      delta_ha: Math.round(diff * 10) / 10,
-      loss_rate_pct: prevTotal > 0 ? Math.round((loss_ha / prevTotal) * 10000) / 100 : 0,
-    };
-  });
-
-  const total_loss_ha = filled.reduce((s, r) => s + r.loss_ha, 0);
-  const total_gain_ha = filled.reduce((s, r) => s + r.gain_ha, 0);
-  return {
-    ...res,
-    records: filled,
-    summary: { total_loss_ha, total_gain_ha, net_change_ha: total_gain_ha - total_loss_ha },
-  };
+function isTimelinePlausible(records: MangroveYearRecord[]): boolean {
+  for (let i = 1; i < records.length; i++) {
+    const prev = records[i - 1].total_ha;
+    if (prev > 0 && Math.abs(records[i].total_ha - prev) / prev > 0.40) return false;
+  }
+  return true;
 }
 
 const MANGROVE_TIMELINE_FALLBACK: MangroveYearRecord[] = [
@@ -111,7 +89,9 @@ export async function loadMangroveTimeline(): Promise<MangroveTimelineResponse> 
     );
     // API may return Firestore data or its own fallback; tag if not already tagged
     if (!res._source) res._source = 'api';
-    return fillLossGainFromTotals(res);
+    // Reject GEE artefacts (wild total_ha swings) — fall through to calibrated fallback
+    if (!isTimelinePlausible(res.records)) throw new Error('implausible_gee_data');
+    return res;
   } catch {
     const records = MANGROVE_TIMELINE_FALLBACK;
     const totalLoss = records.reduce((s, r) => s + r.loss_ha, 0);

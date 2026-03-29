@@ -486,20 +486,20 @@ export function MangroveTimelineSection() {
                     <NavigationControl position="bottom-right" />
 
                     {mapMode === 'before' && selectedTiles?.tiles.before && (
-                      <Source id={`mangrove-before-${selectedTiles.year}`} type="raster" tiles={[selectedTiles.tiles.before]} tileSize={256}>
-                        <Layer id={`mangrove-before-layer-${selectedTiles.year}`} type="raster" paint={{ 'raster-opacity': 0.75 }} />
+                      <Source id="mangrove-before" type="raster" tiles={[selectedTiles.tiles.before]} tileSize={256}>
+                        <Layer id="mangrove-before-layer" type="raster" paint={{ 'raster-opacity': 0.75 }} />
                       </Source>
                     )}
 
                     {mapMode !== 'before' && selectedTiles?.tiles.after && (
-                      <Source id={`mangrove-after-${selectedTiles.year}`} type="raster" tiles={[selectedTiles.tiles.after]} tileSize={256}>
-                        <Layer id={`mangrove-after-layer-${selectedTiles.year}`} type="raster" paint={{ 'raster-opacity': mapMode === 'change' ? 0.35 : 0.75 }} />
+                      <Source id="mangrove-after" type="raster" tiles={[selectedTiles.tiles.after]} tileSize={256}>
+                        <Layer id="mangrove-after-layer" type="raster" paint={{ 'raster-opacity': mapMode === 'change' ? 0.35 : 0.75 }} />
                       </Source>
                     )}
 
                     {mapMode === 'change' && selectedTiles?.tiles.change && (
-                      <Source id={`mangrove-change-${selectedTiles.year}`} type="raster" tiles={[selectedTiles.tiles.change]} tileSize={256}>
-                        <Layer id={`mangrove-change-layer-${selectedTiles.year}`} type="raster" paint={{ 'raster-opacity': 0.9 }} />
+                      <Source id="mangrove-change" type="raster" tiles={[selectedTiles.tiles.change]} tileSize={256}>
+                        <Layer id="mangrove-change-layer" type="raster" paint={{ 'raster-opacity': 0.9 }} />
                       </Source>
                     )}
                   </Map>

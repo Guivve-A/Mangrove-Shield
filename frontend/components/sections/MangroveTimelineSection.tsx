@@ -439,12 +439,12 @@ export function MangroveTimelineSection() {
                 <button
                   type="button"
                   onClick={() => setMapMode('change')}
-                  disabled={!selectedTiles?.tiles?.change}
+                  disabled={!selectedTiles?.tiles?.before && !selectedTiles?.tiles?.after}
                   className={`rounded-full border px-4 py-1.5 font-mono text-[10px] uppercase tracking-[0.18em] transition-all ${
                     mapMode === 'change'
                       ? 'border-amber-400/40 bg-amber-400/10 text-amber-300'
                       : 'border-white/15 bg-white/5 text-white/55 hover:bg-white/10'
-                  } ${!selectedTiles?.tiles?.change ? 'cursor-not-allowed opacity-40' : ''}`}
+                  } ${!selectedTiles?.tiles?.before && !selectedTiles?.tiles?.after ? 'cursor-not-allowed opacity-40' : ''}`}
                 >
                   Cambio
                 </button>
@@ -485,21 +485,30 @@ export function MangroveTimelineSection() {
                   >
                     <NavigationControl position="bottom-right" />
 
+                    {/* ANTES: solo capa del año anterior (gris) */}
                     {mapMode === 'before' && selectedTiles?.tiles.before && (
-                      <Source id="mangrove-before" type="raster" tiles={[selectedTiles.tiles.before]} tileSize={256}>
-                        <Layer id="mangrove-before-layer" type="raster" paint={{ 'raster-opacity': 0.75 }} />
+                      <Source id="mangrove-prev" type="raster" tiles={[selectedTiles.tiles.before]} tileSize={256}>
+                        <Layer id="mangrove-prev-layer" type="raster" paint={{ 'raster-opacity': 0.75 }} />
                       </Source>
                     )}
 
-                    {mapMode !== 'before' && selectedTiles?.tiles.after && (
-                      <Source id="mangrove-after" type="raster" tiles={[selectedTiles.tiles.after]} tileSize={256}>
-                        <Layer id="mangrove-after-layer" type="raster" paint={{ 'raster-opacity': mapMode === 'change' ? 0.35 : 0.75 }} />
+                    {/* DESPUÉS: solo capa del año actual (verde) */}
+                    {mapMode === 'after' && selectedTiles?.tiles.after && (
+                      <Source id="mangrove-curr" type="raster" tiles={[selectedTiles.tiles.after]} tileSize={256}>
+                        <Layer id="mangrove-curr-layer" type="raster" paint={{ 'raster-opacity': 0.75 }} />
                       </Source>
                     )}
 
-                    {mapMode === 'change' && selectedTiles?.tiles.change && (
-                      <Source id="mangrove-change" type="raster" tiles={[selectedTiles.tiles.change]} tileSize={256}>
-                        <Layer id="mangrove-change-layer" type="raster" paint={{ 'raster-opacity': 0.9 }} />
+                    {/* CAMBIO: superpone año anterior (gris, 60%) + año actual (verde, 65%)
+                        Zonas solo grises = pérdida · Zonas solo verdes = ganancia */}
+                    {mapMode === 'change' && selectedTiles?.tiles.before && (
+                      <Source id="mangrove-prev" type="raster" tiles={[selectedTiles.tiles.before]} tileSize={256}>
+                        <Layer id="mangrove-prev-layer" type="raster" paint={{ 'raster-opacity': 0.60 }} />
+                      </Source>
+                    )}
+                    {mapMode === 'change' && selectedTiles?.tiles.after && (
+                      <Source id="mangrove-curr" type="raster" tiles={[selectedTiles.tiles.after]} tileSize={256}>
+                        <Layer id="mangrove-curr-layer" type="raster" paint={{ 'raster-opacity': 0.65 }} />
                       </Source>
                     )}
                   </Map>
@@ -532,18 +541,33 @@ export function MangroveTimelineSection() {
                 <div>
                   <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-white/40">Leyenda</p>
                   <div className="mt-3 flex flex-col gap-2">
-                    <div className="flex items-center gap-3">
-                      <span className="h-2.5 w-2.5 rounded-sm bg-emerald-400" />
-                      <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-white/70">Cobertura</span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <span className="h-2.5 w-2.5 rounded-sm bg-red-400" />
-                      <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-white/70">Pérdida</span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <span className="h-2.5 w-2.5 rounded-sm bg-cyan-300" />
-                      <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-white/70">Ganancia</span>
-                    </div>
+                    {mapMode !== 'change' ? (
+                      <>
+                        <div className="flex items-center gap-3">
+                          <span className="h-2.5 w-2.5 rounded-sm bg-emerald-400" />
+                          <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-white/70">Cobertura actual</span>
+                        </div>
+                        <div className="flex items-center gap-3">
+                          <span className="h-2.5 w-2.5 rounded-sm bg-neutral-400" />
+                          <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-white/70">Cobertura anterior</span>
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        <div className="flex items-center gap-3">
+                          <span className="h-2.5 w-2.5 rounded-sm bg-neutral-400" />
+                          <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-white/70">Pérdida (solo gris)</span>
+                        </div>
+                        <div className="flex items-center gap-3">
+                          <span className="h-2.5 w-2.5 rounded-sm bg-emerald-400" />
+                          <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-white/70">Ganancia (solo verde)</span>
+                        </div>
+                        <div className="flex items-center gap-3">
+                          <span className="h-2.5 w-2.5 rounded-sm bg-teal-600" />
+                          <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-white/70">Estable (superposición)</span>
+                        </div>
+                      </>
+                    )}
                   </div>
                 </div>
 

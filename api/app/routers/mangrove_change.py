@@ -342,6 +342,40 @@ def _compute_proxy_timeline_records(bbox_vals: list[float]) -> list[dict[str, An
 
     return records
 
+def _fill_loss_gain_from_totals(records: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """
+    Derive loss_ha / gain_ha / delta_ha from consecutive total_ha values when the pipeline
+    only computed per-year area without change detection (all non-baseline records have zeros).
+    """
+    if len(records) < 2:
+        return records
+    non_baseline = records[1:]
+    already_computed = any(
+        (r.get("loss_ha") or 0) != 0 or (r.get("gain_ha") or 0) != 0
+        for r in non_baseline
+    )
+    if already_computed:
+        return records
+
+    result: list[dict[str, Any]] = [records[0]]
+    for i in range(1, len(records)):
+        prev_total = float(records[i - 1].get("total_ha") or 0)
+        curr_total = float(records[i].get("total_ha") or 0)
+        diff = curr_total - prev_total
+        loss_ha = round(max(0.0, -diff), 1)
+        gain_ha = round(max(0.0, diff), 1)
+        delta_ha = round(diff, 1)
+        loss_rate_pct = round(loss_ha / prev_total * 100, 2) if prev_total > 0 else 0.0
+        result.append({
+            **records[i],
+            "loss_ha": loss_ha,
+            "gain_ha": gain_ha,
+            "delta_ha": delta_ha,
+            "loss_rate_pct": loss_rate_pct,
+        })
+    return result
+
+
 # Static fallback data derived from GMW v3.0 estimates for Greater Guayaquil.
 # Used when Firestore is unreachable or pipeline hasn't run yet.
 #
@@ -432,6 +466,9 @@ def mangrove_timeline(
         records = FALLBACK_TIMELINE
         source = "calibrated_estimate"
         source_detail = "static-fallback"
+
+    # Derive loss/gain from consecutive totals when the pipeline only stored per-year area.
+    records = _fill_loss_gain_from_totals(list(records))
 
     total_loss = sum(r["loss_ha"] for r in records)
     total_gain = sum(r["gain_ha"] for r in records)

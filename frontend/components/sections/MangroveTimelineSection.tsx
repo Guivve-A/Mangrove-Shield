@@ -196,6 +196,10 @@ export function MangroveTimelineSection() {
   const totalGain = data?.summary.total_gain_ha ?? 0;
   const netChange = data?.summary.net_change_ha ?? 0;
 
+  const maxTotal = useMemo(() => Math.max(1, ...records.map((r) => r.total_ha)), [records]);
+  const maxLoss = useMemo(() => Math.max(1, ...records.map((r) => r.loss_ha)), [records]);
+  const maxGain = useMemo(() => Math.max(1, ...records.map((r) => r.gain_ha)), [records]);
+
   const animLoss = useCountUp(totalLoss, 1800, isVisible);
   const animGain = useCountUp(totalGain, 1800, isVisible);
   const animNet = useCountUp(Math.abs(netChange), 1800, isVisible);
@@ -339,7 +343,7 @@ export function MangroveTimelineSection() {
                   cx="100" cy="100" r="85"
                   fill="none" stroke="url(#coverageGrad)" strokeWidth="8"
                   strokeLinecap="round"
-                  strokeDasharray={`${((selectedRecord?.total_ha ?? 0) / 55000) * 534} 534`}
+                  strokeDasharray={`${(Math.min(selectedRecord?.total_ha ?? 0, maxTotal) / maxTotal) * 534} 534`}
                   transform="rotate(-90 100 100)"
                   className="transition-all duration-700"
                 />
@@ -347,7 +351,7 @@ export function MangroveTimelineSection() {
                   cx="100" cy="100" r="72"
                   fill="none" stroke="#ef4444" strokeWidth="4"
                   strokeLinecap="round"
-                  strokeDasharray={`${((selectedRecord?.loss_ha ?? 0) / 2000) * 452} 452`}
+                  strokeDasharray={`${(Math.min(selectedRecord?.loss_ha ?? 0, maxLoss) / maxLoss) * 452} 452`}
                   transform="rotate(-90 100 100)"
                   opacity="0.7"
                   className="transition-all duration-700"
@@ -356,7 +360,7 @@ export function MangroveTimelineSection() {
                   cx="100" cy="100" r="72"
                   fill="none" stroke="#06b6d4" strokeWidth="4"
                   strokeLinecap="round"
-                  strokeDasharray={`${((selectedRecord?.gain_ha ?? 0) / 500) * 452} 452`}
+                  strokeDasharray={`${(Math.min(selectedRecord?.gain_ha ?? 0, maxGain) / maxGain) * 452} 452`}
                   transform="rotate(90 100 100)"
                   opacity="0.7"
                   className="transition-all duration-700"

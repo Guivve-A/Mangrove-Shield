@@ -73,7 +73,7 @@ const MANGROVE_TIMELINE_FALLBACK: MangroveYearRecord[] = [
 export async function loadMangroveTimeline(): Promise<MangroveTimelineResponse> {
   try {
     const res = await safeJsonFetch<MangroveTimelineResponse>(
-      `${API_BASE_URL}/api/v1/mangrove/timeline`,
+      `${API_BASE_URL}/api/v1/mangrove/timeline?mode=auto`,
     );
     // API may return Firestore data or its own fallback; tag if not already tagged
     if (!res._source) res._source = 'api';
